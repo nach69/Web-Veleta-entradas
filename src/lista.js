@@ -3,11 +3,10 @@
 //
 // Variables que hay que poner en Cloudflare (el Worker → Settings → Variables and Secrets):
 //   RESEND_API_KEY  (secreto)  clave de Resend
-//   EMAIL_FROM                 p. ej.  Veleta <web@gruposobremesa.com>
-//   EMAIL_TO                   opcional; por defecto info@gruposobremesa.com
+//   EMAIL_FROM                 desde qué dirección se envía (p. ej.  Veleta <web@dominio-de-veleta>)
+//   EMAIL_TO                   a qué dirección llegan las altas
+// Qué correos son (uno de Veleta o el del grupo) está por decidir con Nacho: sin las tres, no se envía nada.
 import { revisarEnvio, componerCorreo } from '../lib/formulario.mjs';
-
-const DESTINO_POR_DEFECTO = 'info@gruposobremesa.com';
 
 function respuesta(request, _tipo, ok, error, status) {
   const quiereJSON = (request.headers.get('Accept') || '').includes('application/json');
@@ -42,10 +41,10 @@ export async function onRequestPost({ request, env }) {
   if (revision.spam) return respuesta(request, revision.tipo, true);
   if (revision.error) return respuesta(request, revision.tipo, false, revision.error, 400);
 
-  const destino = env.EMAIL_TO || DESTINO_POR_DEFECTO;
-  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) {
+  const destino = env.EMAIL_TO;
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM || !destino) {
     return respuesta(request, revision.tipo, false,
-      'Esto todavía no está conectado. Escríbenos a ' + destino + ' y te apuntamos.', 503);
+      'Esto todavía no está conectado. Vuelve a probar en unos días, perdona.', 503);
   }
 
   const correo = componerCorreo(revision, { ip: request.headers.get('CF-Connecting-IP') });
@@ -63,7 +62,7 @@ export async function onRequestPost({ request, env }) {
 
   if (!envio || !envio.ok) {
     return respuesta(request, revision.tipo, false,
-      'No se ha podido enviar ahora mismo. Prueba en unos minutos o escríbenos a ' + destino + '.', 502);
+      'No se ha podido enviar ahora mismo. Prueba otra vez en unos minutos.', 502);
   }
   return respuesta(request, revision.tipo, true);
 }

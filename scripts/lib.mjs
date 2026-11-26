@@ -62,7 +62,7 @@ function diaSiguiente(iso) {
 /**
  * Último día (AAAA-MM-DD, Madrid) en que el evento se muestra. Normalmente su propio día; si acaba
  * de madrugada (horaFin menor que la hora de inicio) o empieza de madrugada (antes de las 06:00),
- * sigue visible también el día siguiente. Igual que en la web de Sobremesa.
+ * sigue visible también el día siguiente.
  */
 export function visibleHasta(ev) {
   const { dia, hora } = partirFecha(ev.fecha);

@@ -79,7 +79,8 @@ const CENSURA = '<span class="censura" aria-label="Por desvelar">█████
 function obtener(obj, ruta) {
   return ruta.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
 }
-function rellenar(plantilla, bloques) {
+function rellenar(plantilla, propios) {
+  const bloques = { ...COMUNES, ...propios };
   let html = plantilla;
   for (let i = 0; i < 5 && html.includes('{{>'); i++) {
     html = html.replace(/\{\{>\s*([\w-]+)\s*\}\}/g, (_, n) => leer(`plantillas/parciales/${n}.html`));
@@ -95,6 +96,13 @@ function rellenar(plantilla, bloques) {
     return escapar(v);
   });
 }
+
+// Bloques que puede usar cualquier plantilla. El email va en un bloque porque se usa dentro de un enlace.
+const COMUNES = {
+  emailEnlace: config.email
+    ? `<a href="mailto:${escapar(config.email)}">${escapar(config.email)}</a>`
+    : pendiente('email de contacto de Veleta')
+};
 
 // ---------- Estado: eventos futuros + «sin evento» ----------
 const hoy = hoyEnMadrid();

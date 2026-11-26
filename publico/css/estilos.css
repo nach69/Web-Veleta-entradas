@@ -1,16 +1,9 @@
 /* Landing de Veleta · estilos PROVISIONALES.
-   Lo definitivo es la estructura; todo lo visual (colores, abuelo, tele) se sustituirá por el diseño real.
+   Lo definitivo es la estructura; todo lo visual (colores, letra, abuelo, tele) se sustituirá por la
+   identidad de Veleta. Mientras tanto, letra del sistema, neutra.
    Los marcadores de posición llevan la clase .provisional (rayado gris con la etiqueta «PROVISIONAL»).
    Efectos de movimiento marcados [MOV-n] para quitarlos por separado:
      [MOV-1] zoom a la tele · [MOV-2] reacción del abuelo · [MOV-3] nieve de «sin señal» */
-
-@font-face {
-  font-family: 'RL Madena';
-  src: url('/fuentes/rl-madena.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 :root {
   --tinta: #111;
@@ -18,8 +11,8 @@
   --gris: #8a8a8a;
   --gris-claro: #d9d9d9;
   --blanco: #fff;
-  --titulos: 'RL Madena', 'Helvetica Neue', Helvetica, sans-serif;
-  --textos: 'Helvetica Neue', Helvetica, sans-serif;
+  --titulos: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --textos: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --intro-ms: 1500ms;
 }
 
@@ -110,9 +103,8 @@ mark.pendiente {
 }
 .pantalla__marca { margin: 0 0 .25rem; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #555; }
 .pantalla__titulo {
-  margin: 0 0 1rem; font: 400 clamp(2rem, 9vw, 3.2rem)/1 var(--titulos);
-  letter-spacing: -.03em; transform: scaleY(1.25); transform-origin: left top;
-  padding-bottom: .25em; outline: none;
+  margin: 0 0 1rem; font: 700 clamp(1.8rem, 8vw, 2.6rem)/1.1 var(--titulos);
+  outline: none;
 }
 .pantalla__texto { margin: 0 0 1rem; }
 .venta__datos { margin: 0 0 1.25rem; display: grid; gap: .5rem; }
@@ -196,7 +188,7 @@ html.js[data-fase="pantalla"] .salon { transform: scale(3.2); filter: brightness
 .cabecera-simple a { font-weight: 700; text-decoration: none; }
 .pagina { padding: 0 1rem 2rem; }
 .legal { max-width: 42rem; margin: 0 auto; background: var(--blanco); padding: 1.5rem 1.25rem; }
-.legal h1 { font: 400 2.2rem/1.05 var(--titulos); letter-spacing: -.03em; transform: scaleY(1.25); transform-origin: left top; margin: .5rem 0 1.25rem; }
+.legal h1 { font: 700 1.9rem/1.15 var(--titulos); margin: .5rem 0 1.25rem; }
 .legal h2 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
 .legal h3 { font-size: 1rem; margin: 1.25rem 0 .35rem; }
 .legal__nota { font-size: .8rem; background: #f4f4f4; padding: .5rem .75rem; margin: 0; }

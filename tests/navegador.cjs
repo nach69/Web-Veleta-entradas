@@ -16,7 +16,7 @@ const CSP = fs.readFileSync(path.join(RAIZ, 'publico/_headers'), 'utf8').match(/
 
 let fallos = 0;
 const ok = (cond, texto) => { console.log((cond ? 'OK   ' : 'FALLA') + ' ' + texto); if (!cond) fallos++; };
-const correos = []; // lo que el Worker habría mandado a info@
+const correos = []; // lo que el Worker habría mandado al correo de altas
 
 function servidor(dist, worker) {
   return http.createServer(async (req, res) => {
@@ -25,7 +25,7 @@ function servidor(dist, worker) {
       const trozos = [];
       for await (const t of req) trozos.push(t);
       const peticion = new Request(url, { method: req.method, headers: req.headers, body: req.method === 'POST' ? Buffer.concat(trozos) : undefined });
-      const r = await worker.fetch(peticion, { RESEND_API_KEY: 'falsa', EMAIL_FROM: 'Veleta <web@ejemplo.com>' });
+      const r = await worker.fetch(peticion, { RESEND_API_KEY: 'falsa', EMAIL_FROM: 'Veleta <web@ejemplo.com>', EMAIL_TO: 'altas@ejemplo.com' });
       res.writeHead(r.status, Object.fromEntries(r.headers));
       return res.end(Buffer.from(await r.arrayBuffer()));
     }
@@ -127,7 +127,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     ok(tarda >= 700 && tarda < 1300, `la ticketera se abre tras la reacción (${tarda} ms, máx. ~1 s)`);
     await esperar(300);
     const c = correos.slice(antes).find((x) => /Email antes de comprar/.test(x.subject));
-    ok(c && c.reply_to === 'compradora@ejemplo.com' && /Evento de prueba A/.test(c.text), 'el email antes de comprar llega a info@ con el evento');
+    ok(c && c.reply_to === 'compradora@ejemplo.com' && /Evento de prueba A/.test(c.text), 'el email antes de comprar llega al correo de altas con el evento');
     await ctx.close();
   }
   {
@@ -195,7 +195,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await p.click('#lista [type=submit]');
     await p.waitForURL(REAL + '/gracias/');
     ok((await p.textContent('h1')).includes('Ya estás en la lista'), 'sin JS: el alta lleva a «Ya estás en la lista»');
-    ok(correos.slice(antes).some((x) => x.reply_to === 'sinjs@ejemplo.com'), 'sin JS: el alta llega a info@');
+    ok(correos.slice(antes).some((x) => x.reply_to === 'sinjs@ejemplo.com'), 'sin JS: el alta llega al correo de altas');
     await ctx.close();
   }
 
@@ -212,7 +212,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await p.fill('#lista-email', 'conjs@ejemplo.com');
     await p.click('#lista [type=submit]');
     await p.waitForSelector('.form-estado.es-ok');
-    ok(correos.slice(antes).some((x) => /Lista de espera/.test(x.subject) && x.reply_to === 'conjs@ejemplo.com'), 'con JS: el alta llega a info@ sin recargar');
+    ok(correos.slice(antes).some((x) => /Lista de espera/.test(x.subject) && x.reply_to === 'conjs@ejemplo.com'), 'con JS: el alta llega al correo de altas sin recargar');
     ok((await p.textContent('#lista .legal-corto')).includes('Puedes darte de baja'), 'información básica de privacidad bajo el formulario');
 
     const enlaces = await p.$$eval('a[href^="/"]', (as) => [...new Set(as.map((a) => a.getAttribute('href').split('#')[0]))]);

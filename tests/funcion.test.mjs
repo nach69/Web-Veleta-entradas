@@ -10,15 +10,15 @@ function peticion(campos, cabeceras = {}) {
   return new Request(URL_WEB, { method: 'POST', body: fd, headers: { Accept: 'application/json', Origin: 'https://veleta.example', 'CF-Connecting-IP': '9.9.9.9', ...cabeceras } });
 }
 const campos = () => ({ tipo: 'lista', t: String(Date.now() - 10000), web: '', email: 'lucia@ejemplo.com' });
-const env = { RESEND_API_KEY: 'clave-falsa', EMAIL_FROM: 'Veleta <web@gruposobremesa.com>', ASSETS: { fetch: () => new Response('estático') } };
+const env = { RESEND_API_KEY: 'clave-falsa', EMAIL_FROM: 'Veleta <web@veleta.example>', EMAIL_TO: 'altas@veleta.example', ASSETS: { fetch: () => new Response('estático') } };
 
-test('manda el alta a info@ con responder-a la persona', async (t) => {
+test('manda el alta a EMAIL_TO con responder-a la persona', async (t) => {
   const f = mock.method(globalThis, 'fetch', async () => new Response('{"id":"1"}', { status: 200 }));
   t.after(() => f.mock.restore());
   const res = await worker.fetch(peticion(campos()), env);
   assert.equal(res.status, 200);
   const cuerpo = JSON.parse(f.mock.calls[0].arguments[1].body);
-  assert.deepEqual(cuerpo.to, ['info@gruposobremesa.com']);
+  assert.deepEqual(cuerpo.to, ['altas@veleta.example']);
   assert.equal(cuerpo.reply_to, 'lucia@ejemplo.com');
   assert.match(cuerpo.subject, /Lista de espera/);
   assert.match(cuerpo.text, /IP: 9\.9\.9\.9/);
@@ -44,10 +44,12 @@ test('rechaza envíos desde otra web', async () => {
   assert.equal(res.status, 403);
 });
 
-test('sin clave configurada avisa en vez de fingir que envía', async () => {
+test('sin clave o sin destino configurados avisa en vez de fingir que envía', async () => {
   const res = await worker.fetch(peticion(campos()), { ASSETS: env.ASSETS });
   assert.equal(res.status, 503);
-  assert.match((await res.json()).error, /info@gruposobremesa\.com/);
+  assert.match((await res.json()).error, /no está conectado/);
+  const sinDestino = await worker.fetch(peticion(campos()), { ...env, EMAIL_TO: '' });
+  assert.equal(sinDestino.status, 503);
 });
 
 test('si falla el proveedor de correo, se dice', async (t) => {

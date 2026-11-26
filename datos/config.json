@@ -1,16 +1,15 @@
 {
-  "_nota": "Datos generales de la landing. El nombre de la marca solo se cambia aquí. Lo que vale null sale en la web como PENDIENTE.",
+  "_nota": "Datos generales de la landing de Veleta (marca con identidad propia: nada de la web del grupo). Lo que vale null sale en la web como PENDIENTE.",
   "nombre": "Veleta",
-  "grupo": "Grupo Sobremesa",
   "dominio": null,
-  "email": "info@gruposobremesa.com",
+  "email": null,
   "instagram": {
     "usuario": null,
     "url": null
   },
   "descripcion": "Entradas para el próximo evento de Veleta en Valencia.",
   "titular": {
-    "_nota": "Los mismos datos que en la web del grupo. Los pasa Nacho.",
+    "_nota": "Titular legal de la web de Veleta. Los pasa Nacho.",
     "nombre": null,
     "nif": null,
     "direccion": null
@@ -23,5 +22,6 @@
     "sonido": "boton",
     "introMaxMs": 1500,
     "reaccionMs": 800
-  }
+  },
+  "email_nota": "Email de contacto que sale en los textos legales: ¿uno de Veleta o el del grupo? Por decidir con Nacho."
 }

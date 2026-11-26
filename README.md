@@ -59,4 +59,4 @@ Si te equivocas en el formato, Cloudflare **no publica** el cambio y la web sigu
 
 - `npm run build` → `dist/` · `npm test` · `npm run test:navegador` (Chromium) · `npx wrangler deploy --dry-run`.
 - Sin dependencias. Detalles y decisiones: `CLAUDE.md`.
-- Variables del Worker en Cloudflare: `RESEND_API_KEY` (secreto), `EMAIL_FROM`, `EMAIL_TO` (opcional; por defecto info@gruposobremesa.com).
+- Variables del Worker en Cloudflare: `RESEND_API_KEY` (secreto), `EMAIL_FROM` y `EMAIL_TO` (qué correos son está por decidir; sin las tres no se envía nada).
