@@ -52,10 +52,22 @@ Lo que emite la tele es el evento. De ahí se pasa a la pantalla de venta.
   ilustración ni sus textos de ejemplo. El diseño real vendrá aparte; hasta entonces,
   marcadores de posición claramente provisionales (clase `.provisional`: rayado gris con la
   etiqueta «PROVISIONAL») para el abuelo y la reacción; letra del sistema.
-- (26/11, Nacho) Colores y logo de Veleta YA aplicados: fondo negro, salón azul menta, tarjeta de
-  venta negra con borde menta, botón menta con texto negro, amarillo para «sin señal», avisos de
-  «¡Hecho!» y el foco. Lo que falta (PENDIENTE) va en blanco con rojo, a propósito fuera de la
-  paleta para que no se confunda con el diseño.
+- (26/11, Nacho, más tarde) **Colores de la marca: SOLO BLANCO Y NEGRO.** Se descarta la paleta
+  menta/amarillo (sigue en el código de la rama hasta el siguiente cambio de diseño: quitarla).
+  Logos a usar: negro y blanco. Lo PENDIENTE puede seguir en rojo (no es diseño).
+- (26/11, Nacho) **Estética vintage / retro**: fotografía antigua de salón (años 60-80), en B/N.
+  Elementos centrales: el señor en el sillón y la tele.
+- Referencias de imagen (Drive, carpeta 1i7ZUqfNOx_jt9h0t9RmIY7kIWBQb7Z2V, vistas el 26/11):
+  «referencia primera toma web» (contraluz de ventana, persona en sillón a la izquierda, tele a la
+  derecha con el único punto de luz en pantalla), «señor al lado de tele» (retrato a cámara con
+  flash, años 70-80), «señor viendo la tele en sillon» (plano general con gran angular, tele
+  pequeña al fondo), «abuelo en sillon» (retrato vertical con luz lateral de ventana),
+  «ejemplo tele antigua web» (tele-mueble de los 60, frontal), «ejemplo foto tele antigua»
+  (tele de los 70 frontal; foto de Getty con marca de agua: solo referencia, NO usar). Hay
+  además «fotos web veleta.zip» sin revisar.
+- Propuestas de composición del hero: ver el chat del 26/11 (A contraluz, B gran angular,
+  C por encima del hombro, D retrato a cámara). Pendiente que Nacho elija. «Método Bici»: Nacho
+  lo pidió; no está definido en el Drive ni aquí: pedirle en qué consiste y anotarlo.
 
 ## Los dos estados (cambian solos según la fecha del evento)
 | Estado | Cuándo | Qué ve la gente | Qué consigue |
@@ -247,8 +259,8 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
   (PNG, AI, «RECURSOS MANU» → logos veleta → PNG/AI/SVG) y la carpeta Marketing de cada evento
   (p. ej. «(7) Evento 6 Noviembre» → Marketing: Visuales Alegal, Vídeo presentación, Portada).
   Instagram @veletavalencia (no se puede abrir desde aquí).
-- Colores que salen en los nombres de los logos: **azul menta #8FCDC0**, **amarillo #C3C500**
-  («amarillo premiere»), además de **negro** y **blanco**.
+- Colores que salen en los nombres de los logos: azul menta #8FCDC0, amarillo #C3C500
+  («amarillo premiere»), negro y blanco. **Para la web, solo negro y blanco (Nacho, 26/11).**
 - Logos: negro, blanco, blanco y negro, azul #8FCDC0, amarillo #C3C500, versiones «SIN
   VALENCIA», «azul hueco» y «grafiti negro». Originales en .ai.
 - Letra: no hay archivos de fuente en el Drive. Preguntar a Nacho cuál es (o sacarla del .ai).
