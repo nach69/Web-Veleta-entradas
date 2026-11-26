@@ -17,10 +17,11 @@ test('los datos reales del repositorio son válidos', () => {
   assert.deepEqual(erroresOpciones(leerJSON('datos/config.json').opciones), []);
 });
 
-function construir(eventos, nombre) {
+function construir(eventos, nombre, config) {
   const datos = mkdtempSync(join(tmpdir(), 'veleta-'));
   const dist = join(datos, 'dist');
   writeFileSync(join(datos, 'eventos.json'), typeof eventos === 'string' ? eventos : JSON.stringify(eventos));
+  if (config) writeFileSync(join(datos, 'config.json'), JSON.stringify(config));
   const r = spawnSync('node', ['scripts/build.mjs'], { cwd: RAIZ, env: { ...process.env, DATOS: datos, DIST: dist }, encoding: 'utf8' });
   return { ...r, dist, limpiar: () => rmSync(datos, { recursive: true, force: true }), nombre };
 }
@@ -45,8 +46,22 @@ test('un JSON roto o un vídeo que no existe paran la build', () => {
   sinVideo.limpiar();
 });
 
-test('lo que falta sale como PENDIENTE y sin enlace de compra no hay botón', () => {
-  const r = construir([{ nombre: 'X', fecha: '2030-01-01T20:00', lugar: null, precio: null, enlaceCompra: null, videoTele: null, videoExclusivo: null }]);
+const SIN_ENLACE = { nombre: 'X', fecha: '2030-01-01T20:00', lugar: null, precio: null, enlaceCompra: null, videoTele: null, videoExclusivo: null };
+
+test('evento sin enlace propio: botón al enlace general de la ticketera (Lema)', () => {
+  const r = construir([SIN_ENLACE]);
+  assert.equal(r.status, 0, r.stderr);
+  const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
+  assert.match(html, /href="https:\/\/veleta\.lema\.club" rel="noopener" data-comprar/);
+  assert.doesNotMatch(html, /Entradas pronto/);
+  r.limpiar();
+  const propio = construir([{ ...SIN_ENLACE, enlaceCompra: 'https://veleta.lema.club/evento-x' }]);
+  assert.match(readFileSync(join(propio.dist, 'index.html'), 'utf8'), /href="https:\/\/veleta\.lema\.club\/evento-x"/);
+  propio.limpiar();
+});
+
+test('lo que falta sale como PENDIENTE y sin ningún enlace de compra no hay botón', () => {
+  const r = construir([SIN_ENLACE], 'sin enlace', { ticketera: { enlaceGeneral: null } });
   assert.equal(r.status, 0, r.stderr);
   const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
   assert.match(html, /PENDIENTE: lugar/);

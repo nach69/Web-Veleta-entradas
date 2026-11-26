@@ -28,8 +28,14 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   principal por ser la primera; ordenarlo al publicar.
 - `datos/eventos.json` está vacío a propósito (no hay evento confirmado): la web sale en el
   estado «sin evento». Los eventos de prueba viven solo en `tests/fixtures/`.
-- Pendiente de Nacho: primer evento, ticketera, Instagram, dominio, identidad de Veleta,
-  titular legal, correos (punto 10 de «Por decidir»), nombre del Worker.
+- Datos de Nacho (26/11): ticketera **Lema**, enlace general https://veleta.lema.club (para
+  comprar mientras no haya enlace propio del evento); correo de Veleta **veletavlc@gmail.com**;
+  Instagram https://www.instagram.com/veletavalencia/; identidad en Instagram y en el Drive
+  (ver «Identidad de Veleta»). El titular legal lo pasa Nacho al final.
+- Pendiente de Nacho: primer evento, dominio, desde qué dirección se envían los correos
+  (EMAIL_FROM), si se aplica ya la identidad al diseño provisional, nombre del Worker.
+- Desde aquí no se pueden abrir veleta.lema.club ni instagram.com (red del entorno): el enlace
+  de Lema está puesto tal cual lo dio Nacho, sin comprobar.
 
 ## Qué es esta web
 Landing de UNA SOLA PANTALLA, ultrarrápida, pensada para vender entradas (email → comprar).
@@ -56,7 +62,9 @@ Lo que emite la tele es el evento. De ahí se pasa a la pantalla de venta.
 - No hay tercer estado: las entradas agotadas se resuelven en la ticketera.
 - Al pasar la fecha del evento vuelve sola al estado sin evento (hora de Madrid; si acaba de
   madrugada, sigue visible hasta el día siguiente).
-- Evento con enlace de compra a `null`: la pantalla de venta dice «Entradas pronto» y no
+- Evento con enlace de compra a `null`: el botón «Comprar entrada» lleva al enlace general de
+  la ticketera (`config.json` → `ticketera.enlaceGeneral`, hoy https://veleta.lema.club; decisión
+  de Nacho del 26/11). Solo si ese también es `null`, la pantalla dice «Entradas pronto» y no
   muestra botón. Nunca inventar precios ni fechas.
 - Verificar que el cambio de estado funciona al cargar la página (no solo en cada build).
 
@@ -84,7 +92,7 @@ La web NO sabe si alguien ha pagado, solo si ha pulsado. La reacción ocurre al 
 ## Datos por evento (`datos/eventos.json`; marca solo en `datos/config.json`)
 Cuatro cosas por evento; si falta alguna, `null` y la web lo marca como PENDIENTE:
 1. `fecha` (ISO, hora de Madrid: `"2026-12-12T23:00"`) + `horaFin` opcional (`"05:00"`)
-2. `enlaceCompra` (ticketera de Veleta [RELLENAR])
+2. `enlaceCompra` (enlace del evento en Lema; si es `null`, se usa el general de Lema)
 3. `videoTele` (lo que emite la tele; archivo en `publico/video/`) + `posterTele` opcional
 4. `videoExclusivo` (solo referencia: se manda por email, no se usa en la web)
 Más: `nombre`, `lugar`, `precio`, `"censurado": true` para eventos aún secretos.
@@ -165,9 +173,11 @@ quiere que la entrada sea un gesto (esperar al toque, como Bogart), es un cambio
 8. Medición: la regla es «sin analítica». No hay ningún contador. Preguntar a Nacho antes de
    añadir nada.
 9. Fotos, preguntas frecuentes o pie con más contenido: NO. Solo Instagram y legales en el pie.
-10. Correo desde el que se envía y al que llega la lista de espera: ¿el del grupo o uno de
-    Veleta? Preguntar a Nacho. Hoy `EMAIL_FROM` y `EMAIL_TO` son obligatorios en el Worker (sin
-    ellos no se envía y se avisa a la persona) y `email` en `config.json` está a `null`.
+10. Correo (26/11, Nacho): Veleta usa **veletavlc@gmail.com**. Es el email de contacto de los
+    legales (`config.json` → `email`) y el destino de las altas (`EMAIL_TO` en `vars` de
+    `wrangler.jsonc`). Falta `EMAIL_FROM`: Resend solo envía desde un dominio verificado (no
+    desde Gmail), así que hace falta un dominio (¿de Veleta?) y el visto bueno del informático
+    para AÑADIR sus registros DNS. Sin EMAIL_FROM o sin clave no se envía y se avisa a la persona.
 Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza valores mayores.
 
 ## Reglas que ya nos funcionaron (no repetir errores)
@@ -225,8 +235,21 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
   sistema hasta tener la de Veleta).
 
 ## Tipografía y estilo
-- Manda la identidad de Veleta (colores, letra, logo) [RELLENAR con Nacho]. NO usar por
-  defecto la tipografía, los colores ni el estilo de la web del grupo.
+- Manda la identidad de Veleta (colores, letra, logo). NO usar por defecto la tipografía, los
+  colores ni el estilo de la web del grupo.
+
+### Identidad de Veleta (revisado el Drive el 26/11; aún NO aplicada al diseño provisional)
+- Dónde: Drive compartido → Eventos +18 → «Veleta » → «Logos / Recursos generales VELETA»
+  (PNG, AI, «RECURSOS MANU» → logos veleta → PNG/AI/SVG) y la carpeta Marketing de cada evento
+  (p. ej. «(7) Evento 6 Noviembre» → Marketing: Visuales Alegal, Vídeo presentación, Portada).
+  Instagram @veletavalencia (no se puede abrir desde aquí).
+- Colores que salen en los nombres de los logos: **azul menta #8FCDC0**, **amarillo #C3C500**
+  («amarillo premiere»), además de **negro** y **blanco**.
+- Logos: negro, blanco, blanco y negro, azul #8FCDC0, amarillo #C3C500, versiones «SIN
+  VALENCIA», «azul hueco» y «grafiti negro». Originales en .ai.
+- Letra: no hay archivos de fuente en el Drive. Preguntar a Nacho cuál es (o sacarla del .ai).
+- En el plan de marketing del 6/11 sale «Eusebio» («Flyer principal: imagen Eusebio + info»):
+  preguntar si es el personaje del abuelo antes de suponerlo.
 - Logo de Veleta: `publico/img/logo-veleta-negro.png` (de `veleta-negro.png` en los
   materiales de nach69/Private-, recortado el margen vacío). `publico/img/og.jpg` = logo sobre
   blanco, provisional.

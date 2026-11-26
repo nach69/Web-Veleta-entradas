@@ -2,10 +2,15 @@
   "_nota": "Datos generales de la landing de Veleta (marca con identidad propia: nada de la web del grupo). Lo que vale null sale en la web como PENDIENTE.",
   "nombre": "Veleta",
   "dominio": null,
-  "email": null,
+  "email": "veletavlc@gmail.com",
   "instagram": {
-    "usuario": null,
-    "url": null
+    "usuario": "@veletavalencia",
+    "url": "https://www.instagram.com/veletavalencia/"
+  },
+  "ticketera": {
+    "_nota": "Enlace general de Veleta en Lema (dado por Nacho el 26/11). Se usa en el botón «Comprar entrada» de los eventos que aún no tienen su enlace propio (enlaceCompra null). Si esto también es null, sale «Entradas pronto».",
+    "nombre": "Lema",
+    "enlaceGeneral": "https://veleta.lema.club"
   },
   "descripcion": "Entradas para el próximo evento de Veleta en Valencia.",
   "titular": {
@@ -22,6 +27,5 @@
     "sonido": "boton",
     "introMaxMs": 1500,
     "reaccionMs": 800
-  },
-  "email_nota": "Email de contacto que sale en los textos legales: ¿uno de Veleta o el del grupo? Por decidir con Nacho."
+  }
 }

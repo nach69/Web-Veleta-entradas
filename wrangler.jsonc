@@ -12,5 +12,10 @@
     "not_found_handling": "404-page",
     "run_worker_first": ["/api/*"]
   },
+  // Variables visibles (no secretas). La clave de Resend va aparte, como secreto, en el panel de Cloudflare.
+  // Ojo: lo que esté aquí manda sobre lo que se escriba en el panel para estas mismas variables.
+  "vars": {
+    "EMAIL_TO": "veletavlc@gmail.com"
+  },
   "observability": { "enabled": true }
 }

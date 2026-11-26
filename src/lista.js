@@ -5,7 +5,8 @@
 //   RESEND_API_KEY  (secreto)  clave de Resend
 //   EMAIL_FROM                 desde qué dirección se envía (p. ej.  Veleta <web@dominio-de-veleta>)
 //   EMAIL_TO                   a qué dirección llegan las altas
-// Qué correos son (uno de Veleta o el del grupo) está por decidir con Nacho: sin las tres, no se envía nada.
+// EMAIL_TO está en wrangler.jsonc (veletavlc@gmail.com, decisión de Nacho del 26/11). EMAIL_FROM tiene que ser
+// de un dominio verificado en Resend (no puede ser una dirección de Gmail): por decidir. Sin las tres, no se envía nada.
 import { revisarEnvio, componerCorreo } from '../lib/formulario.mjs';
 
 function respuesta(request, _tipo, ok, error, status) {

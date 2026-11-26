@@ -42,6 +42,8 @@ if (!Array.isArray(eventos)) errores.push('eventos.json tiene que ser una lista 
 else eventos.forEach((ev, i) => erroresEvento(ev).forEach((e) => errores.push(`eventos.json, evento ${i + 1}: ${e}`)));
 erroresOpciones(config.opciones).forEach((e) => errores.push(`config.json: ${e}`));
 if (!config.nombre) errores.push('config.json: falta "nombre" (el nombre de la marca)');
+const ticketera = config.ticketera || {};
+if (ticketera.enlaceGeneral != null && !/^https:\/\/[^\s"'<>]+$/.test(ticketera.enlaceGeneral)) errores.push('config.json: ticketera.enlaceGeneral debe empezar por https:// (o null)');
 if (config.dominio != null && !/^https:\/\/[^/\s]+$/.test(config.dominio)) errores.push('config.json: "dominio" tiene que ser como "https://veleta.com", sin barra al final (o null)');
 
 const MAX_VIDEO = 3 * 1024 * 1024;
@@ -131,6 +133,8 @@ function emision(ev) {
 }
 
 function pantallaEvento(ev) {
+  // Sin enlace propio todavía: el general de la ticketera de Veleta. Sin ninguno: «Entradas pronto».
+  const enlace = ev.enlaceCompra || ticketera.enlaceGeneral || null;
   const nombreTexto = ev.censurado ? 'Por desvelar' : (ev.nombre || 'Evento sin nombre');
   const b = {
     evId: ev.id,
@@ -140,11 +144,11 @@ function pantallaEvento(ev) {
     evFecha: escapar(fechaLegible(ev.fecha)),
     evLugar: ev.lugar ? escapar(ev.lugar) : (ev.censurado ? 'Por desvelar' : pendiente('lugar')),
     evPrecio: ev.precio ? escapar(ev.precio) : pendiente('precio'),
-    evEnlace: ev.enlaceCompra ? escapar(ev.enlaceCompra) : '',
+    evEnlace: enlace ? escapar(enlace) : '',
     modoEmail: op.emailAntesDeComprar,
     etiquetaEmail: op.emailAntesDeComprar === 'obligatorio' ? 'Tu email' : 'Tu email (si quieres)'
   };
-  let compra = ev.enlaceCompra ? leer('plantillas/parciales/comprar.html') : leer('plantillas/parciales/pronto.html');
+  let compra = enlace ? leer('plantillas/parciales/comprar.html') : leer('plantillas/parciales/pronto.html');
   // Sin email antes de comprar: fuera el bloque del email.
   if (op.emailAntesDeComprar === 'no') compra = compra.replace(/\s*<div class="comprar__email"[\s\S]*?<\/p>\n\s*<\/div>/, '');
   b.evCompra = rellenar(compra, b);
