@@ -1,0 +1,19 @@
+  <main id="main" class="landing">
+    <!-- 1. Escena: el abuelo viendo la tele. Lo que emite la tele depende del estado. -->
+    <section class="escena" aria-label="{{nombre}}: el abuelo viendo la tele" data-escena>
+      <div class="salon">
+        <div class="abuelo provisional" aria-hidden="true"><span>PROVISIONAL · abuelo en su sillón con algo de veleta</span></div>
+        <div class="tele" data-tele>
+          <div class="tele__pantalla">
+{{{emisiones}}}
+          </div>
+        </div>
+      </div>
+      <p class="escena__saltar" data-solo-js data-escena-aviso hidden>Toca para saltar</p>
+    </section>
+
+    <!-- 2. Pantalla: venta (con evento) o lista de espera (sin evento). Funciona sin JavaScript. -->
+    <section class="pantalla" aria-live="polite">
+{{{pantallas}}}
+    </section>
+  </main>

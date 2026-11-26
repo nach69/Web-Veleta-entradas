@@ -1,0 +1,27 @@
+{
+  "_nota": "Datos generales de la landing. El nombre de la marca solo se cambia aquí. Lo que vale null sale en la web como PENDIENTE.",
+  "nombre": "Veleta",
+  "grupo": "Grupo Sobremesa",
+  "dominio": null,
+  "email": "info@gruposobremesa.com",
+  "instagram": {
+    "usuario": null,
+    "url": null
+  },
+  "descripcion": "Entradas para el próximo evento de Veleta en Valencia.",
+  "titular": {
+    "_nota": "Los mismos datos que en la web del grupo. Los pasa Nacho.",
+    "nombre": null,
+    "nif": null,
+    "direccion": null
+  },
+  "fechaTextosLegales": "26 de noviembre de 2026",
+  "opciones": {
+    "_nota": "Cosas por decidir. Valores posibles: emailAntesDeComprar no | opcional | obligatorio · reaccion pulgar | golpecito | brindis | aleatoria · sonido nunca | boton · introMaxMs: duración del zoom (máx. 1500) · reaccionMs: duración de la reacción (máx. 1000).",
+    "emailAntesDeComprar": "opcional",
+    "reaccion": "pulgar",
+    "sonido": "boton",
+    "introMaxMs": 1500,
+    "reaccionMs": 800
+  }
+}

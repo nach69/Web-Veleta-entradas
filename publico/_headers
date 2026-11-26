@@ -1,0 +1,22 @@
+# Cabeceras de Cloudflare: seguridad y caché.
+/*
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  X-Frame-Options: DENY
+
+# La dirección de prueba (workers.dev) no debe salir en Google.
+# [RELLENAR] cuando exista el Worker: https://veleta-entradas.<cuenta>.workers.dev/*
+#   X-Robots-Tag: noindex
+
+/fuentes/*
+  Cache-Control: public, max-age=31536000, immutable
+/img/*
+  Cache-Control: public, max-age=604800
+/video/*
+  Cache-Control: public, max-age=604800
+/js/*
+  Cache-Control: public, max-age=3600
+/css/*
+  Cache-Control: public, max-age=3600

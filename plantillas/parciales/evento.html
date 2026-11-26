@@ -1,0 +1,11 @@
+      <article class="venta" id="{{{evId}}}-venta" data-bloque="{{{evId}}}" aria-labelledby="{{{evId}}}-titulo">
+        <p class="pantalla__marca">{{nombre}}</p>
+        <h1 class="pantalla__titulo" id="{{{evId}}}-titulo">{{{evNombre}}}</h1>
+        <dl class="venta__datos">
+          <div><dt>Fecha</dt><dd><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time></dd></div>
+          <div><dt>Lugar</dt><dd>{{{evLugar}}}</dd></div>
+          <div><dt>Precio</dt><dd>{{{evPrecio}}}</dd></div>
+        </dl>
+{{{evCompra}}}
+        <div class="abuelo-mini provisional" data-abuelo aria-hidden="true"><span>PROVISIONAL · reacción</span></div>
+      </article>

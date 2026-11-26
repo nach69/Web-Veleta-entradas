@@ -1,0 +1,3 @@
+eventos.json está vacío a propósito: no hay ningún evento confirmado todavía.
+Mientras esté vacío (o todos hayan pasado) la web enseña el estado «sin evento».
+Cómo añadir uno: README.md, apartado «Cómo añadir un evento».

@@ -1,0 +1,35 @@
+[
+  {
+    "_nota": "DATOS DE PRUEBA, no son eventos reales. Ya pasado: no debe salir nunca.",
+    "nombre": "Evento de prueba pasado",
+    "fecha": "2026-11-20T22:00",
+    "lugar": "Lugar de prueba",
+    "precio": "10 €",
+    "enlaceCompra": "https://ticketera.example/pasado",
+    "videoTele": null,
+    "videoExclusivo": null
+  },
+  {
+    "_nota": "DATOS DE PRUEBA. Acaba de madrugada: sigue visible el 13/12.",
+    "nombre": "Evento de prueba A",
+    "fecha": "2026-12-12T23:00",
+    "horaFin": "05:00",
+    "lugar": "Lugar de prueba A",
+    "precio": "15 €",
+    "enlaceCompra": "https://ticketera.example/evento-a",
+    "videoTele": "/video/prueba-tele.mp4",
+    "posterTele": null,
+    "videoExclusivo": "referencia de prueba"
+  },
+  {
+    "_nota": "DATOS DE PRUEBA. Sin enlace de compra (Entradas pronto), sin lugar ni precio, censurado.",
+    "nombre": "Evento de prueba B",
+    "fecha": "2027-01-16T20:00",
+    "lugar": null,
+    "precio": null,
+    "enlaceCompra": null,
+    "videoTele": null,
+    "videoExclusivo": null,
+    "censurado": true
+  }
+]

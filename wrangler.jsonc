@@ -1,0 +1,16 @@
+// Configuración del Worker de Cloudflare que publica la landing.
+// "name" tiene que coincidir con el nombre del Worker en el panel de Cloudflare.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "veleta-entradas",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+}

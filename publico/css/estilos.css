@@ -1,0 +1,218 @@
+/* Landing de Veleta · estilos PROVISIONALES.
+   Lo definitivo es la estructura; todo lo visual (colores, abuelo, tele) se sustituirá por el diseño real.
+   Los marcadores de posición llevan la clase .provisional (rayado gris con la etiqueta «PROVISIONAL»).
+   Efectos de movimiento marcados [MOV-n] para quitarlos por separado:
+     [MOV-1] zoom a la tele · [MOV-2] reacción del abuelo · [MOV-3] nieve de «sin señal» */
+
+@font-face {
+  font-family: 'RL Madena';
+  src: url('/fuentes/rl-madena.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --tinta: #111;
+  --fondo: #f2f2f2;
+  --gris: #8a8a8a;
+  --gris-claro: #d9d9d9;
+  --blanco: #fff;
+  --titulos: 'RL Madena', 'Helvetica Neue', Helvetica, sans-serif;
+  --textos: 'Helvetica Neue', Helvetica, sans-serif;
+  --intro-ms: 1500ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--textos);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--tinta);
+  background: var(--fondo);
+}
+img, video, canvas { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+[hidden] { display: none !important; }
+
+mark.pendiente {
+  background: #ffe95c; color: #111; padding: 0 .25em; font-size: .85em; font-weight: 700;
+}
+.censura { letter-spacing: -.08em; }
+
+/* ---------- Marcador de posición neutro ---------- */
+.provisional {
+  position: relative;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  border: 2px dashed var(--gris);
+  background: repeating-linear-gradient(45deg, #e6e6e6 0 12px, #dcdcdc 12px 24px);
+  color: #555; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+  padding: .5rem;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: .75rem 1.4rem;
+  border: 2px solid var(--tinta); border-radius: 0;
+  background: var(--tinta); color: var(--blanco);
+  font: 700 1rem/1 var(--textos); text-decoration: none; cursor: pointer;
+}
+.btn--grande { width: 100%; min-height: 56px; font-size: 1.1rem; }
+.btn--borde { background: transparent; color: var(--tinta); }
+.btn--peque { min-height: 40px; padding: .5rem 1rem; font-size: .85rem; }
+.btn--apagado { background: var(--gris-claro); border-color: var(--gris-claro); color: #555; cursor: default; }
+.btn[disabled] { opacity: .6; }
+
+/* ---------- Escena: el abuelo viendo la tele ---------- */
+.escena { position: relative; height: 70vh; height: 70svh; overflow: hidden; background: #cfcfcf; }
+.salon { position: absolute; inset: 0; transform-origin: 74% 40%; }
+.abuelo { position: absolute; left: 4%; bottom: 6%; width: 42%; height: 58%; }
+.tele {
+  position: absolute; left: 52%; top: 22%; width: 44%; height: 36%;
+  background: #222; padding: 4%; border-radius: 6px;
+}
+.tele__pantalla { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+.emision { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.tele__video { width: 100%; height: 100%; object-fit: cover; }
+.emision--sin-senal {
+  /* Sin JS: nieve quieta hecha con degradados */
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, #777 0 2px, #333 2px 3px, #aaa 3px 5px, #555 5px 7px);
+}
+.sin-senal { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.sin-senal__texto {
+  position: relative; background: #000; color: #fff; padding: .15em .5em;
+  font: 700 .8rem/1.2 var(--textos); letter-spacing: .12em; text-transform: uppercase;
+}
+.emision mark.pendiente { font-size: .7rem; }
+.escena__saltar {
+  position: absolute; left: 0; right: 0; bottom: 1rem; margin: 0; text-align: center;
+  font-size: .8rem; color: #333;
+}
+
+/* ---------- Pantalla: venta o lista de espera ---------- */
+.pantalla { position: relative; padding: 2rem 1rem 3rem; background: var(--fondo); }
+.venta, .espera {
+  position: relative; max-width: 30rem; margin: 0 auto; padding: 1.5rem 1.25rem;
+  background: var(--blanco); border: 1px solid var(--gris-claro);
+}
+.pantalla__marca { margin: 0 0 .25rem; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #555; }
+.pantalla__titulo {
+  margin: 0 0 1rem; font: 400 clamp(2rem, 9vw, 3.2rem)/1 var(--titulos);
+  letter-spacing: -.03em; transform: scaleY(1.25); transform-origin: left top;
+  padding-bottom: .25em; outline: none;
+}
+.pantalla__texto { margin: 0 0 1rem; }
+.venta__datos { margin: 0 0 1.25rem; display: grid; gap: .5rem; }
+.venta__datos div { display: grid; grid-template-columns: 5rem 1fr; gap: .5rem; border-top: 1px solid var(--gris-claro); padding-top: .5rem; }
+.venta__datos dt { color: #555; font-size: .85rem; }
+.venta__datos dd { margin: 0; font-weight: 700; }
+.comprar { display: grid; gap: .75rem; }
+.comprar__email { display: grid; gap: .35rem; }
+.comprar__etiqueta { font-size: .85rem; color: #333; }
+.comprar__nota { margin: 0; font-size: .78rem; color: #555; text-align: center; }
+input[type="email"] {
+  width: 100%; min-height: 48px; padding: .6rem .8rem;
+  border: 2px solid var(--tinta); border-radius: 0; background: var(--blanco);
+  font: 400 1rem var(--textos); color: var(--tinta);
+}
+input[aria-invalid="true"] { border-color: #b00020; }
+.campo__error { margin: 0; min-height: 0; color: #b00020; font-size: .85rem; }
+.campo__error:empty { display: none; }
+.legal-corto { margin: 0; font-size: .75rem; color: #555; }
+.lista { display: grid; gap: .6rem; }
+.lista__fila { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
+.form-estado { margin: 0; font-weight: 700; }
+.form-estado:empty { display: none; }
+.form-estado.es-error { color: #b00020; }
+
+/* Abuelo pequeño en la pantalla de venta: es el que reacciona al pulsar «Comprar entrada» */
+.abuelo-mini { position: absolute; top: -1.75rem; right: .75rem; width: 4.5rem; height: 4.5rem; font-size: .5rem; }
+.abuelo-mini::after {
+  content: attr(data-reaccion); position: absolute; bottom: .2rem; left: 0; right: 0;
+  font-size: .55rem; font-weight: 700; color: #111;
+}
+
+/* [MOV-2] Reacción del abuelo (≤ 1 s). La forma real la decidirá el diseño. */
+.abuelo-mini.reacciona[data-reaccion="pulgar"] { animation: reaccion-pulgar var(--reaccion-ms, 800ms) ease-out both; }
+.abuelo-mini.reacciona[data-reaccion="golpecito"] { animation: reaccion-golpecito var(--reaccion-ms, 800ms) ease-in-out both; }
+.abuelo-mini.reacciona[data-reaccion="brindis"] { animation: reaccion-brindis var(--reaccion-ms, 800ms) ease-in-out both; }
+@keyframes reaccion-pulgar { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+@keyframes reaccion-golpecito { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes reaccion-brindis { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-14deg) translateY(-6px); } }
+
+/* ---------- Con JavaScript: escena a pantalla completa → zoom → pantalla de venta ---------- */
+html.js[data-fase] .escena { position: fixed; inset: 0; height: auto; z-index: 0; }
+html.js[data-fase] .pantalla {
+  min-height: 100vh; min-height: 100svh; z-index: 1; background: transparent;
+  display: flex; flex-direction: column; justify-content: center; padding-top: 3rem;
+}
+html.js[data-fase="intro"] .pantalla,
+html.js[data-fase="intro"] .pie { visibility: hidden; opacity: 0; }
+html.js[data-fase="intro"] .escena { cursor: pointer; }
+html.js[data-fase="pantalla"] .pantalla,
+html.js[data-fase="pantalla"] .pie { visibility: visible; opacity: 1; transition: opacity 250ms ease-out; }
+html.js[data-fase="pantalla"] .escena__saltar { display: none; }
+html.recien-llegada .pantalla, html.recien-llegada .pie { pointer-events: none; }
+html.js[data-fase] .pie { position: relative; z-index: 1; }
+
+/* [MOV-1] Zoom a la tele: se mira un momento y se entra en la pantalla. Duración: opciones.introMaxMs (máx. 1,5 s). */
+html.intro-en-marcha[data-fase="intro"] .salon { animation: zoom-tele var(--intro-ms) cubic-bezier(.55, 0, .7, .2) forwards; }
+html.js[data-fase="pantalla"] .salon { transform: scale(3.2); filter: brightness(.45); }
+@keyframes zoom-tele {
+  0%, 35% { transform: scale(1); filter: none; }
+  100% { transform: scale(3.2); filter: brightness(.45); }
+}
+
+/* Con «reducir movimiento»: sin zoom, solo fundidos. El vídeo de la tele SÍ se reproduce. */
+@media (prefers-reduced-motion: reduce) {
+  html.intro-en-marcha[data-fase="intro"] .salon { animation: fundido-tele var(--intro-ms) linear forwards; }
+  html.js[data-fase="pantalla"] .salon { transform: none; filter: brightness(.45); }
+  @keyframes fundido-tele { 0%, 35% { filter: none; } 100% { filter: brightness(.45); } }
+  .abuelo-mini.reacciona[data-reaccion] { animation: reaccion-fundido var(--reaccion-ms, 800ms) linear both; }
+  @keyframes reaccion-fundido { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+}
+
+/* ---------- Pie ---------- */
+.pie { padding: 1.5rem 1rem 2rem; text-align: center; font-size: .8rem; background: var(--fondo); }
+.pie__logo img { width: 110px; height: auto; margin: 0 auto .75rem; }
+.pie__enlaces { list-style: none; margin: 0 0 .5rem; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 1rem; justify-content: center; }
+.pie__mayores { margin: 0; color: #555; }
+
+/* ---------- Páginas legales y avisos ---------- */
+.cabecera-simple { padding: 1rem; }
+.cabecera-simple a { font-weight: 700; text-decoration: none; }
+.pagina { padding: 0 1rem 2rem; }
+.legal { max-width: 42rem; margin: 0 auto; background: var(--blanco); padding: 1.5rem 1.25rem; }
+.legal h1 { font: 400 2.2rem/1.05 var(--titulos); letter-spacing: -.03em; transform: scaleY(1.25); transform-origin: left top; margin: .5rem 0 1.25rem; }
+.legal h2 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
+.legal h3 { font-size: 1rem; margin: 1.25rem 0 .35rem; }
+.legal__nota { font-size: .8rem; background: #f4f4f4; padding: .5rem .75rem; margin: 0; }
+.tabla-scroll { overflow-x: auto; }
+.legal table { border-collapse: collapse; font-size: .85rem; min-width: 32rem; }
+.legal th, .legal td { border: 1px solid var(--gris-claro); padding: .4rem .5rem; text-align: left; vertical-align: top; }
+
+/* ---------- Aviso de cookies (solo si hay algo de otra web en la página) ---------- */
+.cookies {
+  position: fixed; left: .75rem; right: .75rem; bottom: .75rem; z-index: 10;
+  max-width: 30rem; margin: 0 auto; padding: 1rem;
+  background: var(--blanco); border: 2px solid var(--tinta);
+}
+.cookies__texto { margin: 0 0 .75rem; font-size: .85rem; }
+.cookies__botones { display: flex; gap: .5rem; justify-content: flex-end; }
+
+@media (min-width: 48rem) {
+  .escena { height: 80vh; }
+}

@@ -1,0 +1,6 @@
+dist/
+dist-pruebas/
+node_modules/
+.DS_Store
+.wrangler/
+.dev.vars
