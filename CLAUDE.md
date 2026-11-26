@@ -65,9 +65,25 @@ Lo que emite la tele es el evento. De ahí se pasa a la pantalla de venta.
   «ejemplo tele antigua web» (tele-mueble de los 60, frontal), «ejemplo foto tele antigua»
   (tele de los 70 frontal; foto de Getty con marca de agua: solo referencia, NO usar). Hay
   además «fotos web veleta.zip» sin revisar.
-- Propuestas de composición del hero: ver el chat del 26/11 (A contraluz, B gran angular,
-  C por encima del hombro, D retrato a cámara). Pendiente que Nacho elija. «Método Bici»: Nacho
-  lo pidió; no está definido en el Drive ni aquí: pedirle en qué consiste y anotarlo.
+- Más referencias (26/11, misma carpeta): «foto abuelo en sillon» (luz de lámpara de pie,
+  gramófono), «foto abuelo viendo tele» y «foto abuelo viendo tele 2» (abuelo de espaldas/perfil,
+  tele en una estantería llena de fotos en B/N; parecen hechas con IA), «foto niño viendo tele»
+  (tele centrada con antena, niño de espaldas; Getty con marca de agua: NO usar), «foto chicas
+  viendo tele» (vertical, sofá desenfocado como marco), «foto familia viendo tele» 1, 2 y 3
+  (años 60-80; la 3 es España 1981 con la tele sin señal y el padre moviendo la antena).
+- Propuestas finales del hero (chat del 26/11): 1 Eje central de espaldas, 2 Hombro en diagonal,
+  3 La pared de fotos, 4 Contraluz. Descartadas: gran angular (tele muy pequeña en móvil) y
+  retrato a cámara (rompe la idea de «ver la tele con él»). Pendiente que Nacho elija.
+
+## Método BICI (secundario)
+En Veleta se aplica a las tareas creativas abiertas: **B**riefing (qué problema y qué queremos
+conseguir), **I**nsight (qué necesita y qué motiva a la persona), **C**oncepto (cambiar de
+perspectiva para no caer en lo de siempre) e **I**dea (ideas con técnicas anti-página-en-blanco,
+defendiendo qué necesidad resuelve cada una).
+- Ya está aplicado: de ahí salieron el abuelo y la tele, los dos estados y la reacción. No
+  repetir el proceso entero ni replantear el concepto. Mandan los criterios de este documento.
+- Usarlo solo si surge una decisión creativa nueva que el documento no cubre (p. ej. el aspecto
+  visual final, punto 5 de «Por decidir») y, aun así, consultar antes a Nacho.
 
 ## Los dos estados (cambian solos según la fecha del evento)
 | Estado | Cuándo | Qué ve la gente | Qué consigue |
