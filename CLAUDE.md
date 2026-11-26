@@ -13,6 +13,17 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 - (26/11) Se quitaron de la fase 1 la letra RL Madena, el estilo de titulares del grupo,
   «Grupo Sobremesa» como responsable y el correo info@ del grupo. No volver a meterlos.
 
+## PARA RETOMAR (pausado el 26/11 por la noche; Nacho pidió que se lo recuerde al volver)
+Al empezar la próxima conversación, recordar a Nacho en qué punto estamos:
+- Hecho: hero nuevo (foto B/N + zoom + golpe de cámara + venta por tramos), en la rama
+  `claude/confident-dijkstra-7goz2c`, SIN publicar. Todas las pruebas pasan.
+- Siguiente paso: Nacho trae la FOTO de la escena → subirla a `publico/img/`, medir el rectángulo
+  de la pantalla (x, y, ancho, alto en %) y ponerlo en `config.json` → `escena`; comprobar que la
+  tele cae en la franja central del móvil; capturas para que lo vea.
+- Luego, «ir acabando cositas para sacar modelos» (versiones para enseñar). Faltan: letra de
+  Veleta, tramos y precios por evento, primer evento, dominio de envío para Resend, titular
+  legal, Worker de Cloudflare, si «Eusebio» es el abuelo.
+
 ## Quién y cómo hablarle
 - Cliente: Nacho (socio de Grupo Sobremesa; Veleta es una de sus marcas). Español, sin jerga,
   pasos numerados. Consultarle antes de cambios grandes. Le gusta ver opciones.
