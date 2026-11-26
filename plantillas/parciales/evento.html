@@ -1,11 +1,10 @@
       <article class="venta" id="{{{evId}}}-venta" data-bloque="{{{evId}}}" aria-labelledby="{{{evId}}}-titulo">
-        <p class="pantalla__marca"><img src="/img/logo-veleta-menta.png" alt="{{nombre}}" width="900" height="275"></p>
-        <h1 class="pantalla__titulo" id="{{{evId}}}-titulo">{{{evNombre}}}</h1>
-        <dl class="venta__datos">
-          <div><dt>Fecha</dt><dd><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time></dd></div>
-          <div><dt>Lugar</dt><dd>{{{evLugar}}}</dd></div>
-          <div><dt>Precio</dt><dd>{{{evPrecio}}}</dd></div>
-        </dl>
-{{{evCompra}}}
-        <div class="abuelo-mini provisional" data-abuelo aria-hidden="true"><span>PROVISIONAL · reacción</span></div>
+        <p class="pantalla__marca"><img src="/img/logo-veleta-blanco.png" alt="{{nombre}}" width="900" height="275"></p>
+        <p class="pantalla__antetitulo">En antena</p>
+        <h1 class="pantalla__titulo" id="{{{evId}}}-titulo" tabindex="-1">{{{evNombre}}}</h1>
+        <p class="venta__datos"><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time><span aria-hidden="true"> · </span><span class="venta__lugar">{{{evLugar}}}</span></p>
+{{{evEmail}}}
+        <h2 class="tramos__titulo">Entradas</h2>
+{{{evTramos}}}
+        <p class="venta__nota">{{{evNota}}}</p>
       </article>

@@ -27,7 +27,7 @@ function construir(eventos, nombre, config) {
 }
 
 test('con datos mal escritos NO se construye y se explica en español', () => {
-  const r = construir([{ nombre: 'X', fecha: '12/12/2026', lugar: null, precio: null, enlaceCompra: null, videoTele: null, videoExclusivo: null }]);
+  const r = construir([{ nombre: 'X', fecha: '12/12/2026', lugar: null, enlaceCompra: null, videoTele: null, videoExclusivo: null, tramos: null }]);
   assert.notEqual(r.status, 0);
   assert.match(r.stderr, /No se puede construir la web/);
   assert.match(r.stderr, /fecha «12\/12\/2026» no válida/);
@@ -40,34 +40,75 @@ test('un JSON roto o un vídeo que no existe paran la build', () => {
   assert.notEqual(roto.status, 0);
   assert.match(roto.stderr, /mal escrito/);
   roto.limpiar();
-  const sinVideo = construir([{ nombre: 'X', fecha: '2030-01-01T20:00', lugar: null, precio: null, enlaceCompra: null, videoTele: '/video/no-existe.mp4', videoExclusivo: null }]);
+  const sinVideo = construir([{ nombre: 'X', fecha: '2030-01-01T20:00', lugar: null, enlaceCompra: null, videoTele: '/video/no-existe.mp4', videoExclusivo: null, tramos: null }]);
   assert.notEqual(sinVideo.status, 0);
   assert.match(sinVideo.stderr, /no existe el archivo publico\/video\/no-existe\.mp4/);
   sinVideo.limpiar();
 });
 
-const SIN_ENLACE = { nombre: 'X', fecha: '2030-01-01T20:00', lugar: null, precio: null, enlaceCompra: null, videoTele: null, videoExclusivo: null };
+const SIN_ENLACE = { nombre: 'X', fecha: '2030-01-01T20:00', lugar: null, enlaceCompra: null, videoTele: null, videoExclusivo: null, tramos: null };
+const TRAMOS = [{ nombre: 'Primer tramo', precio: 10 }, { nombre: 'Segundo tramo', precio: 12.5 }, { nombre: 'Tercer tramo', precio: null }];
+const hrefsTramos = (html) => [...html.matchAll(/<a class="tramo" href="([^"]+)"/g)].map((m) => m[1]);
 
-test('evento sin enlace propio: botón al enlace general de la ticketera (Lema)', () => {
-  const r = construir([SIN_ENLACE]);
-  assert.equal(r.status, 0, r.stderr);
-  const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
-  assert.match(html, /href="https:\/\/veleta\.lema\.club" rel="noopener" data-comprar/);
-  assert.doesNotMatch(html, /Entradas pronto/);
-  r.limpiar();
-  const propio = construir([{ ...SIN_ENLACE, enlaceCompra: 'https://veleta.lema.club/evento-x' }]);
-  assert.match(readFileSync(join(propio.dist, 'index.html'), 'utf8'), /href="https:\/\/veleta\.lema\.club\/evento-x"/);
+test('TODOS los tramos llevan al mismo enlace: el del evento o, si no tiene, el general de Lema', () => {
+  const general = construir([{ ...SIN_ENLACE, tramos: TRAMOS }]);
+  assert.equal(general.status, 0, general.stderr);
+  const h1 = hrefsTramos(readFileSync(join(general.dist, 'index.html'), 'utf8'));
+  assert.deepEqual(h1, ['https://veleta.lema.club', 'https://veleta.lema.club', 'https://veleta.lema.club']);
+  general.limpiar();
+  const propio = construir([{ ...SIN_ENLACE, tramos: TRAMOS, enlaceCompra: 'https://veleta.lema.club/evento-x' }]);
+  const html = readFileSync(join(propio.dist, 'index.html'), 'utf8');
+  assert.deepEqual(hrefsTramos(html), Array(3).fill('https://veleta.lema.club/evento-x'));
+  assert.match(html, /12,50 €/);
+  assert.match(html, /PENDIENTE: precio/);
   propio.limpiar();
 });
 
-test('lo que falta sale como PENDIENTE y sin ningún enlace de compra no hay botón', () => {
-  const r = construir([SIN_ENLACE], 'sin enlace', { ticketera: { enlaceGeneral: null } });
+test('sin tramos todavía: una fila para comprar igual y el aviso PENDIENTE', () => {
+  const r = construir([SIN_ENLACE]);
+  const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
+  assert.deepEqual(hrefsTramos(html), ['https://veleta.lema.club']);
+  assert.match(html, /PENDIENTE: tramos y precios/);
+  r.limpiar();
+});
+
+test('lo que falta sale como PENDIENTE y sin ningún enlace de compra no hay enlaces', () => {
+  const r = construir([{ ...SIN_ENLACE, tramos: TRAMOS }], 'sin enlace', { ticketera: { enlaceGeneral: null } });
   assert.equal(r.status, 0, r.stderr);
   const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
   assert.match(html, /PENDIENTE: lugar/);
-  assert.match(html, /PENDIENTE: precio/);
   assert.match(html, /Entradas pronto/);
+  assert.deepEqual(hrefsTramos(html), []);
   assert.doesNotMatch(html, /data-comprar/);
+  r.limpiar();
+});
+
+test('precios mal puestos, temas raros o una escena imposible paran la build', () => {
+  const precio = construir([{ ...SIN_ENLACE, tramos: [{ nombre: 'General', precio: '15 €' }] }]);
+  assert.notEqual(precio.status, 0);
+  assert.match(precio.stderr, /tramo 1: precio «15 €» no válido/);
+  precio.limpiar();
+  const viejo = construir([{ ...SIN_ENLACE, precio: '15 €' }]);
+  assert.match(viejo.stderr, /«precio» ya no se usa/);
+  viejo.limpiar();
+  const tema = construir([{ ...SIN_ENLACE, tema: { acento: 'rojo' } }]);
+  assert.match(tema.stderr, /tema\.acento «rojo» no válido/);
+  tema.limpiar();
+  const textura = construir([{ ...SIN_ENLACE, tema: { textura: 'no-existe.webp' } }]);
+  assert.match(textura.stderr, /no existe la textura/);
+  textura.limpiar();
+  const escena = construir([], 'escena', { escena: { pantalla: { x: 90, y: 10, ancho: 30, alto: 20 } } });
+  assert.match(escena.stderr, /escena\.pantalla se sale de la foto/);
+  escena.limpiar();
+  const foto = construir([], 'foto', { escena: { imagen: '/img/no-existe.webp' } });
+  assert.match(foto.stderr, /no existe la foto de la escena/);
+  foto.limpiar();
+});
+
+test('la tele fuera de la franja del móvil da un aviso (no para la build)', () => {
+  const r = construir([], 'franja', { escena: { pantalla: { x: 5, y: 30, ancho: 24, alto: 27 } } });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stderr, /se sale de la franja que se ve en el móvil/);
   r.limpiar();
 });
 

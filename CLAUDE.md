@@ -32,8 +32,11 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   comprar mientras no haya enlace propio del evento); correo de Veleta **veletavlc@gmail.com**;
   Instagram https://www.instagram.com/veletavalencia/; identidad en Instagram y en el Drive
   (ver «Identidad de Veleta»). El titular legal lo pasa Nacho al final.
-- Pendiente de Nacho: primer evento, dominio, desde qué dirección se envían los correos
-  (EMAIL_FROM), la letra de Veleta, si «Eusebio» es el abuelo, nombre del Worker.
+- (26/11) Hero rehecho según las «decisiones finales» de Nacho (ver abajo): foto B/N casi quieta
+  + zoom + sacudida + segunda pantalla a pantalla completa con TRAMOS. Sin publicar.
+- Pendiente de Nacho: foto definitiva de la escena (y medir el rectángulo de la pantalla), archivo
+  de la letra, nombres y precios de los tramos de cada evento, primer evento, dominio, dirección de
+  envío de Resend (EMAIL_FROM), titular legal, Worker de Cloudflare, si «Eusebio» es el abuelo.
 - Desde aquí no se pueden abrir veleta.lema.club ni instagram.com (red del entorno): el enlace
   de Lema está puesto tal cual lo dio Nacho, sin comprobar.
 
@@ -42,19 +45,42 @@ Landing de UNA SOLA PANTALLA, ultrarrápida, pensada para vender entradas (email
 Móvil primero: casi todo el tráfico viene de Instagram. Mismo diseño en móvil y en ordenador.
 Referencia principal de estructura: https://www.bogartconcept.es/ (ver "Referencias").
 
-Concepto: la primera pantalla es un abuelo en su sillón viendo la tele, con algo de veleta.
-Lo que emite la tele es el evento. De ahí se pasa a la pantalla de venta.
+Veleta es una marca de tardeo para gente joven en Valencia.
+Concepto: la primera pantalla es un señor mayor de espaldas en su sillón viendo la tele. Lo que
+emite la tele es el evento. De ahí se pasa a la pantalla de venta.
 
 ## IMPORTANTE: qué es definitivo y qué no
-- DEFINITIVO: la estructura (estados, recorrido, reglas, datos por evento).
-- NO DEFINITIVO: todo lo visual. Existe un prototipo HTML de prueba (abuelo ilustrado, colores,
-  tele dibujada) que solo sirve para ver la lógica. NO copiar su diseño, sus colores, su
-  ilustración ni sus textos de ejemplo. El diseño real vendrá aparte; hasta entonces,
-  marcadores de posición claramente provisionales (clase `.provisional`: rayado gris con la
-  etiqueta «PROVISIONAL») para el abuelo y la reacción; letra del sistema.
-- (26/11, Nacho, más tarde) **Colores de la marca: SOLO BLANCO Y NEGRO.** Se descarta la paleta
-  menta/amarillo (sigue en el código de la rama hasta el siguiente cambio de diseño: quitarla).
-  Logos a usar: negro y blanco. Lo PENDIENTE puede seguir en rojo (no es diseño).
+- DEFINITIVO: la estructura (estados, recorrido, reglas, datos por evento) y las decisiones
+  finales del hero de abajo.
+- Existe un prototipo HTML de prueba que solo sirvió para ver la lógica: NO copiar nada de él.
+- (26/11, Nacho, más tarde) **Colores de la marca: SOLO BLANCO Y NEGRO.** Paleta menta/amarillo
+  quitada del código el 26/11. Lo PENDIENTE va en rojo (no es diseño).
+
+### Decisiones finales del hero (Nacho, 26/11; mandan sobre lo anterior)
+1. Solo blanco y negro. Logos negro/blanco (en la web: el blanco). Letra del sistema hasta que
+   llegue el archivo de la de Veleta; nada de fuentes externas.
+2. La escena es una foto B/N casi quieta (salón español de los 60-80): señor DE ESPALDAS en su
+   sillón viendo una tele de tubo. Todo el movimiento lo pone la web, nunca la imagen. En la
+   foto: nada de textos, logos, veleta ni objetos modernos.
+3. La pantalla de la tele es un rectángulo definido sobre la foto (`config.json` → `escena`). El
+   vídeo del evento (4:3, B/N, sin sonido) se reproduce dentro.
+4. Intro automática de ~3,5 s (constantes en `publico/js/main.js`): 0,7 s quieta → 2,3 s de zoom
+   lento hasta que la pantalla llena la vista → 0,5 s de «golpe de cámara» → segunda pantalla.
+   Esto sustituye al antiguo «máximo 1,5 s».
+5. Golpe de cámara: 2-3 oscilaciones laterales (±1,5 % translateX, giro ≤ 0,3°), frenando, con un
+   destello en la pantalla. Al final el vídeo se pausa.
+6. Segunda pantalla a pantalla completa (NO texto dentro de la tele): nombre, fecha, lugar y la
+   lista de TRAMOS (filas grandes: nombre + precio). TODOS los tramos llevan al MISMO enlace (el
+   del evento o veleta.lema.club). Son `<a href>` normales: funciona sin JavaScript. Sin estado de
+   agotado. **Sin animación al pulsar: se navega y ya** (se quitó la reacción del abuelo).
+7. Tema secundario por evento (`tema`: acento y/o textura). Por defecto null = B/N puro. No
+   inventar temas.
+8. Sin evento: misma intro con nieve animada en la tele; luego «Estamos esperando al nuevo
+   programa» + email («Avísame cuando empiece la emisión»). Mismo flujo de lista de espera.
+9. Email antes de la ticketera (`emailAntesDeComprar`) se mantiene; con «opcional» nunca frena.
+10. Se mantiene: dos estados por fecha (Madrid, al cargar; madrugada → día siguiente; el más
+    próximo gana), +18, sin analítica, nada de terceros sin consentimiento, SIEMPRE sin sonido
+    (botón «Activar sonido» quitado el 26/11 a petición de Nacho).
 - (26/11, Nacho) **Estética vintage / retro**: fotografía antigua de salón (años 60-80), en B/N.
   Elementos centrales: el señor en el sillón y la tele.
 - Referencias de imagen (Drive, carpeta 1i7ZUqfNOx_jt9h0t9RmIY7kIWBQb7Z2V, vistas el 26/11):
@@ -73,14 +99,15 @@ Lo que emite la tele es el evento. De ahí se pasa a la pantalla de venta.
   (años 60-80; la 3 es España 1981 con la tele sin señal y el padre moviendo la antena).
 - Propuestas finales del hero (chat del 26/11): 1 Eje central de espaldas, 2 Hombro en diagonal,
   3 La pared de fotos, 4 Contraluz. Descartadas: gran angular (tele muy pequeña en móvil) y
-  retrato a cámara (rompe la idea de «ver la tele con él»). Pendiente que Nacho elija.
+  retrato a cámara (rompe la idea de «ver la tele con él»). La decisión final (señor de espaldas,
+  foto casi quieta) va en la línea de la opción 1.
 
 ## Método BICI (secundario)
 En Veleta se aplica a las tareas creativas abiertas: **B**riefing (qué problema y qué queremos
 conseguir), **I**nsight (qué necesita y qué motiva a la persona), **C**oncepto (cambiar de
 perspectiva para no caer en lo de siempre) e **I**dea (ideas con técnicas anti-página-en-blanco,
 defendiendo qué necesidad resuelve cada una).
-- Ya está aplicado: de ahí salieron el abuelo y la tele, los dos estados y la reacción. No
+- Ya está aplicado: de ahí salieron el abuelo y la tele y los dos estados. No
   repetir el proceso entero ni replantear el concepto. Mandan los criterios de este documento.
 - Usarlo solo si surge una decisión creativa nueva que el documento no cubre (p. ej. el aspecto
   visual final, punto 5 de «Por decidir») y, aun así, consultar antes a Nacho.
@@ -88,16 +115,16 @@ defendiendo qué necesidad resuelve cada una).
 ## Los dos estados (cambian solos según la fecha del evento)
 | Estado | Cuándo | Qué ve la gente | Qué consigue |
 |---|---|---|---|
-| Con evento | Hay un evento con fecha por delante | La tele emite el vídeo del evento → zoom → pantalla de venta | Entradas |
-| Sin evento | No hay evento, o ya pasó la fecha | Tele pixelada sin señal → zoom → "estamos esperando al nuevo programa" + email | Lista de espera |
+| Con evento | Hay un evento con fecha por delante | La tele emite el vídeo del evento → zoom → golpe de cámara → venta por tramos | Entradas |
+| Sin evento | No hay evento, o ya pasó la fecha | Tele con nieve → zoom → golpe de cámara → "Estamos esperando al nuevo programa" + email | Lista de espera |
 
 - No hay tercer estado: las entradas agotadas se resuelven en la ticketera.
 - Al pasar la fecha del evento vuelve sola al estado sin evento (hora de Madrid; si acaba de
   madrugada, sigue visible hasta el día siguiente).
-- Evento con enlace de compra a `null`: el botón «Comprar entrada» lleva al enlace general de
-  la ticketera (`config.json` → `ticketera.enlaceGeneral`, hoy https://veleta.lema.club; decisión
-  de Nacho del 26/11). Solo si ese también es `null`, la pantalla dice «Entradas pronto» y no
-  muestra botón. Nunca inventar precios ni fechas.
+- Evento con enlace de compra a `null`: los tramos llevan al enlace general de la ticketera
+  (`config.json` → `ticketera.enlaceGeneral`, hoy https://veleta.lema.club; Nacho, 26/11). Solo si
+  ese también es `null`, sale «Entradas pronto» y los tramos van sin enlace. Sin tramos (`null` o
+  `[]`): una sola fila «Comprar entrada» + PENDIENTE. Nunca inventar precios ni fechas.
 - Verificar que el cambio de estado funciona al cargar la página (no solo en cada build).
 
 Cómo está hecho: la build mete en la página TODOS los eventos futuros más el bloque «sin
@@ -108,26 +135,38 @@ bloque las genera la build en `css/estado-<huella>.css`. Si hay varios eventos f
 enseña el más próximo. Sin JavaScript se ve el estado del momento de la build.
 
 ## Recorrido con evento
-1. Entra y ve al abuelo y el vídeo del evento en la tele.
-2. Zoom a la tele: máximo 1,5 s, se salta con un toque, y sin intro para quien ya ha entrado
-   en esa sesión (guardar en sessionStorage dentro de try/catch; clave `veleta_intro`).
-3. Pantalla de venta: evento, fecha, lugar, precio y botón «Comprar entrada». Es una
-   escenografía: NO cobra nada. Debe ser HTML normal con un enlace real a la ticketera, de modo
-   que funcione sin JavaScript (zoom y reacción son mejora progresiva).
-4. Al pulsar comprar, el abuelo reacciona (animación corta, ≤ 1 s) y se abre la ticketera. Si la
-   animación falla, la ticketera se abre igual. (Hecho: se abre en la misma pestaña tras
-   `reaccionMs`; Ctrl/Cmd+clic y similares no se retrasan.)
-5. Tras comprar, fuera de la web, el comprador recibe por email un vídeo exclusivo.
+1. Entra y ve la foto del salón con el vídeo del evento en la tele (sin sonido).
+2. Intro automática ~3,5 s: quieta → zoom → golpe de cámara. Un toque en cualquier sitio la
+   salta. Quien ya la vio en esta visita va directo a la segunda pantalla (sessionStorage dentro
+   de try/catch; clave `veleta_intro`). Con «reducir movimiento»: sin zoom ni sacudida, solo un
+   fundido (el vídeo sí se reproduce).
+3. Segunda pantalla: nombre, fecha, lugar y tramos. Escenografía: NO cobra nada; cada tramo es
+   un enlace normal a la ticketera (misma pestaña, sin esperas).
+4. Tras comprar, fuera de la web, el comprador recibe por email un vídeo exclusivo.
 
-La web NO sabe si alguien ha pagado, solo si ha pulsado. La reacción ocurre al pulsar.
+La web NO sabe si alguien ha pagado, solo si ha pulsado.
+
+Cómo está hecha la escena: `.escena__lienzo` tiene la proporción de la foto y se recorta tipo
+«cover» con CSS (variables generadas en `css/estado-<huella>.css`). La tele (`.tele`) se coloca
+con los % de `escena.pantalla`. El zoom calcula en JS la escala para que el rectángulo llene la
+vista (×1,02) con `transform-origin` en su centro, usando Web Animations (ids `zoom`,
+`sacudida`, `destello`, `fundido`). Sin JavaScript, la escena se ve entera (con su proporción)
+encima de la segunda pantalla.
 
 ## Datos por evento (`datos/eventos.json`; marca solo en `datos/config.json`)
-Cuatro cosas por evento; si falta alguna, `null` y la web lo marca como PENDIENTE:
+Si falta algo, `null` y la web lo marca como PENDIENTE:
 1. `fecha` (ISO, hora de Madrid: `"2026-12-12T23:00"`) + `horaFin` opcional (`"05:00"`)
 2. `enlaceCompra` (enlace del evento en Lema; si es `null`, se usa el general de Lema)
-3. `videoTele` (lo que emite la tele; archivo en `publico/video/`) + `posterTele` opcional
+3. `videoTele` (mp4 4:3 en `publico/video/`; se ve en B/N) + `posterTele` opcional
 4. `videoExclusivo` (solo referencia: se manda por email, no se usa en la web)
-Más: `nombre`, `lugar`, `precio`, `"censurado": true` para eventos aún secretos.
+5. `tramos`: `[{ "nombre": "…", "precio": 15 }]` (precio número en euros, ≥ 0, máx. 2 decimales; o null)
+Más: `nombre`, `lugar`, `"censurado": true` para eventos aún secretos y `tema` opcional
+(`{ "acento": "#rrggbb", "textura": "archivo en publico/img/texturas/" }`). `precio` suelto ya no
+existe: la build lo rechaza con un mensaje.
+
+Escena (`config.json` → `escena`): `imagen` (null = gris PROVISIONAL), `ancho`, `alto`,
+`pantalla { x, y, ancho, alto }` en % de la foto y `ratioVideo` ("4:3"). La build valida todo y
+avisa si la pantalla se sale de la franja que se ve en el móvil o no es 4:3.
 
 ## Referencias de webs (para inspirarse en la LÓGICA, no para copiar el diseño)
 Regla: de cada referencia se toma una idea concreta de cómo funciona. No se copia su aspecto,
@@ -185,9 +224,7 @@ sirve / qué NO copiar) y marcar si se han visto o no.
 3. Poca interfaz: como mucho, el botón de comprar siempre visible.
 4. La personalidad va en el contenido y el movimiento, no en cargar la pantalla de elementos.
 
-Nota (26/11): hoy la intro pasa sola a la venta en 1,5 s y un toque la adelanta. Si Nacho
-quiere que la entrada sea un gesto (esperar al toque, como Bogart), es un cambio pequeño en
-`main.js` (no lanzar el temporizador); preguntárselo antes, porque choca con «máximo 1,5 s».
+Nota (26/11): decidido por Nacho: intro automática (~3,5 s); un toque la salta.
 
 ## Por decidir (PARAMETRIZADO en `datos/config.json` → `opciones`; no elegir por Nacho)
 1. Cómo sacamos la lista de compradores: exportar a mano de la ticketera (recomendado para
@@ -197,11 +234,11 @@ quiere que la entrada sea un gesto (esperar al toque, como Bogart), es un cambio
    `obligatorio`. Sin JavaScript nunca se pide (el enlace funciona igual).
 3. Vídeo exclusivo: extra distinto / mismo vídeo del evento completo / decidir por evento;
    y cuándo se manda. (Solo `videoExclusivo` como referencia.)
-4. Reacción del abuelo: `reaccion`: `pulgar` (puesto) / `golpecito` / `brindis` / `aleatoria`.
+4. ~~Reacción del abuelo~~: quitada (Nacho, 26/11: al tocar un tramo se navega sin animación).
 5. Aspecto del abuelo (ilustración, vídeo real, foto con animaciones): lo decide el diseño.
 6. A dónde van los emails de la lista de espera (herramienta de email / hoja de cálculo →
    base de asistentes de Veleta / ambas). Hoy: un correo por alta a `EMAIL_TO`.
-7. Sonido: `sonido`: `nunca` / `boton` (puesto: sin sonido hasta pulsar «Activar sonido»).
+7. Sonido: decidido (26/11): SIEMPRE sin sonido; botón «Activar sonido» quitado.
 8. Medición: la regla es «sin analítica». No hay ningún contador. Preguntar a Nacho antes de
    añadir nada.
 9. Fotos, preguntas frecuentes o pie con más contenido: NO. Solo Instagram y legales en el pie.
@@ -210,7 +247,8 @@ quiere que la entrada sea un gesto (esperar al toque, como Bogart), es un cambio
     `wrangler.jsonc`). Falta `EMAIL_FROM`: Resend solo envía desde un dominio verificado (no
     desde Gmail), así que hace falta un dominio (¿de Veleta?) y el visto bueno del informático
     para AÑADIR sus registros DNS. Sin EMAIL_FROM o sin clave no se envía y se avisa a la persona.
-Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza valores mayores.
+Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUDIDA_MS` en
+`publico/js/main.js`. `opciones` solo admite `emailAntesDeComprar` (la build rechaza lo demás).
 
 ## Reglas que ya nos funcionaron (no repetir errores)
 - **No inventar datos** (fechas, sitios, precios, cuentas, nombres): lo que falta va a `null`
@@ -225,10 +263,12 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
 - Con «reducir movimiento»: sin zoom ni parallax, solo fundidos; el vídeo de la tele SÍ se
   reproduce.
 - Cada efecto de movimiento va marcado [MOV-n] en CSS y JS para poder quitarlo por separado:
-  [MOV-1] zoom a la tele, [MOV-2] reacción del abuelo, [MOV-3] nieve de «sin señal».
+  [MOV-1] zoom a la tele, [MOV-2] golpe de cámara (+ destello), [MOV-3] nieve de «sin señal»,
+  [MOV-4] grano de película animado, [MOV-5] parpadeo de la luz de la tele.
 - Guardar en el navegador siempre dentro de try/catch (modo privado).
 - Rendimiento: es el objetivo principal. Nada de librerías pesadas ni fuentes externas.
-  Hoy la página pesa unos 40 KB sin contar el vídeo.
+  Hoy (26/11): HTML+CSS+JS ≈ 12 KB comprimidos + logo 9 KB; la foto (≈150-200 KB, WebP/AVIF)
+  y el vídeo van aparte. La build avisa si la foto pasa de 200 KB.
 
 ## Técnica (solo infraestructura, reutilizada de la web de Sobremesa y ya probada)
 - Web estática con generador propio sin dependencias: `scripts/build.mjs` junta `plantillas/` +
@@ -265,6 +305,8 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
   que se pausa cuando no se ve.
 - Fuentes propias servidas desde la web, solo los pesos que se usan (hoy ninguna: letra del
   sistema hasta tener la de Veleta).
+- Capas de ambiente baratas: grano (`publico/img/grano.svg`, 300 bytes), viñeteo y barrido con
+  degradados CSS, luz de la tele con `opacity`.
 
 ## Tipografía y estilo
 - Manda la identidad de Veleta (colores, letra, logo). NO usar por defecto la tipografía, los
@@ -282,10 +324,10 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
 - Letra: no hay archivos de fuente en el Drive. Preguntar a Nacho cuál es (o sacarla del .ai).
 - En el plan de marketing del 6/11 sale «Eusebio» («Flyer principal: imagen Eusebio + info»):
   preguntar si es el personaje del abuelo antes de suponerlo.
-- Logos en la web (`publico/img/`, recortado el margen vacío): `logo-veleta-negro.png` (sobre el
-  salón menta), `logo-veleta-menta.png` (arriba de la tarjeta; del Drive, «logo veleta azul
-  #8FCDC0.png»), `logo-veleta-blanco.png` (pie; del Drive, «logo veleta blanco.png»).
-  `og.jpg` = logo menta sobre negro, 1200×630. La carpeta SVG del Drive está vacía.
+- Logos en la web (`publico/img/`, recortado el margen vacío): `logo-veleta-blanco.png` (segunda
+  pantalla y pie; del Drive, «logo veleta blanco.png») y `logo-veleta-negro.png` (guardado, sin
+  usar ahora). El menta se borró el 26/11. `og.jpg` = logo blanco sobre negro, 1200×630. La
+  carpeta SVG del Drive está vacía.
 
 ## Material de Veleta que ya existe (en nach69/Private-)
 - Vídeo recap de Casino Veleta (`publico/video/casino-veleta.mp4`) y su póster.
@@ -303,9 +345,10 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
   texto a la vista. Que lo confirme el asesor.
 
 ## Cómo trabajar
-- Probar antes de subir: `npm test`, `npm run test:navegador` (Chromium: los dos estados,
-  cambio de estado moviendo el reloj, con y sin JavaScript, zoom, reacción, «reducir
-  movimiento», nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y
+- Probar antes de subir: `npm test` (34 pruebas), `npm run test:navegador` (72 comprobaciones en
+  Chromium: los dos estados, cambio por fecha moviendo el reloj, móvil y ordenador, con y sin
+  JavaScript, fases de la intro, saltar, segunda visita, «reducir movimiento», tramos al mismo
+  enlace, tema, solo B/N, nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y
   `npx wrangler deploy --dry-run`.
 - Para ver la web publicada: pedir permiso para abrir la dirección workers.dev del Worker y
   developers.cloudflare.com.

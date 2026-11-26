@@ -1,31 +1,33 @@
-/* Landing de Veleta · estilos PROVISIONALES con la identidad de Veleta (decisión de Nacho del 26/11:
-   aplicar ya colores y logo). Colores del Drive de Veleta: azul menta #8FCDC0, amarillo #C3C500,
-   negro y blanco. Letra: la del sistema hasta tener la de Veleta.
-   Lo definitivo es la estructura. El abuelo y la tele siguen siendo marcadores de posición (.provisional:
-   rayado gris con la etiqueta «PROVISIONAL») hasta que llegue el diseño.
+/* Landing de Veleta · estilos.
+   Marca SOLO en blanco y negro (Nacho, 26/11). Estética vintage: foto de salón de los años 60-80.
+   Letra del sistema hasta que llegue la de Veleta. Lo que falta (PENDIENTE) va en rojo, fuera de la marca.
+   Las medidas de la escena (proporción de la foto y rectángulo de la tele) las genera la build en
+   css/estado-<huella>.css a partir de datos/config.json → escena.
    Efectos de movimiento marcados [MOV-n] para quitarlos por separado:
-     [MOV-1] zoom a la tele · [MOV-2] reacción del abuelo · [MOV-3] nieve de «sin señal» */
+     [MOV-1] zoom a la tele (JS) · [MOV-2] sacudida de cámara (JS) · [MOV-3] nieve de «sin señal» (JS)
+     [MOV-4] grano de película animado · [MOV-5] parpadeo de la luz de la tele */
 
 :root {
-  --negro: #0b0b0b;
-  --negro-suave: #161616;
-  --menta: #8fcdc0;
-  --amarillo: #c3c500;
+  --negro: #000;
   --blanco: #fff;
-  --texto-suave: #c9c9c9;
-  --linea: rgba(255, 255, 255, .18);
+  --gris-1: #1a1a1a;
+  --gris-2: #3a3a3a;
+  --gris-3: #8c8c8c;
+  --texto-suave: #bdbdbd;
+  --acento: #fff;
   --error: #ff8f8f;
-  --titulos: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --textos: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --intro-ms: 1500ms;
+  --textos: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  /* Valores por defecto; los de verdad vienen de css/estado-<huella>.css */
+  --escena-ratio: 1.5;
+  --tele-x: 38%; --tele-y: 30%; --tele-ancho: 24%; --tele-alto: 27%;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; background: var(--negro); }
 body {
   margin: 0;
   font-family: var(--textos);
-  font-weight: 400;
   font-size: 1rem;
   line-height: 1.45;
   color: var(--blanco);
@@ -33,7 +35,7 @@ body {
 }
 img, video, canvas { display: block; max-width: 100%; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -42,182 +44,229 @@ a { color: inherit; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 [hidden] { display: none !important; }
 
-/* Dato que falta: a propósito NO usa los colores de Veleta, para que no se confunda con el diseño */
+/* Dato que falta: a propósito fuera del blanco y negro, para que no se confunda con el diseño */
 mark.pendiente {
   background: #fff; color: #b00020; outline: 2px dashed #ff4f4f; outline-offset: 1px;
-  padding: 0 .25em; font-size: .85em; font-weight: 700;
+  padding: 0 .25em; font: 700 .75em/1.3 var(--textos); letter-spacing: 0; text-transform: none;
 }
 .censura { letter-spacing: -.08em; }
-
-/* ---------- Marcador de posición neutro ---------- */
-.provisional {
-  position: relative;
-  display: flex; align-items: center; justify-content: center; text-align: center;
-  border: 2px dashed #777;
-  background: repeating-linear-gradient(45deg, #e6e6e6 0 12px, #dcdcdc 12px 24px);
-  color: #444; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
-  padding: .5rem;
-}
 
 /* ---------- Botones ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 48px; padding: .75rem 1.4rem;
-  border: 2px solid var(--menta); border-radius: 0;
-  background: var(--menta); color: var(--negro);
-  font: 800 1rem/1 var(--textos); letter-spacing: .02em; text-decoration: none; cursor: pointer;
+  border: 2px solid var(--blanco); border-radius: 0;
+  background: var(--blanco); color: var(--negro);
+  font: 800 1rem/1 var(--textos); letter-spacing: .04em; text-transform: uppercase;
+  text-decoration: none; cursor: pointer;
 }
-.btn--grande { width: 100%; min-height: 56px; font-size: 1.1rem; text-transform: uppercase; }
-.btn--borde { background: transparent; color: var(--blanco); border-color: var(--blanco); }
-.btn--peque { min-height: 40px; padding: .5rem 1rem; font-size: .85rem; }
-.btn--apagado { background: #2a2a2a; border-color: #2a2a2a; color: var(--texto-suave); cursor: default; }
+.btn--borde { background: transparent; color: var(--blanco); }
 .btn[disabled] { opacity: .6; }
 
-/* ---------- Escena: el abuelo viendo la tele ---------- */
-.escena { position: relative; height: 70vh; height: 70svh; overflow: hidden; background: var(--negro); }
-.salon { position: absolute; inset: 0; transform-origin: 74% 40%; background: var(--menta); }
-.escena__logo { position: absolute; left: 50%; top: 4%; width: min(42%, 220px); height: auto; transform: translateX(-50%); }
-.abuelo { position: absolute; left: 4%; bottom: 6%; width: 42%; height: 58%; }
-.tele {
-  position: absolute; left: 52%; top: 22%; width: 44%; height: 36%;
-  background: var(--negro); padding: 4%; border-radius: 6px;
+/* =====================================================================
+   1. ESCENA
+   Sin JavaScript: la foto entera, con su proporción, encima de la segunda pantalla.
+   Con JavaScript: a pantalla completa, recortada al centro (como object-fit: cover).
+   ===================================================================== */
+.escena { position: relative; overflow: hidden; background: var(--negro); aspect-ratio: var(--escena-ratio); }
+.escena__camara { position: absolute; inset: 0; }
+.escena__lienzo { position: absolute; inset: 0; }
+.escena__foto {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(1) contrast(1.06);
 }
-.tele__pantalla { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+/* Mientras no hay foto: gris PROVISIONAL con el rectángulo de la tele dibujado */
+.escena__foto--provisional {
+  display: flex; align-items: flex-end; justify-content: center; padding: 0 1rem 7%;
+  background: repeating-linear-gradient(45deg, #6f6f6f 0 14px, #666 14px 28px);
+  color: #e8e8e8; font: 700 .7rem/1.3 var(--textos); letter-spacing: .08em; text-transform: uppercase; text-align: center;
+}
+.escena__foto--provisional span { max-width: 26%; } /* dentro de la franja central que se ve en el móvil */
+.escena__foto--provisional ~ .tele { outline: 2px dashed #fff; outline-offset: 3px; }
+
+/* La tele: rectángulo definido sobre la foto (en % de la foto) */
+.tele {
+  position: absolute;
+  left: var(--tele-x); top: var(--tele-y); width: var(--tele-ancho); height: var(--tele-alto);
+  overflow: hidden; background: #050505;
+  border-radius: 7% / 9%;
+  box-shadow: 0 0 2.5vmin rgba(255, 255, 255, .35), 0 0 9vmin rgba(255, 255, 255, .12);
+}
 .emision { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-.tele__video { width: 100%; height: 100%; object-fit: cover; }
+.tele__video { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1) brightness(1.05); }
+.emision mark.pendiente { font-size: .6rem; }
 .emision--sin-senal {
-  /* Sin JS: nieve quieta hecha con degradados */
+  /* Sin JS (o con «reducir movimiento»): nieve quieta hecha con degradados */
   background:
     repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(90deg, #777 0 2px, #333 2px 3px, #aaa 3px 5px, #555 5px 7px);
 }
 .sin-senal { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
-.sin-senal__texto {
-  position: relative; background: var(--amarillo); color: var(--negro); padding: .15em .5em;
-  font: 800 .8rem/1.2 var(--textos); letter-spacing: .12em; text-transform: uppercase;
+/* Encima de la pantalla: líneas de barrido, curvatura y brillo */
+.tele__barrido {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.10), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px);
+  box-shadow: inset 0 0 3vmin rgba(0,0,0,.85);
 }
-.emision mark.pendiente { font-size: .7rem; }
+/* [MOV-5] Luz de la tele que parpadea suave (y destella en la sacudida, desde el JS) */
+.tele__luz { position: absolute; inset: 0; pointer-events: none; background: #fff; opacity: 0; mix-blend-mode: screen; }
+@keyframes parpadeo { 0%, 100% { opacity: 0; } 47% { opacity: .05; } 50% { opacity: 0; } 53% { opacity: .07; } 80% { opacity: .02; } }
+html.js .tele__luz { animation: parpadeo 2.6s steps(8, end) infinite; }
+
+/* Capas de ambiente sobre toda la escena: grano y viñeteo */
+.escena__grano {
+  position: absolute; inset: -60px; pointer-events: none;
+  background: url('/img/grano.svg') repeat; background-size: 160px; opacity: .22; mix-blend-mode: overlay;
+}
+/* [MOV-4] El grano se mueve a saltos, como en una película */
+@keyframes grano {
+  0% { transform: translate(0, 0); } 20% { transform: translate(-23px, 14px); } 40% { transform: translate(17px, -31px); }
+  60% { transform: translate(-41px, -9px); } 80% { transform: translate(29px, 37px); } 100% { transform: translate(0, 0); }
+}
+html.js .escena__grano { animation: grano .5s steps(1, end) infinite; }
+.escena__vineta {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.55) 80%, rgba(0,0,0,.9) 100%);
+}
 .escena__saltar {
-  position: absolute; left: 0; right: 0; bottom: 1rem; margin: 0; text-align: center;
-  font-size: .8rem; font-weight: 700; color: var(--negro);
+  position: absolute; left: 0; right: 0; bottom: max(1.25rem, env(safe-area-inset-bottom)); margin: 0; text-align: center;
+  font: 700 .72rem/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.75);
 }
 
-/* ---------- Pantalla: venta o lista de espera ---------- */
-.pantalla { position: relative; padding: 2rem 1rem 3rem; background: var(--negro); }
-.venta, .espera {
-  position: relative; max-width: 30rem; margin: 0 auto; padding: 1.5rem 1.25rem;
-  background: var(--negro); border: 2px solid var(--menta);
+/* =====================================================================
+   2. SEGUNDA PANTALLA (venta por tramos o lista de espera)
+   ===================================================================== */
+.pantalla {
+  position: relative; isolation: isolate;
+  padding: 3rem 1.25rem 3rem; background: var(--negro);
 }
-.pantalla__marca { margin: 0 0 1rem; }
-.pantalla__marca img { width: 120px; height: auto; }
+.pantalla::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: url('/img/grano.svg') repeat; background-size: 160px; opacity: .14; mix-blend-mode: overlay;
+}
+.venta, .espera { position: relative; max-width: 32rem; margin: 0 auto; }
+/* Tema secundario por evento (opcional): textura de fondo muy suave */
+.venta::before {
+  content: ''; position: absolute; inset: -3rem -1.25rem; z-index: -1; pointer-events: none;
+  background: var(--textura, none) center / cover; opacity: .18; filter: grayscale(1);
+}
+.pantalla__marca { margin: 0 0 2rem; }
+.pantalla__marca img { width: 104px; height: auto; }
+.pantalla__antetitulo {
+  margin: 0 0 .75rem; font: 700 .75rem/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--texto-suave);
+}
+.pantalla__antetitulo::before {
+  content: ''; display: inline-block; width: .55em; height: .55em; margin-right: .6em; border-radius: 50%;
+  background: var(--acento); vertical-align: .05em;
+}
 .pantalla__titulo {
-  margin: 0 0 1rem; font: 800 clamp(1.8rem, 8vw, 2.6rem)/1.05 var(--titulos);
-  text-transform: uppercase; outline: none;
+  margin: 0 0 1rem; font: 900 clamp(2.3rem, 11vw, 4.2rem)/.95 var(--textos);
+  letter-spacing: -.01em; text-transform: uppercase; outline: none; overflow-wrap: anywhere;
 }
-.pantalla__texto { margin: 0 0 1rem; color: var(--texto-suave); }
-.venta__datos { margin: 0 0 1.25rem; display: grid; gap: .5rem; }
-.venta__datos div { display: grid; grid-template-columns: 5rem 1fr; gap: .5rem; border-top: 1px solid var(--linea); padding-top: .5rem; }
-.venta__datos dt { color: var(--menta); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; padding-top: .15em; }
-.venta__datos dd { margin: 0; font-weight: 700; }
-.comprar { display: grid; gap: .75rem; }
-.comprar__email { display: grid; gap: .35rem; }
-.comprar__etiqueta { font-size: .85rem; color: var(--texto-suave); }
-.comprar__nota { margin: 0; font-size: .78rem; color: var(--texto-suave); text-align: center; }
+.venta__datos {
+  margin: 0 0 2rem; font: 600 .85rem/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--texto-suave);
+}
+.tramos__titulo { margin: 0 0 .5rem; font: 700 .75rem/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--texto-suave); }
+.tramos { list-style: none; margin: 0 0 1rem; padding: 0; border-bottom: 1px solid var(--blanco); }
+.tramos li { border-top: 1px solid var(--blanco); }
+.tramo {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  min-height: 68px; padding: .9rem .25rem;
+  font: 800 1.2rem/1.15 var(--textos); text-transform: uppercase; text-decoration: none;
+  transition: background-color 120ms ease-out, color 120ms ease-out, padding 120ms ease-out;
+}
+a.tramo::after { content: '→'; font-weight: 400; margin-left: .25rem; }
+.tramo__nombre { flex: 1; }
+.tramo__precio { font-variant-numeric: tabular-nums; white-space: nowrap; }
+a.tramo:hover, a.tramo:focus-visible, a.tramo:active {
+  background: var(--acento); color: var(--negro); padding-left: .9rem; padding-right: .9rem; outline: none;
+}
+.tramo--apagado { opacity: .55; }
+.venta__nota { margin: 0; font-size: .8rem; color: var(--texto-suave); }
+.venta__nota strong { color: var(--blanco); font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; }
+
+/* Email antes de ir a la ticketera (opcional u obligatorio, según config.json) */
+.comprar__email { display: grid; gap: .4rem; margin: 0 0 1.5rem; }
+.comprar__etiqueta, .lista__etiqueta { font: 700 .75rem/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--texto-suave); }
 input[type="email"] {
-  width: 100%; min-height: 48px; padding: .6rem .8rem;
-  border: 2px solid var(--blanco); border-radius: 0; background: var(--blanco);
-  font: 400 1rem var(--textos); color: var(--negro);
+  width: 100%; min-height: 50px; padding: .6rem .8rem;
+  border: 2px solid var(--blanco); border-radius: 0; background: var(--negro);
+  font: 400 1rem var(--textos); color: var(--blanco);
 }
-input[type="email"]:focus-visible { border-color: var(--amarillo); }
+input[type="email"]::placeholder { color: var(--gris-3); }
 input[aria-invalid="true"] { border-color: var(--error); }
-.campo__error { margin: 0; min-height: 0; color: var(--error); font-size: .85rem; }
+.campo__error { margin: 0; color: var(--error); font-size: .85rem; }
 .campo__error:empty { display: none; }
-.legal-corto { margin: 0; font-size: .75rem; color: var(--texto-suave); }
-.lista { display: grid; gap: .6rem; }
-.lista__fila { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
+.legal-corto { margin: 0; font-size: .72rem; color: var(--texto-suave); }
+.lista { display: grid; gap: .6rem; margin-top: 2rem; }
+.lista__fila { display: grid; grid-template-columns: 1fr auto; }
+.lista__fila .btn { border-left: 0; }
 .form-estado { margin: 0; font-weight: 700; }
 .form-estado:empty { display: none; }
-.form-estado.es-ok { color: var(--amarillo); }
 .form-estado.es-error { color: var(--error); }
 
-/* Abuelo pequeño en la pantalla de venta: es el que reacciona al pulsar «Comprar entrada» */
-.abuelo-mini { position: absolute; top: -1.75rem; right: .75rem; width: 4.5rem; height: 4.5rem; font-size: .5rem; }
-.abuelo-mini::after {
-  content: attr(data-reaccion); position: absolute; bottom: .2rem; left: 0; right: 0;
-  font-size: .55rem; font-weight: 700; color: #111;
+/* =====================================================================
+   Con JavaScript: escena a pantalla completa → intro → segunda pantalla
+   ===================================================================== */
+html.js[data-fase] .escena { position: fixed; inset: 0; aspect-ratio: auto; z-index: 0; }
+html.js[data-fase] .escena__lienzo {
+  /* Recorte «cover»: la foto llena la pantalla manteniendo su proporción, centrada */
+  --lienzo-ancho: max(100vw, calc(100vh * var(--escena-ratio)));
+  --lienzo-alto: max(100vh, calc(100vw / var(--escena-ratio)));
+  inset: auto; width: var(--lienzo-ancho); height: var(--lienzo-alto);
+  left: calc(50% - var(--lienzo-ancho) / 2); top: calc(50% - var(--lienzo-alto) / 2);
 }
-
-/* [MOV-2] Reacción del abuelo (≤ 1 s). La forma real la decidirá el diseño. */
-.abuelo-mini.reacciona[data-reaccion="pulgar"] { animation: reaccion-pulgar var(--reaccion-ms, 800ms) ease-out both; }
-.abuelo-mini.reacciona[data-reaccion="golpecito"] { animation: reaccion-golpecito var(--reaccion-ms, 800ms) ease-in-out both; }
-.abuelo-mini.reacciona[data-reaccion="brindis"] { animation: reaccion-brindis var(--reaccion-ms, 800ms) ease-in-out both; }
-@keyframes reaccion-pulgar { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
-@keyframes reaccion-golpecito { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-@keyframes reaccion-brindis { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-14deg) translateY(-6px); } }
-
-/* ---------- Con JavaScript: escena a pantalla completa → zoom → pantalla de venta ---------- */
-html.js[data-fase] .escena { position: fixed; inset: 0; height: auto; z-index: 0; }
-html.js[data-fase] .pantalla {
-  min-height: 100vh; min-height: 100svh; z-index: 1; background: transparent;
-  display: flex; flex-direction: column; justify-content: center; padding-top: 3rem;
+@supports (height: 100svh) {
+  html.js[data-fase] .escena__lienzo {
+    --lienzo-ancho: max(100vw, calc(100svh * var(--escena-ratio)));
+    --lienzo-alto: max(100svh, calc(100vw / var(--escena-ratio)));
+  }
 }
+html.js[data-fase="intro"] .escena { cursor: pointer; }
 html.js[data-fase="intro"] .pantalla,
 html.js[data-fase="intro"] .pie { visibility: hidden; opacity: 0; }
-html.js[data-fase="intro"] .escena { cursor: pointer; }
+html.js[data-fase] .pantalla { z-index: 1; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+html.js[data-fase="pantalla"] .escena { visibility: hidden; opacity: 0; transition: opacity 400ms ease-out, visibility 0s 400ms; }
 html.js[data-fase="pantalla"] .pantalla,
-html.js[data-fase="pantalla"] .pie { visibility: visible; opacity: 1; transition: opacity 250ms ease-out; }
-html.js[data-fase="pantalla"] .escena__saltar { display: none; }
-html.recien-llegada .pantalla, html.recien-llegada .pie { pointer-events: none; }
+html.js[data-fase="pantalla"] .pie { visibility: visible; opacity: 1; transition: opacity 400ms ease-out; }
 html.js[data-fase] .pie { position: relative; z-index: 1; }
+html.recien-llegada .pantalla, html.recien-llegada .pie { pointer-events: none; }
 
-/* [MOV-1] Zoom a la tele: se mira un momento y se entra en la pantalla. Duración: opciones.introMaxMs (máx. 1,5 s). */
-html.intro-en-marcha[data-fase="intro"] .salon { animation: zoom-tele var(--intro-ms) cubic-bezier(.55, 0, .7, .2) forwards; }
-html.js[data-fase="pantalla"] .salon { transform: scale(3.2); filter: brightness(.45); }
-@keyframes zoom-tele {
-  0%, 35% { transform: scale(1); filter: none; }
-  100% { transform: scale(3.2); filter: brightness(.45); }
-}
-
-/* Con «reducir movimiento»: sin zoom, solo fundidos. El vídeo de la tele SÍ se reproduce. */
+/* Con «reducir movimiento»: sin zoom ni sacudida (los quita el JS), sin grano ni parpadeo animados; solo fundidos */
 @media (prefers-reduced-motion: reduce) {
-  html.intro-en-marcha[data-fase="intro"] .salon { animation: fundido-tele var(--intro-ms) linear forwards; }
-  html.js[data-fase="pantalla"] .salon { transform: none; filter: brightness(.45); }
-  @keyframes fundido-tele { 0%, 35% { filter: none; } 100% { filter: brightness(.45); } }
-  .abuelo-mini.reacciona[data-reaccion] { animation: reaccion-fundido var(--reaccion-ms, 800ms) linear both; }
-  @keyframes reaccion-fundido { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+  html.js .escena__grano, html.js .tele__luz { animation: none; }
+  .tramo { transition: none; }
 }
 
 /* ---------- Pie ---------- */
-.pie { padding: 1.5rem 1rem 2rem; text-align: center; font-size: .8rem; background: var(--negro); color: var(--texto-suave); }
-.pie__logo img { width: 110px; height: auto; margin: 0 auto .75rem; }
+.pie { padding: 1.5rem 1.25rem 2rem; text-align: center; font-size: .78rem; background: var(--negro); color: var(--texto-suave); border-top: 1px solid var(--gris-2); }
+.pie__logo img { width: 96px; height: auto; margin: 0 auto .75rem; }
 .pie__enlaces { list-style: none; margin: 0 0 .5rem; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 1rem; justify-content: center; }
 .pie__enlaces a { color: var(--blanco); }
-.pie__enlaces a:hover { color: var(--menta); }
 .pie__mayores { margin: 0; }
 
 /* ---------- Páginas legales y avisos ---------- */
-.cabecera-simple { padding: 1rem; }
-.cabecera-simple a { font-weight: 700; text-decoration: none; color: var(--menta); }
-.pagina { padding: 0 1rem 2rem; }
-.legal { max-width: 42rem; margin: 0 auto; background: var(--negro-suave); padding: 1.5rem 1.25rem; border-top: 4px solid var(--menta); }
-.legal h1 { font: 800 1.9rem/1.15 var(--titulos); margin: .5rem 0 1.25rem; }
-.legal h2 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; color: var(--menta); }
+.cabecera-simple { padding: 1rem 1.25rem; }
+.cabecera-simple a { font: 700 .8rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
+.pagina { padding: 0 1.25rem 2rem; }
+.legal { max-width: 42rem; margin: 0 auto; background: var(--gris-1); padding: 1.5rem 1.25rem; border-top: 3px solid var(--blanco); }
+.legal h1 { font: 900 1.9rem/1.1 var(--textos); text-transform: uppercase; margin: .5rem 0 1.25rem; }
+.legal h2 { font-size: 1.05rem; margin: 1.75rem 0 .5rem; }
 .legal h3 { font-size: 1rem; margin: 1.25rem 0 .35rem; }
 .legal p, .legal li { color: #e6e6e6; }
-.legal__nota { font-size: .8rem; background: #262626; padding: .5rem .75rem; margin: 0; }
+.legal__nota { font-size: .8rem; background: #2a2a2a; padding: .5rem .75rem; margin: 0; }
 .tabla-scroll { overflow-x: auto; }
 .legal table { border-collapse: collapse; font-size: .85rem; min-width: 32rem; }
 .legal th, .legal td { border: 1px solid #3a3a3a; padding: .4rem .5rem; text-align: left; vertical-align: top; }
+.aviso-envio .btn { margin-top: .5rem; }
 
 /* ---------- Aviso de cookies (solo si hay algo de otra web en la página) ---------- */
 .cookies {
   position: fixed; left: .75rem; right: .75rem; bottom: .75rem; z-index: 10;
   max-width: 30rem; margin: 0 auto; padding: 1rem;
-  background: var(--negro); border: 2px solid var(--menta);
+  background: var(--negro); border: 2px solid var(--blanco);
 }
 .cookies__texto { margin: 0 0 .75rem; font-size: .85rem; }
 .cookies__botones { display: flex; gap: .5rem; justify-content: flex-end; }
-
-@media (min-width: 48rem) {
-  .escena { height: 80vh; }
-}

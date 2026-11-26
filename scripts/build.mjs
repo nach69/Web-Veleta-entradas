@@ -6,8 +6,8 @@ import { join, dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import {
-  hoyEnMadrid, erroresEvento, erroresOpciones, eventosFuturos, eventoActual, visibleHasta,
-  fechaLegible, idEvento, escapar
+  hoyEnMadrid, erroresEvento, erroresOpciones, erroresEscena, eventosFuturos, eventoActual, visibleHasta,
+  fechaLegible, idEvento, escapar, formatearPrecio
 } from './lib.mjs';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -30,7 +30,7 @@ function leerJSON(ruta, nombre) {
 let config = leerJSON(join(RAIZ, 'datos/config.json'), 'datos/config.json') || {};
 if (DATOS !== join(RAIZ, 'datos') && existsSync(join(DATOS, 'config.json'))) {
   const extra = leerJSON(join(DATOS, 'config.json'), 'config.json de pruebas') || {};
-  config = { ...config, ...extra, opciones: { ...config.opciones, ...extra.opciones } };
+  config = { ...config, ...extra, opciones: { ...config.opciones, ...extra.opciones }, escena: { ...config.escena, ...extra.escena } };
 }
 const eventos = leerJSON(join(DATOS, 'eventos.json'), 'eventos.json') || [];
 // Archivos extra de la carpeta de datos de pruebas (p. ej. un vídeo de prueba): se copian encima de publico/.
@@ -41,6 +41,7 @@ const archivoPublico = (ruta) => [join(RAIZ, 'publico', ruta), PUBLICO_EXTRA && 
 if (!Array.isArray(eventos)) errores.push('eventos.json tiene que ser una lista entre [ y ] (vacía si no hay eventos: [])');
 else eventos.forEach((ev, i) => erroresEvento(ev).forEach((e) => errores.push(`eventos.json, evento ${i + 1}: ${e}`)));
 erroresOpciones(config.opciones).forEach((e) => errores.push(`config.json: ${e}`));
+erroresEscena(config.escena).forEach((e) => errores.push(`config.json: ${e}`));
 if (!config.nombre) errores.push('config.json: falta "nombre" (el nombre de la marca)');
 const ticketera = config.ticketera || {};
 if (ticketera.enlaceGeneral != null && !/^https:\/\/[^\s"'<>]+$/.test(ticketera.enlaceGeneral)) errores.push('config.json: ticketera.enlaceGeneral debe empezar por https:// (o null)');
@@ -48,7 +49,25 @@ if (config.dominio != null && !/^https:\/\/[^/\s]+$/.test(config.dominio)) error
 
 const MAX_VIDEO = 3 * 1024 * 1024;
 const MAX_IMAGEN = 500 * 1024;
+const MAX_ESCENA = 200 * 1024; // presupuesto de la foto del salón (WebP/AVIF ~150-200 KB)
 if (!errores.length) {
+  const escena = config.escena;
+  if (escena.imagen) {
+    const ruta = archivoPublico(escena.imagen);
+    if (!ruta) errores.push(`config.json: no existe la foto de la escena publico${escena.imagen} (súbela o pon null)`);
+    else if (statSync(ruta).size > MAX_ESCENA) avisos.push(`publico${escena.imagen} pesa ${Math.round(statSync(ruta).size / 1024)} KB: el presupuesto es ~150-200 KB (WebP o AVIF).`);
+  }
+  // En el móvil (vertical) solo se ve la franja central de la foto: la pantalla tiene que caer ahí.
+  const p = escena.pantalla;
+  const visible = (100 * (9 / 19.5)) / (escena.ancho / escena.alto); // % del ancho visible en un móvil típico
+  const desde = 50 - visible / 2, hasta = 50 + visible / 2;
+  if (p.x < desde || p.x + p.ancho > hasta) avisos.push(`config.json: escena.pantalla (de ${p.x}% a ${p.x + p.ancho}% del ancho) se sale de la franja que se ve en el móvil (de ~${Math.round(desde)}% a ~${Math.round(hasta)}%). En el móvil la tele saldría cortada.`);
+  const [rw, rh] = escena.ratioVideo.split(':').map(Number);
+  const proporcion = (p.ancho * escena.ancho) / (p.alto * escena.alto);
+  if (Math.abs(proporcion / (rw / rh) - 1) > 0.05) avisos.push(`config.json: el rectángulo de la pantalla no es ${escena.ratioVideo} (es ${proporcion.toFixed(2)}:1): el vídeo se recortará un poco.`);
+  eventos.forEach((ev, i) => {
+    if (ev.tema && ev.tema.textura && !archivoPublico('/img/texturas/' + ev.tema.textura)) errores.push(`eventos.json, evento ${i + 1}: no existe la textura publico/img/texturas/${ev.tema.textura}`);
+  });
   eventos.forEach((ev, i) => {
     for (const k of ['videoTele', 'posterTele']) {
       if (!ev[k]) continue;
@@ -117,45 +136,62 @@ function emision(ev) {
   if (!ev) {
     // [MOV-3] nieve de «sin señal»: el JS la anima; sin JS (o con «reducir movimiento») queda quieta.
     return `            <div class="emision emision--sin-senal" data-bloque="ninguno">
-              <canvas class="sin-senal" width="96" height="72" data-sin-senal aria-hidden="true"></canvas>
-              <span class="sin-senal__texto">Sin señal</span>
+              <canvas class="sin-senal" width="96" height="72" data-sin-senal role="img" aria-label="La tele no tiene señal"></canvas>
             </div>`;
   }
   if (!ev.videoTele) {
     return `            <div class="emision" data-bloque="${ev.id}">${pendiente('vídeo de la tele')}</div>`;
   }
+  // Sin sonido siempre; autoplay para que se vea también sin JavaScript (si el navegador lo bloquea, queda el póster).
   const poster = ev.posterTele ? ` poster="${escapar(ev.posterTele)}"` : '';
+  const actualEnBuild = ev.id === idActualBuild;
   return `            <div class="emision" data-bloque="${ev.id}">
-              <video class="tele__video" muted loop playsinline preload="${ev.id === idActualBuild ? 'metadata' : 'none'}"${poster} data-video aria-label="Avance del evento">
+              <video class="tele__video" muted loop playsinline${actualEnBuild ? ' autoplay preload="auto"' : ' preload="none"'}${poster} data-video aria-label="Avance del evento">
                 <source src="${escapar(ev.videoTele)}" type="video/mp4">
               </video>
             </div>`;
 }
 
 function pantallaEvento(ev) {
-  // Sin enlace propio todavía: el general de la ticketera de Veleta. Sin ninguno: «Entradas pronto».
+  // TODOS los tramos llevan al mismo enlace: el del evento o, si aún no tiene, el general de Lema.
+  // Sin ninguno de los dos: «Entradas pronto» y los tramos sin enlace.
   const enlace = ev.enlaceCompra || ticketera.enlaceGeneral || null;
   const nombreTexto = ev.censurado ? 'Por desvelar' : (ev.nombre || 'Evento sin nombre');
+  const tramos = Array.isArray(ev.tramos) ? ev.tramos : [];
+  const fila = (nombreHTML, precioHTML, etiqueta) => enlace
+    ? `          <li><a class="tramo" href="${escapar(enlace)}" rel="noopener" data-comprar data-evento="${escapar(nombreTexto)}" aria-label="${escapar(etiqueta)}"><span class="tramo__nombre">${nombreHTML}</span><span class="tramo__precio">${precioHTML}</span></a></li>`
+    : `          <li><span class="tramo tramo--apagado"><span class="tramo__nombre">${nombreHTML}</span><span class="tramo__precio">${precioHTML}</span></span></li>`;
+  let filas = tramos.map((t, i) => {
+    const nombre = t.nombre ? escapar(t.nombre) : pendiente(`nombre del tramo ${i + 1}`);
+    const precio = t.precio != null ? escapar(formatearPrecio(t.precio)) : pendiente('precio');
+    const etiqueta = `Comprar entrada: ${t.nombre || 'tramo ' + (i + 1)}${t.precio != null ? ', ' + formatearPrecio(t.precio) : ''}`;
+    return fila(nombre, precio, etiqueta);
+  });
+  // Sin tramos todavía: una fila para poder comprar igual, y el aviso de que faltan.
+  if (!filas.length) filas = [fila('Comprar entrada', pendiente('tramos y precios'), 'Comprar entrada')];
   const b = {
     evId: ev.id,
     evNombre: ev.censurado ? CENSURA : (ev.nombre ? escapar(ev.nombre) : pendiente('nombre del evento')),
-    evNombreTexto: escapar(nombreTexto),
     evFechaISO: ev.fecha,
     evFecha: escapar(fechaLegible(ev.fecha)),
     evLugar: ev.lugar ? escapar(ev.lugar) : (ev.censurado ? 'Por desvelar' : pendiente('lugar')),
-    evPrecio: ev.precio ? escapar(ev.precio) : pendiente('precio'),
-    evEnlace: enlace ? escapar(enlace) : '',
     modoEmail: op.emailAntesDeComprar,
-    etiquetaEmail: op.emailAntesDeComprar === 'obligatorio' ? 'Tu email' : 'Tu email (si quieres)'
+    etiquetaEmail: op.emailAntesDeComprar === 'obligatorio' ? 'Tu email (lo necesitamos para seguir)' : 'Tu email (si quieres)',
+    evTramos: `        <ul class="tramos" role="list">\n${filas.join('\n')}\n        </ul>`,
+    evNota: enlace ? 'La compra se hace en la web de la ticketera.' : '<strong>Entradas pronto.</strong>'
   };
-  let compra = enlace ? leer('plantillas/parciales/comprar.html') : leer('plantillas/parciales/pronto.html');
-  // Sin email antes de comprar: fuera el bloque del email.
-  if (op.emailAntesDeComprar === 'no') compra = compra.replace(/\s*<div class="comprar__email"[\s\S]*?<\/p>\n\s*<\/div>/, '');
-  b.evCompra = rellenar(compra, b);
+  b.evEmail = enlace && op.emailAntesDeComprar !== 'no' ? rellenar(leer('plantillas/parciales/email-compra.html'), b) : '';
   return rellenar(leer('plantillas/parciales/evento.html'), b);
 }
 
+// Fondo de la escena: la foto o, mientras no exista, el gris PROVISIONAL (el rectángulo de la tele se dibuja igual).
+const esc = config.escena;
+const fondoEscena = esc.imagen
+  ? `          <img class="escena__foto" src="${escapar(esc.imagen)}" alt="" width="${esc.ancho}" height="${esc.alto}" fetchpriority="high" decoding="async">`
+  : `          <div class="escena__foto escena__foto--provisional" aria-hidden="true"><span>PROVISIONAL · foto del salón en blanco y negro: señor de espaldas en su sillón viendo la tele</span></div>`;
+
 const bloquesLanding = {
+  fondoEscena,
   emisiones: [...futuros.map(emision), emision(null)].join('\n'),
   pantallas: [...futuros.map(pantallaEvento), rellenar(leer('plantillas/parciales/sin-evento.html'), {})].join('\n')
 };
@@ -163,18 +199,22 @@ const bloquesLanding = {
 // Reglas CSS de estado: sin JS, solo el bloque elegido en la build; con JS, el que diga estado.js.
 // Van en un archivo con huella en el nombre para que la caché nunca mezcle reglas viejas con HTML nuevo.
 const ids = [...futuros.map((e) => e.id), 'ninguno'];
+const [vw, vh] = esc.ratioVideo.split(':').map(Number);
 const cssEstado = [
-  '/* Generado por scripts/build.mjs: qué bloque se ve en cada estado. */',
+  '/* Generado por scripts/build.mjs a partir de datos/: escena, qué bloque se ve en cada estado y temas. */',
+  `:root { --escena-ratio: ${esc.ancho / esc.alto}; --tele-x: ${esc.pantalla.x}%; --tele-y: ${esc.pantalla.y}%; --tele-ancho: ${esc.pantalla.ancho}%; --tele-alto: ${esc.pantalla.alto}%; --video-ratio: ${vw / vh}; }`,
   `html:not([data-actual]) [data-bloque]:not([data-bloque="${idActualBuild}"]) { display: none !important; }`,
-  ...ids.map((id) => `html[data-actual]:not([data-actual="${id}"]) [data-bloque="${id}"] { display: none !important; }`)
+  ...ids.map((id) => `html[data-actual]:not([data-actual="${id}"]) [data-bloque="${id}"] { display: none !important; }`),
+  // Tema secundario por evento (opcional). Sin tema: blanco y negro puro.
+  ...futuros.filter((e) => e.tema).map((e) => [
+    e.tema.acento && `[data-bloque="${e.id}"] { --acento: ${e.tema.acento}; }`,
+    e.tema.textura && `.venta[data-bloque="${e.id}"] { --textura: url("/img/texturas/${e.tema.textura}"); }`
+  ].filter(Boolean).join('\n'))
 ].join('\n') + '\n';
 const huella = createHash('sha256').update(cssEstado).digest('hex').slice(0, 10);
 const metaEventos = JSON.stringify(futuros.map((e) => ({ id: e.id, hasta: visibleHasta(e) })));
 // Opciones que necesita el JS (en una etiqueta meta: la CSP no permite scripts en línea)
-const metaOpciones = JSON.stringify({
-  emailAntesDeComprar: op.emailAntesDeComprar, reaccion: op.reaccion, sonido: op.sonido,
-  introMaxMs: op.introMaxMs, reaccionMs: op.reaccionMs
-});
+const metaOpciones = JSON.stringify({ emailAntesDeComprar: op.emailAntesDeComprar });
 
 // ---------- Páginas ----------
 const PAGINAS = [
@@ -230,7 +270,7 @@ for (const p of PAGINAS) {
     robots: p.noindex ? '<meta name="robots" content="noindex">' : '',
     absolutas,
     metaEstado: p.landing ? `<meta name="veleta-eventos" content="${escapar(metaEventos)}">\n  <meta name="veleta-opciones" content="${escapar(metaOpciones)}">` : '',
-    cssEstado: p.landing ? `<link rel="stylesheet" href="/css/estado-${huella}.css">` : '',
+    cssEstado: p.landing ? `<link rel="stylesheet" href="/css/estado-${huella}.css">` + (esc.imagen ? `\n  <link rel="preload" as="image" href="${escapar(esc.imagen)}" fetchpriority="high">` : '') : '',
     claseCuerpo: p.clase || 'es-pagina',
     enlaceInstagram
   });

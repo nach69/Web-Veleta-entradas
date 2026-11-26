@@ -1,19 +1,22 @@
   <main id="main" class="landing">
-    <!-- 1. Escena: el abuelo viendo la tele. Lo que emite la tele depende del estado. -->
-    <section class="escena" aria-label="{{nombre}}: el abuelo viendo la tele" data-escena>
-      <div class="salon">
-        <img class="escena__logo" src="/img/logo-veleta-negro.png" alt="" width="900" height="275">
-        <div class="abuelo provisional" aria-hidden="true"><span>PROVISIONAL · abuelo en su sillón con algo de veleta</span></div>
-        <div class="tele" data-tele>
-          <div class="tele__pantalla">
+    <!-- 1. Escena: foto del salón (o el gris PROVISIONAL) con la tele. Todo el movimiento lo pone la web. -->
+    <section class="escena" aria-label="Un señor viendo la tele en su sillón" data-escena>
+      <div class="escena__camara" data-camara>
+        <div class="escena__lienzo" data-lienzo>
+{{{fondoEscena}}}
+          <div class="tele" data-tele>
 {{{emisiones}}}
+            <span class="tele__barrido" aria-hidden="true"></span>
+            <span class="tele__luz" data-luz aria-hidden="true"></span>
           </div>
         </div>
       </div>
-      <p class="escena__saltar" data-solo-js data-escena-aviso hidden>Toca para saltar</p>
+      <span class="escena__grano" aria-hidden="true"></span>
+      <span class="escena__vineta" aria-hidden="true"></span>
+      <p class="escena__saltar" data-saltar hidden>Toca para saltar</p>
     </section>
 
-    <!-- 2. Pantalla: venta (con evento) o lista de espera (sin evento). Funciona sin JavaScript. -->
+    <!-- 2. Segunda pantalla: venta por tramos (con evento) o lista de espera (sin evento). Funciona sin JavaScript. -->
     <section class="pantalla" aria-live="polite">
 {{{pantallas}}}
     </section>

@@ -13,6 +13,19 @@
     "enlaceGeneral": "https://veleta.lema.club"
   },
   "descripcion": "Entradas para el próximo evento de Veleta en Valencia.",
+  "escena": {
+    "_nota": "Foto del salón (B/N, horizontal 3:2) y rectángulo de la pantalla de la tele en % de la foto (x, y = esquina de arriba a la izquierda). Mientras imagen sea null sale un fondo gris PROVISIONAL con el rectángulo dibujado; estas coordenadas son provisionales y hay que medirlas sobre la foto definitiva. En el móvil solo se ve la franja central (de ~35% a ~65% del ancho): la pantalla tiene que caer ahí.",
+    "imagen": null,
+    "ancho": 1500,
+    "alto": 1000,
+    "pantalla": {
+      "x": 38,
+      "y": 30,
+      "ancho": 24,
+      "alto": 27
+    },
+    "ratioVideo": "4:3"
+  },
   "titular": {
     "_nota": "Titular legal de la web de Veleta. Los pasa Nacho.",
     "nombre": null,
@@ -21,11 +34,7 @@
   },
   "fechaTextosLegales": "26 de noviembre de 2026",
   "opciones": {
-    "_nota": "Cosas por decidir. Valores posibles: emailAntesDeComprar no | opcional | obligatorio · reaccion pulgar | golpecito | brindis | aleatoria · sonido nunca | boton · introMaxMs: duración del zoom (máx. 1500) · reaccionMs: duración de la reacción (máx. 1000).",
-    "emailAntesDeComprar": "opcional",
-    "reaccion": "pulgar",
-    "sonido": "boton",
-    "introMaxMs": 1500,
-    "reaccionMs": 800
+    "_nota": "Por decidir. emailAntesDeComprar: no | opcional | obligatorio («opcional» nunca impide ir a la ticketera).",
+    "emailAntesDeComprar": "opcional"
   }
 }

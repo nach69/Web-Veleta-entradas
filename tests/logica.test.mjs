@@ -1,12 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  hoyEnMadrid, partirFecha, erroresEvento, visibleHasta, eventosFuturos, eventoActual, fechaLegible, erroresOpciones
+  hoyEnMadrid, partirFecha, erroresEvento, visibleHasta, eventosFuturos, eventoActual, fechaLegible, erroresOpciones,
+  erroresTramos, erroresTema, erroresEscena, formatearPrecio
 } from '../scripts/lib.mjs';
 import { revisarEnvio, componerCorreo, TEXTO_ALTA_LISTA, TEXTO_ALTA_COMPRA } from '../lib/formulario.mjs';
 
 const ev = (fecha, extra = {}) => ({
-  nombre: 'X', fecha, lugar: null, precio: null, enlaceCompra: null, videoTele: null, videoExclusivo: null, ...extra
+  nombre: 'X', fecha, lugar: null, enlaceCompra: null, videoTele: null, videoExclusivo: null, tramos: null, ...extra
 });
 
 test('hoy en Madrid cambia a medianoche de Valencia, no de UTC', () => {
@@ -30,7 +31,7 @@ test('un evento correcto no da errores; los típicos sí', () => {
   assert.ok(malos.some((e) => e.includes('enlaceCompra')));
   assert.ok(malos.some((e) => e.includes('videoTele')));
   assert.ok(malos.some((e) => e.includes('censurado')));
-  assert.ok(malos.some((e) => e.includes('precio')));
+  assert.ok(malos.some((e) => e.includes('«precio» ya no se usa')));
   assert.ok(malos.some((e) => e.includes('«fehca»')));
   assert.ok(malos.some((e) => e.includes('falta «videoExclusivo»')));
 });
@@ -56,11 +57,38 @@ test('fecha legible en español', () => {
 });
 
 test('opciones por decidir: solo valores conocidos y tiempos dentro de lo acordado', () => {
-  const buenas = { emailAntesDeComprar: 'opcional', reaccion: 'aleatoria', sonido: 'boton', introMaxMs: 1500, reaccionMs: 1000 };
-  assert.deepEqual(erroresOpciones(buenas), []);
-  assert.equal(erroresOpciones({ ...buenas, introMaxMs: 2000 }).length, 1);
-  assert.equal(erroresOpciones({ ...buenas, reaccionMs: 1500 }).length, 1);
-  assert.equal(erroresOpciones({ ...buenas, reaccion: 'baile' }).length, 1);
+  assert.deepEqual(erroresOpciones({ emailAntesDeComprar: 'opcional' }), []);
+  assert.equal(erroresOpciones({ emailAntesDeComprar: 'siempre' }).length, 1);
+  assert.match(erroresOpciones({ emailAntesDeComprar: 'no', reaccion: 'pulgar' })[0], /ya no se usa/);
+});
+
+test('tramos: nombre y precio en euros; lo que falta, null', () => {
+  assert.deepEqual(erroresTramos([{ nombre: 'General', precio: 15 }, { nombre: 'VIP', precio: 22.5 }, { nombre: null, precio: null }]), []);
+  assert.deepEqual(erroresTramos(null), []);
+  assert.equal(erroresTramos([{ nombre: 'X', precio: '15 €' }]).length, 1);
+  assert.equal(erroresTramos([{ nombre: 'X', precio: -1 }]).length, 1);
+  assert.equal(erroresTramos([{ nombre: 'X', precio: 9.999 }]).length, 1);
+  assert.equal(erroresTramos({ nombre: 'X' }).length, 1);
+  assert.equal(formatearPrecio(15), '15 €');
+  assert.equal(formatearPrecio(12.5), '12,50 €');
+});
+
+test('tema: acento #rrggbb y textura con nombre de archivo, o nada', () => {
+  assert.deepEqual(erroresTema(null), []);
+  assert.deepEqual(erroresTema({ acento: '#ff3b3b', textura: 'papel.webp' }), []);
+  assert.equal(erroresTema({ acento: 'rojo' }).length, 1);
+  assert.equal(erroresTema({ textura: '../fuera.png' }).length, 1);
+  assert.equal(erroresTema({ color: '#000000' }).length, 1);
+});
+
+test('escena: foto, tamaño y rectángulo de la pantalla dentro de la foto', () => {
+  const buena = { imagen: '/img/escena.webp', ancho: 1500, alto: 1000, ratioVideo: '4:3', pantalla: { x: 38, y: 30, ancho: 24, alto: 27 } };
+  assert.deepEqual(erroresEscena(buena), []);
+  assert.deepEqual(erroresEscena({ ...buena, imagen: null }), []);
+  assert.equal(erroresEscena({ ...buena, pantalla: { x: 90, y: 30, ancho: 24, alto: 27 } }).length, 1);
+  assert.equal(erroresEscena({ ...buena, pantalla: { x: 38, y: 30, ancho: '24', alto: 27 } }).length, 1);
+  assert.equal(erroresEscena({ ...buena, imagen: 'escena.webp' }).length, 1);
+  assert.ok(erroresEscena(undefined).length >= 1);
 });
 
 const AHORA = Date.parse('2026-11-26T12:00:00Z');
