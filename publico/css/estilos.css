@@ -1,16 +1,20 @@
-/* Landing de Veleta · estilos PROVISIONALES.
-   Lo definitivo es la estructura; todo lo visual (colores, letra, abuelo, tele) se sustituirá por la
-   identidad de Veleta. Mientras tanto, letra del sistema, neutra.
-   Los marcadores de posición llevan la clase .provisional (rayado gris con la etiqueta «PROVISIONAL»).
+/* Landing de Veleta · estilos PROVISIONALES con la identidad de Veleta (decisión de Nacho del 26/11:
+   aplicar ya colores y logo). Colores del Drive de Veleta: azul menta #8FCDC0, amarillo #C3C500,
+   negro y blanco. Letra: la del sistema hasta tener la de Veleta.
+   Lo definitivo es la estructura. El abuelo y la tele siguen siendo marcadores de posición (.provisional:
+   rayado gris con la etiqueta «PROVISIONAL») hasta que llegue el diseño.
    Efectos de movimiento marcados [MOV-n] para quitarlos por separado:
      [MOV-1] zoom a la tele · [MOV-2] reacción del abuelo · [MOV-3] nieve de «sin señal» */
 
 :root {
-  --tinta: #111;
-  --fondo: #f2f2f2;
-  --gris: #8a8a8a;
-  --gris-claro: #d9d9d9;
+  --negro: #0b0b0b;
+  --negro-suave: #161616;
+  --menta: #8fcdc0;
+  --amarillo: #c3c500;
   --blanco: #fff;
+  --texto-suave: #c9c9c9;
+  --linea: rgba(255, 255, 255, .18);
+  --error: #ff8f8f;
   --titulos: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --textos: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --intro-ms: 1500ms;
@@ -24,12 +28,12 @@ body {
   font-weight: 400;
   font-size: 1rem;
   line-height: 1.45;
-  color: var(--tinta);
-  background: var(--fondo);
+  color: var(--blanco);
+  background: var(--negro);
 }
 img, video, canvas { display: block; max-width: 100%; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 2px; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -38,8 +42,10 @@ a { color: inherit; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 [hidden] { display: none !important; }
 
+/* Dato que falta: a propósito NO usa los colores de Veleta, para que no se confunda con el diseño */
 mark.pendiente {
-  background: #ffe95c; color: #111; padding: 0 .25em; font-size: .85em; font-weight: 700;
+  background: #fff; color: #b00020; outline: 2px dashed #ff4f4f; outline-offset: 1px;
+  padding: 0 .25em; font-size: .85em; font-weight: 700;
 }
 .censura { letter-spacing: -.08em; }
 
@@ -47,9 +53,9 @@ mark.pendiente {
 .provisional {
   position: relative;
   display: flex; align-items: center; justify-content: center; text-align: center;
-  border: 2px dashed var(--gris);
+  border: 2px dashed #777;
   background: repeating-linear-gradient(45deg, #e6e6e6 0 12px, #dcdcdc 12px 24px);
-  color: #555; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+  color: #444; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
   padding: .5rem;
 }
 
@@ -57,23 +63,24 @@ mark.pendiente {
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 48px; padding: .75rem 1.4rem;
-  border: 2px solid var(--tinta); border-radius: 0;
-  background: var(--tinta); color: var(--blanco);
-  font: 700 1rem/1 var(--textos); text-decoration: none; cursor: pointer;
+  border: 2px solid var(--menta); border-radius: 0;
+  background: var(--menta); color: var(--negro);
+  font: 800 1rem/1 var(--textos); letter-spacing: .02em; text-decoration: none; cursor: pointer;
 }
-.btn--grande { width: 100%; min-height: 56px; font-size: 1.1rem; }
-.btn--borde { background: transparent; color: var(--tinta); }
+.btn--grande { width: 100%; min-height: 56px; font-size: 1.1rem; text-transform: uppercase; }
+.btn--borde { background: transparent; color: var(--blanco); border-color: var(--blanco); }
 .btn--peque { min-height: 40px; padding: .5rem 1rem; font-size: .85rem; }
-.btn--apagado { background: var(--gris-claro); border-color: var(--gris-claro); color: #555; cursor: default; }
+.btn--apagado { background: #2a2a2a; border-color: #2a2a2a; color: var(--texto-suave); cursor: default; }
 .btn[disabled] { opacity: .6; }
 
 /* ---------- Escena: el abuelo viendo la tele ---------- */
-.escena { position: relative; height: 70vh; height: 70svh; overflow: hidden; background: #cfcfcf; }
-.salon { position: absolute; inset: 0; transform-origin: 74% 40%; }
+.escena { position: relative; height: 70vh; height: 70svh; overflow: hidden; background: var(--negro); }
+.salon { position: absolute; inset: 0; transform-origin: 74% 40%; background: var(--menta); }
+.escena__logo { position: absolute; left: 50%; top: 4%; width: min(42%, 220px); height: auto; transform: translateX(-50%); }
 .abuelo { position: absolute; left: 4%; bottom: 6%; width: 42%; height: 58%; }
 .tele {
   position: absolute; left: 52%; top: 22%; width: 44%; height: 36%;
-  background: #222; padding: 4%; border-radius: 6px;
+  background: var(--negro); padding: 4%; border-radius: 6px;
 }
 .tele__pantalla { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
 .emision { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
@@ -86,49 +93,52 @@ mark.pendiente {
 }
 .sin-senal { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
 .sin-senal__texto {
-  position: relative; background: #000; color: #fff; padding: .15em .5em;
-  font: 700 .8rem/1.2 var(--textos); letter-spacing: .12em; text-transform: uppercase;
+  position: relative; background: var(--amarillo); color: var(--negro); padding: .15em .5em;
+  font: 800 .8rem/1.2 var(--textos); letter-spacing: .12em; text-transform: uppercase;
 }
 .emision mark.pendiente { font-size: .7rem; }
 .escena__saltar {
   position: absolute; left: 0; right: 0; bottom: 1rem; margin: 0; text-align: center;
-  font-size: .8rem; color: #333;
+  font-size: .8rem; font-weight: 700; color: var(--negro);
 }
 
 /* ---------- Pantalla: venta o lista de espera ---------- */
-.pantalla { position: relative; padding: 2rem 1rem 3rem; background: var(--fondo); }
+.pantalla { position: relative; padding: 2rem 1rem 3rem; background: var(--negro); }
 .venta, .espera {
   position: relative; max-width: 30rem; margin: 0 auto; padding: 1.5rem 1.25rem;
-  background: var(--blanco); border: 1px solid var(--gris-claro);
+  background: var(--negro); border: 2px solid var(--menta);
 }
-.pantalla__marca { margin: 0 0 .25rem; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #555; }
+.pantalla__marca { margin: 0 0 1rem; }
+.pantalla__marca img { width: 120px; height: auto; }
 .pantalla__titulo {
-  margin: 0 0 1rem; font: 700 clamp(1.8rem, 8vw, 2.6rem)/1.1 var(--titulos);
-  outline: none;
+  margin: 0 0 1rem; font: 800 clamp(1.8rem, 8vw, 2.6rem)/1.05 var(--titulos);
+  text-transform: uppercase; outline: none;
 }
-.pantalla__texto { margin: 0 0 1rem; }
+.pantalla__texto { margin: 0 0 1rem; color: var(--texto-suave); }
 .venta__datos { margin: 0 0 1.25rem; display: grid; gap: .5rem; }
-.venta__datos div { display: grid; grid-template-columns: 5rem 1fr; gap: .5rem; border-top: 1px solid var(--gris-claro); padding-top: .5rem; }
-.venta__datos dt { color: #555; font-size: .85rem; }
+.venta__datos div { display: grid; grid-template-columns: 5rem 1fr; gap: .5rem; border-top: 1px solid var(--linea); padding-top: .5rem; }
+.venta__datos dt { color: var(--menta); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; padding-top: .15em; }
 .venta__datos dd { margin: 0; font-weight: 700; }
 .comprar { display: grid; gap: .75rem; }
 .comprar__email { display: grid; gap: .35rem; }
-.comprar__etiqueta { font-size: .85rem; color: #333; }
-.comprar__nota { margin: 0; font-size: .78rem; color: #555; text-align: center; }
+.comprar__etiqueta { font-size: .85rem; color: var(--texto-suave); }
+.comprar__nota { margin: 0; font-size: .78rem; color: var(--texto-suave); text-align: center; }
 input[type="email"] {
   width: 100%; min-height: 48px; padding: .6rem .8rem;
-  border: 2px solid var(--tinta); border-radius: 0; background: var(--blanco);
-  font: 400 1rem var(--textos); color: var(--tinta);
+  border: 2px solid var(--blanco); border-radius: 0; background: var(--blanco);
+  font: 400 1rem var(--textos); color: var(--negro);
 }
-input[aria-invalid="true"] { border-color: #b00020; }
-.campo__error { margin: 0; min-height: 0; color: #b00020; font-size: .85rem; }
+input[type="email"]:focus-visible { border-color: var(--amarillo); }
+input[aria-invalid="true"] { border-color: var(--error); }
+.campo__error { margin: 0; min-height: 0; color: var(--error); font-size: .85rem; }
 .campo__error:empty { display: none; }
-.legal-corto { margin: 0; font-size: .75rem; color: #555; }
+.legal-corto { margin: 0; font-size: .75rem; color: var(--texto-suave); }
 .lista { display: grid; gap: .6rem; }
 .lista__fila { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
 .form-estado { margin: 0; font-weight: 700; }
 .form-estado:empty { display: none; }
-.form-estado.es-error { color: #b00020; }
+.form-estado.es-ok { color: var(--amarillo); }
+.form-estado.es-error { color: var(--error); }
 
 /* Abuelo pequeño en la pantalla de venta: es el que reacciona al pulsar «Comprar entrada» */
 .abuelo-mini { position: absolute; top: -1.75rem; right: .75rem; width: 4.5rem; height: 4.5rem; font-size: .5rem; }
@@ -178,29 +188,32 @@ html.js[data-fase="pantalla"] .salon { transform: scale(3.2); filter: brightness
 }
 
 /* ---------- Pie ---------- */
-.pie { padding: 1.5rem 1rem 2rem; text-align: center; font-size: .8rem; background: var(--fondo); }
+.pie { padding: 1.5rem 1rem 2rem; text-align: center; font-size: .8rem; background: var(--negro); color: var(--texto-suave); }
 .pie__logo img { width: 110px; height: auto; margin: 0 auto .75rem; }
 .pie__enlaces { list-style: none; margin: 0 0 .5rem; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 1rem; justify-content: center; }
-.pie__mayores { margin: 0; color: #555; }
+.pie__enlaces a { color: var(--blanco); }
+.pie__enlaces a:hover { color: var(--menta); }
+.pie__mayores { margin: 0; }
 
 /* ---------- Páginas legales y avisos ---------- */
 .cabecera-simple { padding: 1rem; }
-.cabecera-simple a { font-weight: 700; text-decoration: none; }
+.cabecera-simple a { font-weight: 700; text-decoration: none; color: var(--menta); }
 .pagina { padding: 0 1rem 2rem; }
-.legal { max-width: 42rem; margin: 0 auto; background: var(--blanco); padding: 1.5rem 1.25rem; }
-.legal h1 { font: 700 1.9rem/1.15 var(--titulos); margin: .5rem 0 1.25rem; }
-.legal h2 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; }
+.legal { max-width: 42rem; margin: 0 auto; background: var(--negro-suave); padding: 1.5rem 1.25rem; border-top: 4px solid var(--menta); }
+.legal h1 { font: 800 1.9rem/1.15 var(--titulos); margin: .5rem 0 1.25rem; }
+.legal h2 { font-size: 1.1rem; margin: 1.75rem 0 .5rem; color: var(--menta); }
 .legal h3 { font-size: 1rem; margin: 1.25rem 0 .35rem; }
-.legal__nota { font-size: .8rem; background: #f4f4f4; padding: .5rem .75rem; margin: 0; }
+.legal p, .legal li { color: #e6e6e6; }
+.legal__nota { font-size: .8rem; background: #262626; padding: .5rem .75rem; margin: 0; }
 .tabla-scroll { overflow-x: auto; }
 .legal table { border-collapse: collapse; font-size: .85rem; min-width: 32rem; }
-.legal th, .legal td { border: 1px solid var(--gris-claro); padding: .4rem .5rem; text-align: left; vertical-align: top; }
+.legal th, .legal td { border: 1px solid #3a3a3a; padding: .4rem .5rem; text-align: left; vertical-align: top; }
 
 /* ---------- Aviso de cookies (solo si hay algo de otra web en la página) ---------- */
 .cookies {
   position: fixed; left: .75rem; right: .75rem; bottom: .75rem; z-index: 10;
   max-width: 30rem; margin: 0 auto; padding: 1rem;
-  background: var(--blanco); border: 2px solid var(--tinta);
+  background: var(--negro); border: 2px solid var(--menta);
 }
 .cookies__texto { margin: 0 0 .75rem; font-size: .85rem; }
 .cookies__botones { display: flex; gap: .5rem; justify-content: flex-end; }

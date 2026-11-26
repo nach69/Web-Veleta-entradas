@@ -33,7 +33,7 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   Instagram https://www.instagram.com/veletavalencia/; identidad en Instagram y en el Drive
   (ver «Identidad de Veleta»). El titular legal lo pasa Nacho al final.
 - Pendiente de Nacho: primer evento, dominio, desde qué dirección se envían los correos
-  (EMAIL_FROM), si se aplica ya la identidad al diseño provisional, nombre del Worker.
+  (EMAIL_FROM), la letra de Veleta, si «Eusebio» es el abuelo, nombre del Worker.
 - Desde aquí no se pueden abrir veleta.lema.club ni instagram.com (red del entorno): el enlace
   de Lema está puesto tal cual lo dio Nacho, sin comprobar.
 
@@ -50,8 +50,12 @@ Lo que emite la tele es el evento. De ahí se pasa a la pantalla de venta.
 - NO DEFINITIVO: todo lo visual. Existe un prototipo HTML de prueba (abuelo ilustrado, colores,
   tele dibujada) que solo sirve para ver la lógica. NO copiar su diseño, sus colores, su
   ilustración ni sus textos de ejemplo. El diseño real vendrá aparte; hasta entonces,
-  marcadores de posición neutros y claramente provisionales (clase `.provisional`: rayado gris
-  con la etiqueta «PROVISIONAL»; letra del sistema).
+  marcadores de posición claramente provisionales (clase `.provisional`: rayado gris con la
+  etiqueta «PROVISIONAL») para el abuelo y la reacción; letra del sistema.
+- (26/11, Nacho) Colores y logo de Veleta YA aplicados: fondo negro, salón azul menta, tarjeta de
+  venta negra con borde menta, botón menta con texto negro, amarillo para «sin señal», avisos de
+  «¡Hecho!» y el foco. Lo que falta (PENDIENTE) va en blanco con rojo, a propósito fuera de la
+  paleta para que no se confunda con el diseño.
 
 ## Los dos estados (cambian solos según la fecha del evento)
 | Estado | Cuándo | Qué ve la gente | Qué consigue |
@@ -238,7 +242,7 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
 - Manda la identidad de Veleta (colores, letra, logo). NO usar por defecto la tipografía, los
   colores ni el estilo de la web del grupo.
 
-### Identidad de Veleta (revisado el Drive el 26/11; aún NO aplicada al diseño provisional)
+### Identidad de Veleta (revisado el Drive el 26/11; colores y logo aplicados el 26/11)
 - Dónde: Drive compartido → Eventos +18 → «Veleta » → «Logos / Recursos generales VELETA»
   (PNG, AI, «RECURSOS MANU» → logos veleta → PNG/AI/SVG) y la carpeta Marketing de cada evento
   (p. ej. «(7) Evento 6 Noviembre» → Marketing: Visuales Alegal, Vídeo presentación, Portada).
@@ -250,9 +254,10 @@ Duraciones: `introMaxMs` (≤ 1500) y `reaccionMs` (≤ 1000); la build rechaza 
 - Letra: no hay archivos de fuente en el Drive. Preguntar a Nacho cuál es (o sacarla del .ai).
 - En el plan de marketing del 6/11 sale «Eusebio» («Flyer principal: imagen Eusebio + info»):
   preguntar si es el personaje del abuelo antes de suponerlo.
-- Logo de Veleta: `publico/img/logo-veleta-negro.png` (de `veleta-negro.png` en los
-  materiales de nach69/Private-, recortado el margen vacío). `publico/img/og.jpg` = logo sobre
-  blanco, provisional.
+- Logos en la web (`publico/img/`, recortado el margen vacío): `logo-veleta-negro.png` (sobre el
+  salón menta), `logo-veleta-menta.png` (arriba de la tarjeta; del Drive, «logo veleta azul
+  #8FCDC0.png»), `logo-veleta-blanco.png` (pie; del Drive, «logo veleta blanco.png»).
+  `og.jpg` = logo menta sobre negro, 1200×630. La carpeta SVG del Drive está vacía.
 
 ## Material de Veleta que ya existe (en nach69/Private-)
 - Vídeo recap de Casino Veleta (`publico/video/casino-veleta.mp4`) y su póster.

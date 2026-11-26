@@ -8,7 +8,7 @@ Cambia sola entre dos estados según la fecha (hora de Madrid):
 
 Se publicará sola en **Cloudflare** (un *Worker*) cada vez que se guarde un cambio en la rama `main`. **Todavía no está publicada.**
 
-> El diseño es PROVISIONAL (rayados grises). Lo definitivo es cómo funciona; el aspecto vendrá aparte.
+> Ya lleva los colores y el logo de Veleta. El abuelo y la tele siguen siendo provisionales (rayados grises) hasta que llegue el diseño.
 
 ---
 
