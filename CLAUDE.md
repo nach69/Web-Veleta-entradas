@@ -16,6 +16,14 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   usa el grupo; el archivo se copió de nach69/Private-). Va en los titulares; textos, datos y
   tramos con la letra del sistema.
 
+## ⚠️ CONCEPTO EN REVISIÓN (27/11, Nacho)
+Tras ver la versión publicada (foto + zoom + vídeo + tramos en la tele): «el concepto no nos ha
+gustado, ni el resultado»; están confundidos con el concepto del vídeo. Quieren algo MÁS SENCILLO,
+con **formato contador (cuenta atrás)** y una **imagen o vídeo más fijo**. Se propusieron
+alternativas en el chat (método BICI, solo parte de Idea) y está pendiente que elijan. NO tocar
+el código del hero hasta que Nacho decida. Lo técnico (dos estados por fecha, tramos a Lema,
+lista de espera, build, Worker, huellas, legales) sigue valiendo para cualquier opción.
+
 ## PUNTO ACTUAL (27/11)
 - **27/11, tras ver la versión publicada, Nacho cambió el recorrido (MANDA sobre lo anterior):**
   1. La foto se ve QUIETA 2 s con el vídeo ya en la tele (antes 0,7 s: «no se ve el vídeo»).
