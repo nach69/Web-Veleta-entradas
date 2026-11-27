@@ -291,6 +291,29 @@ for (const p of PAGINAS) {
   writeFileSync(destino, html);
 }
 
+// ---------- Huella en las direcciones de estilos, código, imágenes, vídeos y letra ----------
+// Cada archivo se pide como /css/estilos.css?v=<huella de su contenido>. Si cambia, cambia la dirección
+// y el móvil lo descarga de nuevo en vez de usar la copia guardada (que podía durar horas o días).
+const huellas = new Map();
+function conHuella(ruta) {
+  const limpia = ruta.split('?')[0];
+  const f = join(DIST, decodeURIComponent(limpia));
+  if (!existsSync(f) || statSync(f).isDirectory()) return ruta;
+  if (!huellas.has(limpia)) huellas.set(limpia, createHash('sha256').update(readFileSync(f)).digest('hex').slice(0, 10));
+  return `${limpia}?v=${huellas.get(limpia)}`;
+}
+const RUTA_RECURSO = /(\/(?:css|js|img|video|fuentes)\/[^"'()?#\s]+)/;
+// Primero dentro de las hojas de estilo (url(...)), luego en cada página
+for (const css of readdirSync(join(DIST, 'css'))) {
+  const f = join(DIST, 'css', css);
+  writeFileSync(f, readFileSync(f, 'utf8').replace(new RegExp(`url\\((['"]?)${RUTA_RECURSO.source}\\1\\)`, 'g'), (_, c, r) => `url(${c}${conHuella(r)}${c})`));
+}
+huellas.clear();
+for (const pagina of PAGINAS) {
+  const f = join(DIST, pagina.salida);
+  writeFileSync(f, readFileSync(f, 'utf8').replace(new RegExp(`((?:src|href|poster)=")${RUTA_RECURSO.source}(")`, 'g'), (_, a, r, z) => `${a}${conHuella(r)}${z}`));
+}
+
 // sitemap.xml y robots.txt (solo con dominio: necesitan direcciones absolutas)
 if (config.dominio) {
   writeFileSync(join(DIST, 'sitemap.xml'),

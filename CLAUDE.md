@@ -379,6 +379,9 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   que se pausa cuando no se ve.
 - Fuentes propias servidas desde la web, solo los pesos que se usan: RL Madena 400 (34 KB, con
   preload y caché de un año).
+- **Huellas en las direcciones** (27/11): la build añade `?v=<huella del contenido>` a todo lo de
+  /css, /js, /img, /video y /fuentes (en las páginas y dentro de los url() de los CSS). Motivo: Nacho
+  seguía viendo la versión vieja porque el móvil guardaba copias (CSS/JS 1 h, imágenes 7 días).
 - Capas de ambiente baratas: grano (`publico/img/grano.svg`, 300 bytes), viñeteo y barrido con
   degradados CSS, luz de la tele con `opacity`.
 
@@ -422,7 +425,7 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   texto a la vista. Que lo confirme el asesor.
 
 ## Cómo trabajar
-- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (86 comprobaciones en
+- Probar antes de subir: `npm test` (36 pruebas), `npm run test:navegador` (86 comprobaciones en
   Chromium: los dos estados, cambio por fecha moviendo el reloj, móvil y ordenador, con y sin
   JavaScript, fases de la intro, saltar, segunda visita, «reducir movimiento», tramos al mismo
   enlace, tema, solo B/N, nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y

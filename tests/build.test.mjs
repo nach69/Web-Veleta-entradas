@@ -115,10 +115,21 @@ test('sin foto: gris PROVISIONAL con el rectángulo de la tele, y sin capa de pr
   r.limpiar();
   const conFoto = construir([]);
   const h2 = readFileSync(join(conFoto.dist, 'index.html'), 'utf8');
-  assert.match(h2, /<img class="escena__foto" src="\/img\/escena\.webp" alt="" width="3072" height="2048"/);
+  assert.match(h2, /<img class="escena__foto" src="\/img\/escena\.webp\?v=[0-9a-f]{10}" alt="" width="3072" height="2048"/);
   assert.match(h2, /escena__primer-plano/);
-  assert.match(h2, /rel="preload" as="image" href="\/img\/escena\.webp"/);
+  assert.match(h2, /rel="preload" as="image" href="\/img\/escena\.webp\?v=[0-9a-f]{10}"/);
   conFoto.limpiar();
+});
+
+test('estilos, código, imágenes y vídeo llevan huella (?v=) para que el móvil no use copias viejas', () => {
+  const r = construir([]);
+  const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
+  const recursos = [...html.matchAll(/(?:src|href|poster)="(\/(?:css|js|img|video|fuentes)\/[^"]+)"/g)].map((m) => m[1]);
+  assert.ok(recursos.length >= 5);
+  for (const u of recursos) assert.match(u, /\?v=[0-9a-f]{10}$/, u);
+  const css = readFileSync(join(r.dist, 'css/estilos.css'), 'utf8');
+  for (const m of css.matchAll(/url\((['"]?)(\/[^'")]+)\1\)/g)) assert.match(m[2], /\?v=[0-9a-f]{10}$/, m[2]);
+  r.limpiar();
 });
 
 test('la tele fuera de la franja del móvil da un aviso (no para la build)', () => {
