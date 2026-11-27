@@ -115,7 +115,7 @@ test('sin foto: gris PROVISIONAL con el rectángulo de la tele, y sin capa de pr
   r.limpiar();
   const conFoto = construir([]);
   const h2 = readFileSync(join(conFoto.dist, 'index.html'), 'utf8');
-  assert.match(h2, /<img class="escena__foto" src="\/img\/escena\.webp" alt="" width="1536" height="1024"/);
+  assert.match(h2, /<img class="escena__foto" src="\/img\/escena\.webp" alt="" width="3072" height="2048"/);
   assert.match(h2, /escena__primer-plano/);
   assert.match(h2, /rel="preload" as="image" href="\/img\/escena\.webp"/);
   conFoto.limpiar();

@@ -1,11 +1,15 @@
       <article class="venta" id="{{{evId}}}-venta" data-bloque="{{{evId}}}" aria-labelledby="{{{evId}}}-titulo">
-        <p class="pantalla__aviso"><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time></p>
-        <h1 class="pantalla__titulo" id="{{{evId}}}-titulo" tabindex="-1">Entradas</h1>
-        <p class="pantalla__destacado"><span class="venta__nombre">{{{evNombre}}}</span><span aria-hidden="true"> · </span><span class="venta__lugar">{{{evLugar}}}</span></p>
+        <header class="venta__cabecera">
+          <p class="pantalla__aviso"><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time></p>
+          <h1 class="pantalla__titulo" id="{{{evId}}}-titulo" tabindex="-1">Entradas</h1>
+          <p class="pantalla__destacado"><span class="venta__nombre">{{{evNombre}}}</span><span aria-hidden="true"> · </span><span class="venta__lugar">{{{evLugar}}}</span></p>
+        </header>
 {{{evTramos}}}
+        <div class="venta__abajo">
 {{{evEmail}}}
-        <nav class="botonera" aria-label="Navegación">
-          <a class="pastilla pastilla--oscura" href="?intro=1" data-volver>Volver</a>
+          <nav class="botonera" aria-label="Navegación">
+            <a class="pastilla pastilla--oscura" href="?intro=1" data-volver>Volver</a>
 {{{evContinuar}}}
-        </nav>
+          </nav>
+        </div>
       </article>

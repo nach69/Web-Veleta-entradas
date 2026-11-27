@@ -1,23 +1,27 @@
       <article class="espera" id="lista" data-bloque="ninguno" aria-labelledby="espera-titulo">
-        <p class="pantalla__aviso">No hay ningún evento ahora mismo</p>
+        <header class="venta__cabecera">
+          <p class="pantalla__aviso">No hay ningún evento ahora mismo</p>
+        </header>
         <h1 class="pantalla__titulo" id="espera-titulo" tabindex="-1">Estamos esperando al nuevo programa</h1>
-        <form class="lista" action="/api/lista" method="post" novalidate data-formulario>
-          <input type="hidden" name="tipo" value="lista">
-          <input type="hidden" name="t" value="">
-          <label class="pantalla__destacado lista__etiqueta" for="lista-email">Avísame cuando empiece la emisión</label>
-          <div class="lista__fila">
-            <input id="lista-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="Tu email" required maxlength="150">
-            <button class="pastilla pastilla--clara" type="submit">Avísame</button>
-          </div>
-          <p class="campo__error" id="lista-email-error"></p>
-          <div class="hp" aria-hidden="true">
-            <label for="lista-web">No rellenar</label>
-            <input id="lista-web" name="web" type="text" tabindex="-1" autocomplete="off">
-          </div>
-          <p class="form-estado" role="status" aria-live="polite"></p>
-          <p class="legal-corto"><span data-texto-alta="lista">Al apuntarte te avisaremos por email del próximo evento de {{nombre}}. Puedes darte de baja cuando quieras.</span> Responsable: {{titular.nombre}}. Más información en la <a href="/privacidad/">política de privacidad</a>.</p>
-        </form>
-        <nav class="botonera" aria-label="Navegación">
-          <a class="pastilla pastilla--oscura" href="?intro=1" data-volver>Volver</a>
-        </nav>
+        <div class="venta__abajo">
+          <form class="lista" action="/api/lista" method="post" novalidate data-formulario>
+            <input type="hidden" name="tipo" value="lista">
+            <input type="hidden" name="t" value="">
+            <label class="pantalla__destacado lista__etiqueta" for="lista-email">Avísame cuando empiece la emisión</label>
+            <div class="lista__fila">
+              <input id="lista-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="Tu email" required maxlength="150">
+              <button class="pastilla pastilla--clara" type="submit">Avísame</button>
+            </div>
+            <p class="campo__error" id="lista-email-error"></p>
+            <div class="hp" aria-hidden="true">
+              <label for="lista-web">No rellenar</label>
+              <input id="lista-web" name="web" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <p class="form-estado" role="status" aria-live="polite"></p>
+            <p class="legal-corto"><span data-texto-alta="lista">Al apuntarte te avisaremos por email del próximo evento de {{nombre}}. Puedes darte de baja cuando quieras.</span> Responsable: {{titular.nombre}}. Más información en la <a href="/privacidad/">política de privacidad</a>.</p>
+          </form>
+          <nav class="botonera" aria-label="Navegación">
+            <a class="pastilla pastilla--oscura" href="?intro=1" data-volver>Volver</a>
+          </nav>
+        </div>
       </article>

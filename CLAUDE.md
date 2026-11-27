@@ -17,6 +17,25 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   tramos con la letra del sistema.
 
 ## PUNTO ACTUAL (27/11)
+- **27/11, tras ver la versión publicada, Nacho cambió el recorrido (MANDA sobre lo anterior):**
+  1. La foto se ve QUIETA 2 s con el vídeo ya en la tele (antes 0,7 s: «no se ve el vídeo»).
+  2. Zoom LENTO (2,8 s) hasta que el televisor ENTERO ocupa el ancho (no hasta llenar la pantalla
+     con el cristal). Medido como `escena.marco` en config.json.
+  3. El vídeo sigue DENTRO de la tele hasta el final; abajo, botón «Saltar» (sustituye a «toca
+     para saltar»: ya no salta tocando en cualquier sitio).
+  4. Al acabar (o al «Saltar»): golpe de cámara y **los tramos aparecen DENTRO de la pantalla de
+     la tele** (no en otra pantalla). Arriba del televisor: fecha, «Entradas», nombre · lugar.
+     Debajo: email (si toca) y Volver/Continuar. Sin evento: «Estamos esperando al nuevo
+     programa» dentro de la pantalla y el email debajo. Sin JavaScript sigue el formato de
+     tarjetas debajo de la foto.
+  5. «La calidad de la imagen es malísima»: la foto (1536 px) se agrandó x2 y se enfocó (sin IA:
+     el entorno no deja instalarla) → `escena.webp` 3072×2048, 144 KB; cabeza recortada de
+     nuevo. Vídeo del modelo rehecho a 960×720 (826 KB). Para más calidad hace falta una foto de
+     origen con más resolución.
+  Constantes en `publico/js/main.js`: FASE_QUIETA_MS 2000, FASE_ZOOM_MS 2800, FASE_SIN_VIDEO_MS
+  1500, MARCO_ANCHO 0.94, MARCO_ALTO 0.5, MARCO_CENTRO_Y 0.46. El JS pone en `--pt-*` el
+  rectángulo de la pantalla y en `--marco-arriba/abajo` el del televisor; `data-paso` =
+  quieta | zoom | video | tramos.
 - Hecho: hero nuevo (foto B/N + zoom + golpe de cámara + venta por tramos), en la rama
   `claude/confident-dijkstra-7goz2c`. Todas las pruebas pasan.
 - 27/11: **publicada la versión de PRUEBA (el modelo)** en
@@ -117,12 +136,11 @@ emite la tele es el evento. De ahí se pasa a la pantalla de venta.
    foto: nada de textos, logos, veleta ni objetos modernos.
 3. La pantalla de la tele es un rectángulo definido sobre la foto (`config.json` → `escena`). El
    vídeo del evento (4:3, B/N, sin sonido) se reproduce dentro.
-4. Intro automática de ~3,5 s (constantes en `publico/js/main.js`): 0,7 s quieta → 2,3 s de zoom
-   lento hasta que la pantalla llena la vista → 0,5 s de «golpe de cámara» → segunda pantalla.
-   Esto sustituye al antiguo «máximo 1,5 s».
+4. ~~Intro de ~3,5 s~~ → cambiado el 27/11: 2 s quieta → zoom lento al televisor entero → vídeo
+   hasta el final («Saltar» abajo) → golpe de cámara → tramos dentro de la tele (ver arriba).
 5. Golpe de cámara: 2-3 oscilaciones laterales (±1,5 % translateX, giro ≤ 0,3°), frenando, con un
    destello en la pantalla. Al final el vídeo se pausa.
-6. Segunda pantalla a pantalla completa (NO texto dentro de la tele): nombre, fecha, lugar y la
+6. (27/11: ahora los tramos van DENTRO de la pantalla de la tele; ver «PUNTO ACTUAL».) Antes: segunda pantalla a pantalla completa: nombre, fecha, lugar y la
    lista de TRAMOS (tarjetas grandes: nombre + precio) y botones «Volver»/«Continuar» (formato
    Bogart, 27/11). TODOS los tramos y «Continuar» llevan al MISMO enlace (el del evento o
    veleta.lema.club). Son `<a href>` normales: funciona sin JavaScript. Sin estado de
@@ -404,7 +422,7 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   texto a la vista. Que lo confirme el asesor.
 
 ## Cómo trabajar
-- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (83 comprobaciones en
+- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (86 comprobaciones en
   Chromium: los dos estados, cambio por fecha moviendo el reloj, móvil y ordenador, con y sin
   JavaScript, fases de la intro, saltar, segunda visita, «reducir movimiento», tramos al mismo
   enlace, tema, solo B/N, nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y

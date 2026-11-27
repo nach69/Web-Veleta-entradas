@@ -49,13 +49,13 @@ if (config.dominio != null && !/^https:\/\/[^/\s]+$/.test(config.dominio)) error
 
 const MAX_VIDEO = 3 * 1024 * 1024;
 const MAX_IMAGEN = 500 * 1024;
-const MAX_ESCENA = 200 * 1024; // presupuesto de la foto del salón (WebP/AVIF ~150-200 KB)
+const MAX_ESCENA = 250 * 1024; // presupuesto de la foto del salón (WebP/AVIF ~150-250 KB)
 if (!errores.length) {
   const escena = config.escena;
   if (escena.imagen) {
     const ruta = archivoPublico(escena.imagen);
     if (!ruta) errores.push(`config.json: no existe la foto de la escena publico${escena.imagen} (súbela o pon null)`);
-    else if (statSync(ruta).size > MAX_ESCENA) avisos.push(`publico${escena.imagen} pesa ${Math.round(statSync(ruta).size / 1024)} KB: el presupuesto es ~150-200 KB (WebP o AVIF).`);
+    else if (statSync(ruta).size > MAX_ESCENA) avisos.push(`publico${escena.imagen} pesa ${Math.round(statSync(ruta).size / 1024)} KB: el presupuesto es ~150-250 KB (WebP o AVIF).`);
   }
   if (escena.primerPlano && !archivoPublico(escena.primerPlano.imagen)) errores.push(`config.json: no existe la capa de primer plano publico${escena.primerPlano.imagen} (súbela o pon null)`);
   // En el móvil (vertical) solo se ve la franja central de la foto: la pantalla tiene que caer ahí.
@@ -147,7 +147,7 @@ function emision(ev) {
   const poster = ev.posterTele ? ` poster="${escapar(ev.posterTele)}"` : '';
   const actualEnBuild = ev.id === idActualBuild;
   return `            <div class="emision" data-bloque="${ev.id}">
-              <video class="tele__video" muted loop playsinline${actualEnBuild ? ' autoplay preload="auto"' : ' preload="none"'}${poster} data-video aria-label="Avance del evento">
+              <video class="tele__video" muted playsinline${actualEnBuild ? ' autoplay preload="auto"' : ' preload="none"'}${poster} data-video aria-label="Avance del evento">
                 <source src="${escapar(ev.videoTele)}" type="video/mp4">
               </video>
             </div>`;
@@ -213,6 +213,7 @@ const [vw, vh] = esc.ratioVideo.split(':').map(Number);
 const cssEstado = [
   '/* Generado por scripts/build.mjs a partir de datos/: escena, qué bloque se ve en cada estado y temas. */',
   `:root { --escena-ratio: ${esc.ancho / esc.alto}; --tele-x: ${esc.pantalla.x}%; --tele-y: ${esc.pantalla.y}%; --tele-ancho: ${esc.pantalla.ancho}%; --tele-alto: ${esc.pantalla.alto}%; --video-ratio: ${vw / vh}; }`,
+  (() => { const m = esc.marco || esc.pantalla; return `:root { --marco-x: ${m.x}%; --marco-y: ${m.y}%; --marco-ancho: ${m.ancho}%; --marco-alto: ${m.alto}%; }`; })(),
   esc.primerPlano ? `:root { --pp-x: ${esc.primerPlano.x}%; --pp-y: ${esc.primerPlano.y}%; --pp-ancho: ${esc.primerPlano.ancho}%; --pp-alto: ${esc.primerPlano.alto}%; }` : '',
   `html:not([data-actual]) [data-bloque]:not([data-bloque="${idActualBuild}"]) { display: none !important; }`,
   ...ids.map((id) => `html[data-actual]:not([data-actual="${id}"]) [data-bloque="${id}"] { display: none !important; }`),

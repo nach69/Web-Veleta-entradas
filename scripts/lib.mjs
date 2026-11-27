@@ -104,6 +104,12 @@ export function erroresEscena(e) {
     if (!errores.length && (p.x + p.ancho > 100 || p.y + p.alto > 100)) errores.push('escena.pantalla se sale de la foto (x + ancho y y + alto no pueden pasar de 100)');
     if (!errores.length && (p.ancho === 0 || p.alto === 0)) errores.push('escena.pantalla no puede medir 0');
   }
+  // El televisor entero (carcasa y mandos): el zoom lo ajusta al ancho y los tramos van dentro de la pantalla
+  const m = e.marco;
+  if (m != null) {
+    if (typeof m !== 'object') errores.push('escena.marco tiene que ser { x, y, ancho, alto } (o null)');
+    else for (const k of ['x', 'y', 'ancho', 'alto']) if (!(typeof m[k] === 'number' && m[k] >= 0 && m[k] <= 100)) errores.push(`escena.marco.${k} tiene que ser un número entre 0 y 100 (% de la foto)`);
+  }
   // Capa opcional de lo que en la foto queda DELANTE de la pantalla (p. ej. la cabeza del señor)
   const f = e.primerPlano;
   if (f != null) {

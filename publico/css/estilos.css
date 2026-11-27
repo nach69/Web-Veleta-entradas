@@ -147,10 +147,6 @@ html.js .escena__grano { animation: grano .5s steps(1, end) infinite; }
   position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(0,0,0,.55) 80%, rgba(0,0,0,.9) 100%);
 }
-.escena__saltar {
-  position: absolute; left: 0; right: 0; bottom: max(1.25rem, env(safe-area-inset-bottom)); margin: 0; text-align: center;
-  font: 700 .72rem/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.75);
-}
 
 /* =====================================================================
    2. SEGUNDA PANTALLA (venta por tramos o lista de espera)
@@ -282,14 +278,87 @@ html.js[data-fase] .escena__lienzo {
     --lienzo-alto: max(100svh, calc(100vw / var(--escena-ratio)));
   }
 }
-html.js[data-fase="intro"] .escena { cursor: pointer; }
 html.js[data-fase="intro"] .pantalla,
 html.js[data-fase="intro"] .pie { visibility: hidden; opacity: 0; }
-html.js[data-fase] .pantalla { z-index: 1; min-height: 100vh; min-height: 100svh; }
-html.js[data-fase="pantalla"] .escena { visibility: hidden; opacity: 0; transition: opacity 400ms ease-out, visibility 0s 400ms; }
-html.js[data-fase="pantalla"] .pantalla,
-html.js[data-fase="pantalla"] .pie { visibility: visible; opacity: 1; transition: opacity 400ms ease-out; }
 html.js[data-fase] .pie { position: relative; z-index: 1; }
+
+/* El televisor entero (invisible): sirve para encuadrar el zoom */
+.tele-marco { position: absolute; left: var(--marco-x); top: var(--marco-y); width: var(--marco-ancho); height: var(--marco-alto); pointer-events: none; }
+
+/* «Saltar», abajo, durante la intro (Nacho, 27/11) */
+.escena__saltar {
+  position: absolute; left: 50%; bottom: max(1.5rem, env(safe-area-inset-bottom)); transform: translateX(-50%);
+  z-index: 2; min-width: 7.5rem; background: rgba(20, 20, 20, .78); border: 1px solid rgba(255, 255, 255, .25);
+}
+
+/* ---------- Los tramos DENTRO de la tele (Nacho, 27/11) ----------
+   La escena se queda encuadrada en el televisor; el JS pone en --pt-* el rectángulo de la pantalla y en
+   --marco-arriba / --marco-abajo dónde empieza y acaba el televisor. Arriba: fecha, «Entradas» y
+   nombre · lugar. Dentro de la pantalla: los tramos. Abajo: email y botones. */
+html.js[data-fase="pantalla"] .escena { visibility: visible; opacity: 1; }
+html.js[data-paso="tramos"] .tele::after {
+  content: ''; position: absolute; inset: 0; background: rgba(0, 0, 0, .84); pointer-events: none;
+  animation: oscurecer 400ms ease-out both;
+}
+@keyframes oscurecer { from { opacity: 0; } to { opacity: 1; } }
+html.js[data-fase="pantalla"] .pantalla {
+  position: relative; z-index: 1; height: 100vh; height: 100svh; min-height: 0; padding: 0;
+  background: transparent; visibility: visible; opacity: 1; animation: aparecer 400ms ease-out both;
+}
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+html.js[data-fase="pantalla"] .pantalla::before,
+html.js[data-fase="pantalla"] .pantalla::after,
+html.js[data-fase="pantalla"] .venta::before { display: none; }
+html.js[data-fase="pantalla"] .pie { visibility: visible; opacity: 1; }
+html.js[data-fase="pantalla"] .venta,
+html.js[data-fase="pantalla"] .espera { position: absolute; inset: 0; width: auto; max-width: none; min-height: 0; display: block; margin: 0; }
+
+/* Arriba del televisor */
+html.js[data-fase="pantalla"] .venta__cabecera {
+  position: absolute; left: 0; right: 0; top: 0; height: var(--marco-arriba, 30%);
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  padding: 1rem 1.25rem .6rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .9);
+  background: linear-gradient(180deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.35) 70%, transparent 100%);
+}
+html.js[data-fase="pantalla"] .venta__cabecera .pantalla__titulo { font-size: calc(clamp(2.2rem, 12vw, 4rem) * var(--estirado)); margin: 0 0 .25rem; }
+html.js[data-fase="pantalla"] .venta__cabecera .pantalla__destacado { margin: 0; }
+
+/* Dentro de la pantalla de la tele */
+html.js[data-fase="pantalla"] .tramos {
+  position: absolute; left: var(--pt-x); top: var(--pt-y); width: var(--pt-ancho); height: var(--pt-alto);
+  margin: 0; padding: calc(var(--pt-alto) * .07) calc(var(--pt-ancho) * .07);
+  display: flex; flex-direction: column; justify-content: center; gap: calc(var(--pt-alto) * .045);
+  overflow: auto; border-radius: 11% / 14%;
+}
+html.js[data-fase="pantalla"] .tramo {
+  min-height: 44px; flex: 0 1 auto; border-radius: calc(var(--pt-ancho) * .035);
+  padding: calc(var(--pt-alto) * .045) calc(var(--pt-ancho) * .05);
+  font-size: clamp(.62rem, calc(var(--pt-ancho) * .05), 1.05rem); line-height: 1.12;
+  background: linear-gradient(180deg, rgba(60,60,60,.92) 0%, rgba(22,22,22,.92) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), 0 3px 0 rgba(0, 0, 0, .7);
+}
+html.js[data-fase="pantalla"] .tramo__precio { font-size: calc(clamp(1rem, calc(var(--pt-ancho) * .085), 1.9rem) * var(--estirado)); }
+html.js[data-fase="pantalla"] a.tramo:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), 0 1px 0 rgba(0, 0, 0, .7); }
+/* Sin evento: el título va dentro de la pantalla */
+html.js[data-fase="pantalla"] .espera .pantalla__titulo {
+  position: absolute; top: var(--pt-y); height: var(--pt-alto); margin: 0;
+  width: calc(var(--pt-ancho) * var(--estirado)); left: calc(var(--pt-x) - var(--pt-ancho) * (var(--estirado) - 1) / 2);
+  display: flex; align-items: center; justify-content: center; padding: 0 calc(var(--pt-ancho) * .1);
+  font-size: calc(clamp(1.1rem, calc(var(--pt-ancho) * .1), 2.6rem) * var(--estirado)); line-height: 1;
+}
+
+/* Debajo del televisor */
+html.js[data-fase="pantalla"] .venta__abajo {
+  position: absolute; left: 0; right: 0; top: var(--marco-abajo, 70%); bottom: 0;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: .6rem;
+  padding: .75rem 1.25rem 0; max-width: 32rem; margin: 0 auto;
+  background: linear-gradient(0deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.55) 75%, transparent 100%);
+}
+html.js[data-fase="pantalla"] .venta__abajo .comprar__email { margin: 0; gap: .3rem; }
+html.js[data-fase="pantalla"] .venta__abajo input[type="email"] { min-height: 44px; }
+html.js[data-fase="pantalla"] .venta__abajo .legal-corto { font-size: .66rem; }
+html.js[data-fase="pantalla"] .venta__abajo .lista { margin: 0; gap: .45rem; }
+html.js[data-fase="pantalla"] .botonera { position: static; margin: 0 -1.25rem; padding-top: .4rem; background: none; }
 html.recien-llegada .pantalla, html.recien-llegada .pie { pointer-events: none; }
 
 /* Con «reducir movimiento»: sin zoom ni sacudida (los quita el JS), sin grano ni parpadeo animados; solo fundidos */

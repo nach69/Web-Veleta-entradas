@@ -14,10 +14,10 @@
   },
   "descripcion": "Entradas para el próximo evento de Veleta en Valencia.",
   "escena": {
-    "_nota": "Foto del salón (B/N, horizontal 3:2) y rectángulo de la pantalla de la tele en % de la foto (x, y = esquina de arriba a la izquierda). primerPlano: recorte de lo que en la foto queda DELANTE de la pantalla (la cabeza del señor), con transparencia, colocado en % igual que la pantalla; null si no hace falta. En el móvil solo se ve la franja central (de ~35% a ~65% del ancho): la pantalla tiene que caer ahí. Foto de prueba del 27/11 (1536×1024): pantalla medida a mano a partir de sus bordes.",
+    "_nota": "Foto del salón (B/N, horizontal 3:2) y rectángulo de la pantalla de la tele en % de la foto (x, y = esquina de arriba a la izquierda). primerPlano: recorte de lo que en la foto queda DELANTE de la pantalla (la cabeza del señor), con transparencia, colocado en % igual que la pantalla; null si no hace falta. En el móvil solo se ve la franja central (de ~35% a ~65% del ancho): la pantalla tiene que caer ahí. Foto de prueba del 27/11 (1536×1024): pantalla medida a mano a partir de sus bordes. marco: el televisor ENTERO (carcasa y mandos, sin la antena), en %; el zoom lo ajusta al ancho de la pantalla y los tramos salen dentro de «pantalla». 27/11: foto agrandada x2 y enfocada (de 1536 a 3072 px) porque se veía borrosa.",
     "imagen": "/img/escena.webp",
-    "ancho": 1536,
-    "alto": 1024,
+    "ancho": 3072,
+    "alto": 2048,
     "pantalla": {
       "x": 38.41,
       "y": 18.85,
@@ -31,6 +31,12 @@
       "y": 35.74,
       "ancho": 15.62,
       "alto": 4.69
+    },
+    "marco": {
+      "x": 36.46,
+      "y": 16.41,
+      "ancho": 25.52,
+      "alto": 27.15
     }
   },
   "titular": {

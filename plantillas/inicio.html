@@ -4,6 +4,7 @@
       <div class="escena__camara" data-camara>
         <div class="escena__lienzo" data-lienzo>
 {{{fondoEscena}}}
+          <div class="tele-marco" data-marco aria-hidden="true"></div>
           <div class="tele" data-tele>
 {{{emisiones}}}
             <span class="tele__barrido" aria-hidden="true"></span>
@@ -14,7 +15,7 @@
       </div>
       <span class="escena__grano" aria-hidden="true"></span>
       <span class="escena__vineta" aria-hidden="true"></span>
-      <p class="escena__saltar" data-saltar hidden>Toca para saltar</p>
+      <button type="button" class="pastilla pastilla--oscura escena__saltar" data-saltar hidden>Saltar</button>
     </section>
 
     <!-- 2. Segunda pantalla: venta por tramos (con evento) o lista de espera (sin evento). Funciona sin JavaScript. -->

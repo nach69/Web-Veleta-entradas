@@ -1,5 +1,6 @@
 // Comprobaciones en un navegador real (Chromium + Playwright).
-// Intro: 0,7 s quieta + 2,3 s de zoom + 0,5 s de sacudida ≈ 3,5 s → segunda pantalla.
+// Intro (27/11): 2 s quieta con el vídeo → 2,8 s de zoom hasta encuadrar el televisor → el vídeo hasta el final
+// (el de prueba dura 2 s, así que ya ha acabado) → sacudida → tramos DENTRO de la tele. «Saltar» abajo.
 // Uso: npm run test:navegador  (construye dist/ con los datos reales y dist-pruebas/ con tests/fixtures/estados)
 //
 // - dist-pruebas: un evento pasado, el A (12/12/2026 23:00–05:00, con vídeo, 3 tramos y tema) y el B
@@ -85,7 +86,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     ok(await fase(p) === 'intro', 'primera visita: empieza la intro');
     ok(await p.isVisible('.tele video'), 'la tele emite el vídeo del evento');
     ok(await p.$eval('.tele video', (v) => v.muted && v.autoplay && v.playsInline), 'vídeo sin sonido, autoplay y playsinline');
-    ok(await p.$eval('img.escena__foto', (i) => i.complete && i.naturalWidth === 1536), 'se ve la foto del salón');
+    ok(await p.$eval('img.escena__foto', (i) => i.complete && i.naturalWidth === 3072), 'se ve la foto del salón');
     const capas = await p.evaluate(() => {
       const capa = document.querySelector('.escena__primer-plano');
       capa.style.pointerEvents = 'auto'; // solo para mirar qué queda encima (en la web no recibe toques)
@@ -100,19 +101,25 @@ const madrid = (iso) => new Date(iso + '+01:00');
     const caja = await p.$eval('[data-tele]', (t) => { const r = t.getBoundingClientRect(); return { izq: r.left, der: r.right, ancho: innerWidth }; });
     ok(caja.izq >= 0 && caja.der <= caja.ancho, 'en el móvil la tele cae entera dentro de la pantalla');
     ok(await p.isHidden(A), 'durante la intro no se ve la segunda pantalla');
-    await p.waitForFunction(() => document.getAnimations().some((a) => a.id === 'zoom'), null, { timeout: 1500 });
-    ok(true, 'a los 0,7 s empieza el zoom');
-    await p.waitForTimeout(1500);
+    ok(await p.isVisible('[data-saltar]'), 'botón «Saltar» abajo durante la intro');
+    await p.waitForTimeout(1400);
+    ok(await p.evaluate(() => !document.getAnimations().some((a) => a.id === 'zoom')) && await p.evaluate(() => document.documentElement.dataset.paso) === 'quieta', 'los 2 primeros segundos la foto está quieta');
+    await p.waitForFunction(() => document.getAnimations().some((a) => a.id === 'zoom'), null, { timeout: 3000 });
+    ok(true, 'a los 2 s empieza el zoom');
+    await p.waitForTimeout(2000);
     const escala = await p.$eval('[data-lienzo]', (l) => new DOMMatrix(getComputedStyle(l).transform).a);
-    ok(escala > 1.2, `el zoom acerca la tele (escala ${escala.toFixed(2)})`);
-    await p.waitForFunction(() => document.getAnimations().some((a) => a.id === 'sacudida'), null, { timeout: 2500 });
-    ok(await animando(p, 'sacudida') || await fase(p) === 'pantalla', 'después del zoom, sacudida de cámara');
-    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 2500 });
-    ok(true, 'tras ~3,5 s sale sola la segunda pantalla');
+    ok(escala > 1.05, `el zoom acerca la tele (escala ${escala.toFixed(2)})`);
+    await p.waitForFunction(() => document.getAnimations().some((a) => a.id === 'sacudida') || document.documentElement.dataset.paso === 'tramos', null, { timeout: 6000 });
+    ok(true, 'cuando acaba el vídeo, sacudida de cámara');
+    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 4000 });
+    ok(true, 'y salen los tramos');
+    const encuadre = await p.evaluate(() => { const m = document.querySelector('[data-marco]').getBoundingClientRect(); return { izq: m.left, der: m.right, ancho: innerWidth }; });
+    ok(encuadre.izq >= -2 && encuadre.der <= encuadre.ancho + 2 && (encuadre.der - encuadre.izq) > encuadre.ancho * 0.8, 'el televisor entero ocupa el ancho de la pantalla');
     ok(await p.$eval('.tele video', (v) => v.paused), 'al acabar, el vídeo se pausa');
     await p.waitForTimeout(500);
     ok(await p.isVisible(A) && await p.isHidden('#ev-2027-01-16-3-venta') && await p.isHidden('#lista'), 'se ve la venta del A y nada más');
-    ok(await p.isHidden('[data-escena]'), 'la escena desaparece');
+    const dentro = await p.evaluate((sel) => { const t = document.querySelector('[data-tele]').getBoundingClientRect(); return [...document.querySelectorAll(sel + ' a.tramo')].every((a) => { const r = a.getBoundingClientRect(); return r.left >= t.left - 1 && r.right <= t.right + 1 && r.top >= t.top - 1 && r.bottom <= t.bottom + 1; }); }, A);
+    ok(await p.isVisible('[data-escena]') && dentro, 'los tramos salen DENTRO de la pantalla de la tele');
     ok((await p.textContent(A)).includes('sábado 12 de diciembre · 23:00–05:00') && (await p.textContent(A)).includes('Lugar de prueba A'), 'nombre, fecha y lugar');
     const tramos = await p.$$eval(A + ' a.tramo', (as) => as.map((a) => ({ href: a.getAttribute('href'), txt: a.textContent })));
     ok(tramos.length === 3, '3 tramos, cada uno una fila');
@@ -123,7 +130,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     ok(await p.$$eval(A + ' .tramos li', (lis) => lis.every((li) => getComputedStyle(li).borderTopWidth === '0px')), 'sin rayas separadoras entre tramos');
     ok(tramos[1].txt.includes('15,50 €'), 'precios en euros a la española');
     const alto = await p.$eval(A + ' a.tramo', (a) => a.getBoundingClientRect().height);
-    ok(alto >= 56, `filas grandes para el dedo (${Math.round(alto)} px)`);
+    ok(alto >= 44, `filas que se pueden tocar bien con el dedo (${Math.round(alto)} px, mínimo 44)`);
     ok(await p.$eval(A, (el) => getComputedStyle(el).getPropertyValue('--acento').trim()) === '#ff3b3b', 'tema del evento: color de acento');
     ok(await p.$eval(A, (el) => getComputedStyle(el, '::before').backgroundImage.includes('/img/texturas/prueba.png')), 'tema del evento: textura');
     ok(await p.$$eval('[data-sonido]', (b) => b.length) === 0, 'no hay botón de sonido');
@@ -135,7 +142,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await p.waitForLoadState();
     ok(await fase(p) === 'intro', '«Volver» enseña otra vez la tele');
     ok(!(await p.evaluate(() => location.search.includes('intro'))), 'y limpia la dirección');
-    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 6000 });
+    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 12000 });
     ok(true, 'y después vuelve sola a la venta');
     ok(await p.isHidden('#aviso-cookies'), 'sin nada de otras webs, no sale el aviso de cookies');
     await ctx.close();
@@ -147,9 +154,9 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await p.goto(PRUEBAS + '/');
     await p.waitForTimeout(1200);
     const t0 = Date.now();
-    await p.tap('[data-escena]');
+    await p.click('[data-saltar]');
     await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla');
-    ok(Date.now() - t0 < 600, 'un toque en mitad del zoom salta la intro');
+    ok(Date.now() - t0 < 800, '«Saltar» salta la intro');
     ok(await p.$eval('.tele video', (v) => v.paused), 'y el vídeo se pausa');
     await p.waitForTimeout(500);
     ok(await p.isVisible(A), 'y sale la venta');
@@ -162,7 +169,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await p.goto(PRUEBAS + '/');
     const r = await p.$eval('[data-lienzo]', (l) => { const b = l.getBoundingClientRect(); return { a: b.width, h: b.height }; });
     ok(r.a >= 1280 && r.h >= 800, 'en el ordenador la foto llena la pantalla');
-    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: INTRO_MS + 2000 });
+    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 12000 });
     await p.waitForTimeout(500);
     ok(await p.isVisible(A), 'en el ordenador también llega a la venta');
     await ctx.close();
@@ -172,7 +179,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
   {
     const { ctx, p } = await nuevaPagina();
     await p.goto(PRUEBAS + '/');
-    await p.tap('[data-escena]');
+    await p.click('[data-saltar]');
     await p.waitForTimeout(3300); // el antispam pide más de 3 s
     await p.fill('#ev-2026-12-12-2-email', 'mal@');
     const antes = correos.length;
@@ -208,7 +215,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
       await p.waitForTimeout(250);
       ok(a1 !== await p.$eval('[data-sin-senal]', (c) => c.toDataURL()), 'la nieve se mueve');
     }
-    await p.tap('[data-escena]');
+    await p.click('[data-saltar]');
     await p.waitForTimeout(500);
     if (esperado === 'ev-2027-01-16-3') {
       const B = '#ev-2027-01-16-3-venta';
@@ -229,9 +236,9 @@ const madrid = (iso) => new Date(iso + '+01:00');
   {
     const { ctx, p } = await nuevaPagina({ reducedMotion: 'reduce' }, madrid('2026-12-01T12:00:00'));
     await p.goto(PRUEBAS + '/');
-    await p.waitForFunction(() => document.getAnimations().some((a) => a.id === 'fundido'), null, { timeout: 2000 });
+    await p.waitForFunction(() => document.getAnimations().some((a) => a.id === 'fundido'), null, { timeout: 4000 });
     ok(true, 'con «reducir movimiento» hay un fundido');
-    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 3000 });
+    await p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 8000 });
     await p.waitForTimeout(500);
     ok(await p.isVisible(A), 'llega a la segunda pantalla');
     ok(await p.evaluate(() => !document.getAnimations().some((a) => a.id === 'zoom' || a.id === 'sacudida')), 'sin zoom ni sacudida');
@@ -241,7 +248,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await c2.p.exposeFunction('__anota', (id) => ids.push(id));
     await c2.p.addInitScript(() => { const o = Element.prototype.animate; Element.prototype.animate = function (k, op) { window.__anota(op && op.id); return o.call(this, k, op); }; });
     await c2.p.goto(PRUEBAS + '/');
-    await c2.p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 3000 });
+    await c2.p.waitForFunction(() => document.documentElement.getAttribute('data-fase') === 'pantalla', null, { timeout: 8000 });
     ok(!ids.includes('zoom') && !ids.includes('sacudida') && ids.includes('fundido'), 'en ningún momento se lanza el zoom ni la sacudida');
     await c2.ctx.close();
   }
@@ -273,7 +280,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     const { ctx, p } = await nuevaPagina();
     await p.goto(REAL + '/');
     ok(await actual(p) === 'ninguno', 'datos reales: hoy no hay evento');
-    await p.tap('[data-escena]');
+    await p.click('[data-saltar]');
     await p.waitForTimeout(500);
     await p.click('#lista [type=submit]');
     ok((await p.textContent('#lista-email-error')).includes('Falta tu email'), 'avisa si falta el email');
