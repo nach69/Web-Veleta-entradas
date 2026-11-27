@@ -2,7 +2,7 @@
 // "name" tiene que coincidir con el nombre del Worker en el panel de Cloudflare.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "veleta-entradas",
+  "name": "web-veleta-entradas",
   "main": "src/worker.js",
   "compatibility_date": "2026-10-01",
   "assets": {

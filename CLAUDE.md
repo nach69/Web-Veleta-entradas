@@ -48,7 +48,8 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 - 27/11 (Nacho): **crear el Worker de Cloudflare para ir viéndolo.** Se publica el MODELO:
   build command `npm run build:prueba` (= `DATOS=modelo node scripts/build.mjs`, sale en `dist/`),
   deploy `npx wrangler deploy`, rama de producción `claude/confident-dijkstra-7goz2c` (no hay
-  `main` aún). Nombre del Worker: `veleta-entradas` (como `wrangler.jsonc`). `_headers` lleva
+  `main` aún). Nombre del Worker: **`web-veleta-entradas`** (así lo creó Nacho; `wrangler.jsonc` corregido el 27/11).
+  Dirección de prueba: **https://web-veleta-entradas.super-unit-ca4a.workers.dev**. `_headers` lleva
   `X-Robots-Tag: noindex, nofollow` para TODA la web mientras sea de prueba: QUITARLO al lanzar.
   Para lanzar de verdad: build command → `npm run build`, quitar el noindex, y pasar a `main`.
   Ojo: el evento de prueba (24/12) deja de verse el 25/12 y sale «sin evento».
@@ -330,8 +331,8 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   raros…) y si hay error no publica: la web sigue como estaba y el error sale explicado en
   español en Cloudflare.
 - Publicación: Cloudflare **Worker** con Static Assets (plan gratuito), conectado a GitHub,
-  publica desde `main`. Nombre del Worker [RELLENAR]; debe coincidir con `name` en
-  `wrangler.jsonc` (de momento `veleta-entradas`). Build `npm run build`, deploy
+  publica desde `main` (de momento, desde la rama `claude/confident-dijkstra-7goz2c`). Worker
+  `web-veleta-entradas`; debe coincidir con `name` en `wrangler.jsonc`. Build `npm run build`, deploy
   `npx wrangler deploy`. **No usar Netlify.** Crearlo como Worker, no como Pages.
 - `src/worker.js` solo actúa en `/api/*` (`run_worker_first`); el resto lo sirve Cloudflare.
 - Lista de espera por email: `/api/lista` → `src/lista.js` (equivale al `contacto.js` de
