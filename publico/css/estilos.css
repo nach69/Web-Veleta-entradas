@@ -89,7 +89,7 @@ mark.pendiente {
   position: absolute;
   left: var(--tele-x); top: var(--tele-y); width: var(--tele-ancho); height: var(--tele-alto);
   overflow: hidden; background: #050505;
-  border-radius: 7% / 9%;
+  border-radius: 11% / 14%; /* esquinas de tubo, como en la foto */
   box-shadow: 0 0 2.5vmin rgba(255, 255, 255, .35), 0 0 9vmin rgba(255, 255, 255, .12);
 }
 .emision { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
@@ -102,6 +102,11 @@ mark.pendiente {
     repeating-linear-gradient(90deg, #777 0 2px, #333 2px 3px, #aaa 3px 5px, #555 5px 7px);
 }
 .sin-senal { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+/* Lo que en la foto queda delante de la pantalla (la cabeza del señor), encima del vídeo */
+.escena__primer-plano {
+  position: absolute; left: var(--pp-x); top: var(--pp-y); width: var(--pp-ancho); height: var(--pp-alto);
+  max-width: none; pointer-events: none; filter: grayscale(1) contrast(1.06);
+}
 /* Encima de la pantalla: líneas de barrido, curvatura y brillo */
 .tele__barrido {
   position: absolute; inset: 0; pointer-events: none;

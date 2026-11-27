@@ -104,6 +104,15 @@ export function erroresEscena(e) {
     if (!errores.length && (p.x + p.ancho > 100 || p.y + p.alto > 100)) errores.push('escena.pantalla se sale de la foto (x + ancho y y + alto no pueden pasar de 100)');
     if (!errores.length && (p.ancho === 0 || p.alto === 0)) errores.push('escena.pantalla no puede medir 0');
   }
+  // Capa opcional de lo que en la foto queda DELANTE de la pantalla (p. ej. la cabeza del señor)
+  const f = e.primerPlano;
+  if (f != null) {
+    if (typeof f !== 'object') errores.push('escena.primerPlano tiene que ser { imagen, x, y, ancho, alto } (o null)');
+    else {
+      if (!/^\/img\/[\w.-]+\.(webp|png|avif)$/i.test(f.imagen || '')) errores.push('escena.primerPlano.imagen tiene que ser como "/img/escena-cabeza.webp" (con transparencia)');
+      for (const k of ['x', 'y', 'ancho', 'alto']) if (!(typeof f[k] === 'number' && f[k] >= 0 && f[k] <= 100)) errores.push(`escena.primerPlano.${k} tiene que ser un número entre 0 y 100 (% de la foto)`);
+    }
+  }
   return errores;
 }
 

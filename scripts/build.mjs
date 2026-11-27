@@ -57,6 +57,7 @@ if (!errores.length) {
     if (!ruta) errores.push(`config.json: no existe la foto de la escena publico${escena.imagen} (súbela o pon null)`);
     else if (statSync(ruta).size > MAX_ESCENA) avisos.push(`publico${escena.imagen} pesa ${Math.round(statSync(ruta).size / 1024)} KB: el presupuesto es ~150-200 KB (WebP o AVIF).`);
   }
+  if (escena.primerPlano && !archivoPublico(escena.primerPlano.imagen)) errores.push(`config.json: no existe la capa de primer plano publico${escena.primerPlano.imagen} (súbela o pon null)`);
   // En el móvil (vertical) solo se ve la franja central de la foto: la pantalla tiene que caer ahí.
   const p = escena.pantalla;
   const visible = (100 * (9 / 19.5)) / (escena.ancho / escena.alto); // % del ancho visible en un móvil típico
@@ -189,9 +190,14 @@ const esc = config.escena;
 const fondoEscena = esc.imagen
   ? `          <img class="escena__foto" src="${escapar(esc.imagen)}" alt="" width="${esc.ancho}" height="${esc.alto}" fetchpriority="high" decoding="async">`
   : `          <div class="escena__foto escena__foto--provisional" aria-hidden="true"><span>PROVISIONAL · foto del salón en blanco y negro: señor de espaldas en su sillón viendo la tele</span></div>`;
+// Lo que en la foto queda delante de la pantalla (la cabeza): va encima del vídeo
+const primerPlano = esc.imagen && esc.primerPlano
+  ? `          <img class="escena__primer-plano" src="${escapar(esc.primerPlano.imagen)}" alt="" decoding="async">`
+  : '';
 
 const bloquesLanding = {
   fondoEscena,
+  primerPlano,
   emisiones: [...futuros.map(emision), emision(null)].join('\n'),
   pantallas: [...futuros.map(pantallaEvento), rellenar(leer('plantillas/parciales/sin-evento.html'), {})].join('\n')
 };
@@ -203,6 +209,7 @@ const [vw, vh] = esc.ratioVideo.split(':').map(Number);
 const cssEstado = [
   '/* Generado por scripts/build.mjs a partir de datos/: escena, qué bloque se ve en cada estado y temas. */',
   `:root { --escena-ratio: ${esc.ancho / esc.alto}; --tele-x: ${esc.pantalla.x}%; --tele-y: ${esc.pantalla.y}%; --tele-ancho: ${esc.pantalla.ancho}%; --tele-alto: ${esc.pantalla.alto}%; --video-ratio: ${vw / vh}; }`,
+  esc.primerPlano ? `:root { --pp-x: ${esc.primerPlano.x}%; --pp-y: ${esc.primerPlano.y}%; --pp-ancho: ${esc.primerPlano.ancho}%; --pp-alto: ${esc.primerPlano.alto}%; }` : '',
   `html:not([data-actual]) [data-bloque]:not([data-bloque="${idActualBuild}"]) { display: none !important; }`,
   ...ids.map((id) => `html[data-actual]:not([data-actual="${id}"]) [data-bloque="${id}"] { display: none !important; }`),
   // Tema secundario por evento (opcional). Sin tema: blanco y negro puro.

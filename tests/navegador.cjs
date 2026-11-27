@@ -85,7 +85,18 @@ const madrid = (iso) => new Date(iso + '+01:00');
     ok(await fase(p) === 'intro', 'primera visita: empieza la intro');
     ok(await p.isVisible('.tele video'), 'la tele emite el vídeo del evento');
     ok(await p.$eval('.tele video', (v) => v.muted && v.autoplay && v.playsInline), 'vídeo sin sonido, autoplay y playsinline');
-    ok(await p.isVisible('.escena__foto--provisional') && (await p.textContent('.escena__foto--provisional')).includes('PROVISIONAL'), 'sin foto todavía: gris PROVISIONAL');
+    ok(await p.$eval('img.escena__foto', (i) => i.complete && i.naturalWidth === 1536), 'se ve la foto del salón');
+    const capas = await p.evaluate(() => {
+      const capa = document.querySelector('.escena__primer-plano');
+      capa.style.pointerEvents = 'auto'; // solo para mirar qué queda encima (en la web no recibe toques)
+      const cab = capa.getBoundingClientRect();
+      const tv = document.querySelector('[data-tele]').getBoundingClientRect();
+      const x = cab.left + cab.width / 2, y = cab.bottom - 2;
+      const delante = document.elementFromPoint(x, y) === capa;
+      capa.style.pointerEvents = '';
+      return { delante, solapa: cab.top < tv.bottom && cab.bottom > tv.top };
+    });
+    ok(capas.solapa && capas.delante, 'la cabeza del señor queda DELANTE del vídeo');
     const caja = await p.$eval('[data-tele]', (t) => { const r = t.getBoundingClientRect(); return { izq: r.left, der: r.right, ancho: innerWidth }; });
     ok(caja.izq >= 0 && caja.der <= caja.ancho, 'en el móvil la tele cae entera dentro de la pantalla');
     ok(await p.isHidden(A), 'durante la intro no se ve la segunda pantalla');

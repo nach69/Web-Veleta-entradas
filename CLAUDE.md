@@ -13,16 +13,18 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 - (26/11) Se quitaron de la fase 1 la letra RL Madena, el estilo de titulares del grupo,
   «Grupo Sobremesa» como responsable y el correo info@ del grupo. No volver a meterlos.
 
-## PARA RETOMAR (pausado el 26/11 por la noche; Nacho pidió que se lo recuerde al volver)
-Al empezar la próxima conversación, recordar a Nacho en qué punto estamos:
+## PUNTO ACTUAL (27/11)
 - Hecho: hero nuevo (foto B/N + zoom + golpe de cámara + venta por tramos), en la rama
   `claude/confident-dijkstra-7goz2c`, SIN publicar. Todas las pruebas pasan.
-- Siguiente paso: Nacho trae la FOTO de la escena → subirla a `publico/img/`, medir el rectángulo
-  de la pantalla (x, y, ancho, alto en %) y ponerlo en `config.json` → `escena`; comprobar que la
-  tele cae en la franja central del móvil; capturas para que lo vea.
-- Luego, «ir acabando cositas para sacar modelos» (versiones para enseñar). Faltan: letra de
-  Veleta, tramos y precios por evento, primer evento, dominio de envío para Resend, titular
-  legal, Worker de Cloudflare, si «Eusebio» es el abuelo.
+- 27/11: Nacho pasó la **foto de prueba** (1536×1024, señor de espaldas en sillón orejero, tele
+  de los 70 con antena sobre un aparador, dos cuadros, mesita con vaso y puro). Puesta como
+  `publico/img/escena.webp` (B/N, 55 KB). Pantalla medida a mano: píxeles 590-870 × 193-410
+  (≈ 4:3). La cabeza del señor tapa el borde de abajo de la pantalla: se recortó como capa
+  `publico/img/escena-cabeza.webp` (2 KB, con transparencia) que va DELANTE del vídeo
+  (`escena.primerPlano`). Si cambia la foto, hay que volver a medir y recortar.
+- Siguiente: «ir acabando cositas para sacar modelos» (versiones para enseñar). Faltan: letra de
+  Veleta, tramos y precios por evento, primer evento (y su vídeo 4:3), dominio de envío para
+  Resend, titular legal, Worker de Cloudflare, si «Eusebio» es el abuelo.
 
 ## Quién y cómo hablarle
 - Cliente: Nacho (socio de Grupo Sobremesa; Veleta es una de sus marcas). Español, sin jerga,
@@ -176,7 +178,9 @@ Más: `nombre`, `lugar`, `"censurado": true` para eventos aún secretos y `tema`
 existe: la build lo rechaza con un mensaje.
 
 Escena (`config.json` → `escena`): `imagen` (null = gris PROVISIONAL), `ancho`, `alto`,
-`pantalla { x, y, ancho, alto }` en % de la foto y `ratioVideo` ("4:3"). La build valida todo y
+`pantalla { x, y, ancho, alto }` en % de la foto, `ratioVideo` ("4:3") y `primerPlano`
+(opcional: `{ imagen, x, y, ancho, alto }`, recorte con transparencia de lo que en la foto queda
+delante de la pantalla; se pinta encima del vídeo; solo si hay foto). La build valida todo y
 avisa si la pantalla se sale de la franja que se ve en el móvil o no es 4:3.
 
 ## Referencias de webs (para inspirarse en la LÓGICA, no para copiar el diseño)
@@ -356,7 +360,7 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   texto a la vista. Que lo confirme el asesor.
 
 ## Cómo trabajar
-- Probar antes de subir: `npm test` (34 pruebas), `npm run test:navegador` (72 comprobaciones en
+- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (73 comprobaciones en
   Chromium: los dos estados, cambio por fecha moviendo el reloj, móvil y ordenador, con y sin
   JavaScript, fases de la intro, saltar, segunda visita, «reducir movimiento», tramos al mismo
   enlace, tema, solo B/N, nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y

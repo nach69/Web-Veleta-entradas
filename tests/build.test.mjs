@@ -105,6 +105,22 @@ test('precios mal puestos, temas raros o una escena imposible paran la build', (
   foto.limpiar();
 });
 
+test('sin foto: gris PROVISIONAL con el rectángulo de la tele, y sin capa de primer plano', () => {
+  const r = construir([], 'sin foto', { escena: { imagen: null } });
+  assert.equal(r.status, 0, r.stderr);
+  const html = readFileSync(join(r.dist, 'index.html'), 'utf8');
+  assert.match(html, /escena__foto--provisional/);
+  assert.doesNotMatch(html, /escena__primer-plano/);
+  assert.doesNotMatch(html, /rel="preload" as="image"/);
+  r.limpiar();
+  const conFoto = construir([]);
+  const h2 = readFileSync(join(conFoto.dist, 'index.html'), 'utf8');
+  assert.match(h2, /<img class="escena__foto" src="\/img\/escena\.webp" alt="" width="1536" height="1024"/);
+  assert.match(h2, /escena__primer-plano/);
+  assert.match(h2, /rel="preload" as="image" href="\/img\/escena\.webp"/);
+  conFoto.limpiar();
+});
+
 test('la tele fuera de la franja del móvil da un aviso (no para la build)', () => {
   const r = construir([], 'franja', { escena: { pantalla: { x: 5, y: 30, ancho: 24, alto: 27 } } });
   assert.equal(r.status, 0, r.stderr);

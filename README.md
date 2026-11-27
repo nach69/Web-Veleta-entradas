@@ -85,7 +85,10 @@ Por defecto todo es blanco y negro puro (`"tema": null`). Si un evento lo pide, 
 
      Ejemplo: en una foto de 1500 × 1000, si la pantalla empieza en el píxel 570 por la izquierda y 300
      por arriba, y mide 360 × 270, sería `x: 38, y: 30, ancho: 24, alto: 27`.
-4. Pulsa **Commit changes**. Mientras `imagen` sea `null` se ve un fondo gris PROVISIONAL con el
+4. Si algo de la foto queda **delante** de la pantalla (como la cabeza del señor en la foto actual),
+   hay que recortarlo con fondo transparente y ponerlo en `"primerPlano"` (imagen y su posición en %,
+   igual que la pantalla); así el vídeo no lo tapa. Si no hace falta, `"primerPlano": null`.
+5. Pulsa **Commit changes**. Mientras `imagen` sea `null` se ve un fondo gris PROVISIONAL con el
    rectángulo de la tele dibujado.
 
 Ojo con el móvil: en vertical solo se ve la franja central de la foto (más o menos de 35 % a 65 % del
