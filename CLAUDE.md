@@ -349,8 +349,8 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
 - Logos: negro, blanco, blanco y negro, azul #8FCDC0, amarillo #C3C500, versiones «SIN
   VALENCIA», «azul hueco» y «grafiti negro». Originales en .ai.
 - Letra (Nacho, 27/11): **RL Madena «un poco estirada»**. En `publico/fuentes/rl-madena.woff2`
-  (copiada de nach69/Private-; licencia del grupo para web confirmada por Nacho para esa web:
-  confirmar que cubre también esta). En CSS: `--titulos` y `--estirado: 1.15` (letra 1,15 veces
+  (copiada de nach69/Private-; la licencia web del grupo cubre también Veleta: confirmado por
+  Nacho el 27/11). En CSS: `--titulos` y `--estirado: 1.15` (letra 1,15 veces
   más alta y estrechada con `scaleX(1/1,15)`, con el ancho compensado, para que los titulares de
   varias líneas ocupen su alto real). Para estirar más o menos, cambiar solo `--estirado`.
 - «Eusebio»: no hace falta (Nacho, 27/11).
