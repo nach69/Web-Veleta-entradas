@@ -18,7 +18,13 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 
 ## PUNTO ACTUAL (27/11)
 - Hecho: hero nuevo (foto B/N + zoom + golpe de cámara + venta por tramos), en la rama
-  `claude/confident-dijkstra-7goz2c`, SIN publicar. Todas las pruebas pasan.
+  `claude/confident-dijkstra-7goz2c`. Todas las pruebas pasan.
+- 27/11: **publicada la versión de PRUEBA (el modelo)** en
+  https://web-veleta-entradas.super-unit-ca4a.workers.dev (Worker `web-veleta-entradas`, build
+  `npm run build:prueba`, publica solo desde la rama). Comprobado en navegador de móvil: evento
+  del 24/12, vídeo en la tele, tres tramos, sin errores, nada de terceros, CSP y noindex activos.
+  El entorno «Web Veleta» puede abrir esa dirección (permiso de Nacho, 27/11). Cada push a la
+  rama se publica ahí solo.
 - 27/11: Nacho pasó la **foto de prueba** (1536×1024, señor de espaldas en sillón orejero, tele
   de los 70 con antena sobre un aparador, dos cuadros, mesita con vaso y puro). Puesta como
   `publico/img/escena.webp` (B/N, 55 KB). Pantalla medida a mano: píxeles 590-870 × 193-410
