@@ -24,6 +24,18 @@ alternativas en el chat (método BICI, solo parte de Idea) y está pendiente que
 el código del hero hasta que Nacho decida. Lo técnico (dos estados por fecha, tramos a Lema,
 lista de espera, build, Worker, huellas, legales) sigue valiendo para cualquier opción.
 
+Referencias nuevas (27/11, por búsqueda web; desde aquí no se pueden abrir las webs, así que
+«Solo leído»):
+- **Pompeii** (Madrid): Nacho recuerda una web suya en la que «abren un maletín y hay un
+  contador». No aparece en búsquedas: pedirle enlace o captura.
+- **Corteiz** (Londres): portada con cuenta atrás hasta la hora del drop y alta por email para
+  acceso anticipado; anuncia drops solo con la hora, sin imagen ni precio; web con contraseña.
+- **Broken Planet**: teasers y cuentas atrás en redes; drops que se agotan en minutos.
+- **Travis Scott (Utopia)**: portada con solo el logo y alta para avisos (texto, Discord, email),
+  sin fecha.
+- **Medusa** (vía Fever): lista de espera para la preventa.
+- Plantilla de Framer «Drop Page»: cambia sola entre estados (cuenta atrás → en venta).
+
 ## PUNTO ACTUAL (27/11)
 - **27/11, tras ver la versión publicada, Nacho cambió el recorrido (MANDA sobre lo anterior):**
   1. La foto se ve QUIETA 2 s con el vídeo ya en la tele (antes 0,7 s: «no se ve el vídeo»).
