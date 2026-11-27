@@ -174,7 +174,7 @@ function pantallaEvento(ev) {
     evId: ev.id,
     evNombre: ev.censurado ? CENSURA : (ev.nombre ? escapar(ev.nombre) : pendiente('nombre del evento')),
     evFechaISO: ev.fecha,
-    evFecha: escapar(fechaLegible(ev.fecha)),
+    evFecha: escapar(fechaLegible(ev.fecha, ev.horaFin)),
     evLugar: ev.lugar ? escapar(ev.lugar) : (ev.censurado ? 'Por desvelar' : pendiente('lugar')),
     modoEmail: op.emailAntesDeComprar,
     etiquetaEmail: op.emailAntesDeComprar === 'obligatorio' ? 'Tu email (lo necesitamos para seguir)' : 'Tu email (si quieres)',

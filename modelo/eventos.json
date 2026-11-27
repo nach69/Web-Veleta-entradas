@@ -1,14 +1,19 @@
 [
   {
-    "_nota": "MODELO PARA ENSEÑAR, no es un evento real ni se publica. Vídeo: presentación de Casino Veleta × Alegal (6/11/2026), recortada a 4:3 y en B/N, sin el cierre de logos. La fecha es inventada (lejana) solo para que el modelo salga en el estado «con evento»; el resto, PENDIENTE hasta tener el primer evento.",
+    "_nota": "EVENTO DE PRUEBA para enseñar (Nacho, 27/11): 24/12/2026 de 15:00 a 20:00, tres tramos con dos cervezas (15, 18 y 20 €), enlace general de Lema y el vídeo de Casino Veleta. Nombre y lugar sin dar: PENDIENTE. No se publica.",
     "nombre": null,
-    "fecha": "2099-12-31T18:00",
+    "fecha": "2026-12-24T15:00",
+    "horaFin": "20:00",
     "lugar": null,
     "enlaceCompra": null,
     "videoTele": "/video/casino-veleta-tele.mp4",
     "posterTele": "/video/casino-veleta-tele.jpg",
     "videoExclusivo": null,
     "tema": null,
-    "tramos": null
+    "tramos": [
+      { "nombre": "Primer tramo + 2 cervezas", "precio": 15 },
+      { "nombre": "Segundo tramo + 2 cervezas", "precio": 18 },
+      { "nombre": "Tercer tramo + 2 cervezas", "precio": 20 }
+    ]
   }
 ]

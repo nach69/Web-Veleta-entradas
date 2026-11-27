@@ -113,7 +113,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     await p.waitForTimeout(500);
     ok(await p.isVisible(A) && await p.isHidden('#ev-2027-01-16-3-venta') && await p.isHidden('#lista'), 'se ve la venta del A y nada más');
     ok(await p.isHidden('[data-escena]'), 'la escena desaparece');
-    ok((await p.textContent(A)).includes('sábado 12 de diciembre · 23:00') && (await p.textContent(A)).includes('Lugar de prueba A'), 'nombre, fecha y lugar');
+    ok((await p.textContent(A)).includes('sábado 12 de diciembre · 23:00–05:00') && (await p.textContent(A)).includes('Lugar de prueba A'), 'nombre, fecha y lugar');
     const tramos = await p.$$eval(A + ' a.tramo', (as) => as.map((a) => ({ href: a.getAttribute('href'), txt: a.textContent })));
     ok(tramos.length === 3, '3 tramos, cada uno una fila');
     ok(tramos.every((t) => t.href === 'https://ticketera.example/evento-a'), 'todos los tramos llevan al MISMO enlace');

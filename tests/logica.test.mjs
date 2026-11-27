@@ -54,6 +54,7 @@ test('estado: el evento más próximo que no ha pasado; si no hay, ninguno', () 
 
 test('fecha legible en español', () => {
   assert.equal(fechaLegible('2026-12-12T23:00'), 'sábado 12 de diciembre · 23:00');
+  assert.equal(fechaLegible('2026-12-24T15:00', '20:00'), 'jueves 24 de diciembre · 15:00–20:00');
 });
 
 test('opciones por decidir: solo valores conocidos y tiempos dentro de lo acordado', () => {

@@ -31,6 +31,10 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   (6/11) que pasó Nacho: recortado a 4:3, B/N, sin sonido, primeros 18 s (sin el cierre con los
   logos de Sobremesa y Alegal), aclarado (gamma 1,45): `modelo/publico/video/casino-veleta-tele.mp4`
   (290 KB) + póster. Ese vídeo es de un evento pasado: no está en `publico/` ni en la web real.
+- 27/11 (Nacho): el modelo usa un **evento de prueba**: 24/12/2026 de 15:00 a 20:00, tramos
+  «Primer/Segundo/Tercer tramo + 2 cervezas» a 15, 18 y 20 € (nombres de tramo puestos por
+  Claude a partir de lo que dijo Nacho), enlace veleta.lema.club, vídeo de Casino Veleta. Nombre
+  y lugar sin dar (PENDIENTE). La fecha ahora se ve con la hora de fin («15:00–20:00»).
 - 27/11: corregido que la segunda pantalla se salía por los lados en el móvil con textos largos
   (pruebas nuevas: «no se sale por los lados»). Nacho reenvió los logos blanco y negro (son los
   mismos que ya había). La letra de Veleta sigue SIN aparecer en el Drive ni en el chat.

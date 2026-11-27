@@ -149,12 +149,12 @@ export function eventoActual(eventos, hoy) {
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
-/** «sábado 12 de diciembre · 23:00» */
-export function fechaLegible(fecha) {
+/** «sábado 12 de diciembre · 23:00», o con hora de fin: «jueves 24 de diciembre · 15:00–20:00» */
+export function fechaLegible(fecha, horaFin = null) {
   const { dia, hora } = partirFecha(fecha);
   const [a, m, d] = dia.split('-').map(Number);
   const semana = new Date(Date.UTC(a, m - 1, d)).getUTCDay();
-  return `${DIAS[semana]} ${d} de ${MESES[m - 1]} · ${hora}`;
+  return `${DIAS[semana]} ${d} de ${MESES[m - 1]} · ${hora}${horaFin ? '–' + horaFin : ''}`;
 }
 
 /** Identificador estable para un evento (para el HTML). */
