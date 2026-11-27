@@ -1,11 +1,20 @@
 /* Landing de Veleta · estilos.
    Marca SOLO en blanco y negro (Nacho, 26/11). Estética vintage: foto de salón de los años 60-80.
-   Letra del sistema hasta que llegue la de Veleta. Lo que falta (PENDIENTE) va en rojo, fuera de la marca.
+   Letra de Veleta: RL Madena «un poco estirada» (Nacho, 27/11) en los titulares; textos con la del sistema.
+   Lo que falta (PENDIENTE) va en rojo, fuera de la marca.
    Las medidas de la escena (proporción de la foto y rectángulo de la tele) las genera la build en
    css/estado-<huella>.css a partir de datos/config.json → escena.
    Efectos de movimiento marcados [MOV-n] para quitarlos por separado:
      [MOV-1] zoom a la tele (JS) · [MOV-2] sacudida de cámara (JS) · [MOV-3] nieve de «sin señal» (JS)
      [MOV-4] grano de película animado · [MOV-5] parpadeo de la luz de la tele */
+
+@font-face {
+  font-family: 'RL Madena';
+  src: url('/fuentes/rl-madena.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --negro: #000;
@@ -17,6 +26,8 @@
   --acento: #fff;
   --error: #ff8f8f;
   --textos: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --titulos: 'RL Madena', Georgia, 'Times New Roman', serif;
+  --estirado: 1.15; /* cuánto se estira en vertical la RL Madena (1 = nada) */
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
   /* Valores por defecto; los de verdad vienen de css/estado-<huella>.css */
   --escena-ratio: 1.5;
@@ -168,8 +179,14 @@ html.js .escena__grano { animation: grano .5s steps(1, end) infinite; }
   background: var(--acento); vertical-align: .05em;
 }
 .pantalla__titulo {
-  margin: 0 0 1rem; font: 900 clamp(2.3rem, 11vw, 4.2rem)/.95 var(--textos);
-  letter-spacing: -.01em; text-transform: uppercase; outline: none; overflow-wrap: anywhere;
+  margin: 0 0 1rem; font: 400 calc(clamp(2.4rem, 11.5vw, 4.4rem) * var(--estirado))/.95 var(--titulos);
+  letter-spacing: -.02em; outline: none; overflow-wrap: anywhere;
+}
+/* RL Madena «un poco estirada»: letra más alta y estrechada en horizontal en la misma proporción.
+   Así el titular ocupa su alto real (no se monta sobre lo de debajo) aunque tenga varias líneas. */
+.pantalla__titulo, .legal h1 {
+  width: calc(100% * var(--estirado));
+  transform: scaleX(calc(1 / var(--estirado))); transform-origin: left top;
 }
 .venta__datos {
   margin: 0 0 2rem; font: 600 .85rem/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--texto-suave);
@@ -259,7 +276,7 @@ html.recien-llegada .pantalla, html.recien-llegada .pie { pointer-events: none; 
 .cabecera-simple a { font: 700 .8rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
 .pagina { padding: 0 1.25rem 2rem; }
 .legal { max-width: 42rem; margin: 0 auto; background: var(--gris-1); padding: 1.5rem 1.25rem; border-top: 3px solid var(--blanco); }
-.legal h1 { font: 900 1.9rem/1.1 var(--textos); text-transform: uppercase; margin: .5rem 0 1.25rem; }
+.legal h1 { font: 400 calc(2.2rem * var(--estirado))/1.05 var(--titulos); letter-spacing: -.02em; margin: .5rem 0 1.25rem; }
 .legal h2 { font-size: 1.05rem; margin: 1.75rem 0 .5rem; }
 .legal h3 { font-size: 1rem; margin: 1.25rem 0 .35rem; }
 .legal p, .legal li { color: #e6e6e6; }

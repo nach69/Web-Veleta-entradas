@@ -10,8 +10,11 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 - De Sobremesa se reutiliza SOLO la parte técnica ya probada (ver "Técnica") y las reglas de
   seguridad y legales. Nada de diseño, textos ni estructura.
 - Si dudas entre «como en Sobremesa» y «distinto», es distinto. Pregunta a Nacho.
-- (26/11) Se quitaron de la fase 1 la letra RL Madena, el estilo de titulares del grupo,
-  «Grupo Sobremesa» como responsable y el correo info@ del grupo. No volver a meterlos.
+- (26/11) Se quitaron de la fase 1 el estilo de titulares del grupo, «Grupo Sobremesa» como
+  responsable y el correo info@ del grupo. No volver a meterlos.
+- (27/11, Nacho) **La letra de Veleta ES RL Madena, «un poco estirada»** (la misma familia que
+  usa el grupo; el archivo se copió de nach69/Private-). Va en los titulares; textos, datos y
+  tramos con la letra del sistema.
 
 ## PUNTO ACTUAL (27/11)
 - Hecho: hero nuevo (foto B/N + zoom + golpe de cámara + venta por tramos), en la rama
@@ -33,7 +36,7 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   mismos que ya había). La letra de Veleta sigue SIN aparecer en el Drive ni en el chat.
 - Siguiente: «ir acabando cositas para sacar modelos». Faltan: archivo de la letra, tramos y
   precios, primer evento (y su vídeo 4:3), dominio de envío para Resend, titular legal, Worker de
-  Cloudflare, si «Eusebio» es el abuelo (¿el señor del vídeo de Casino Veleta?).
+  Cloudflare. (Lo de «Eusebio» no hace falta: Nacho, 27/11.)
 
 ## Quién y cómo hablarle
 - Cliente: Nacho (socio de Grupo Sobremesa; Veleta es una de sus marcas). Español, sin jerga,
@@ -56,9 +59,9 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   (ver «Identidad de Veleta»). El titular legal lo pasa Nacho al final.
 - (26/11) Hero rehecho según las «decisiones finales» de Nacho (ver abajo): foto B/N casi quieta
   + zoom + sacudida + segunda pantalla a pantalla completa con TRAMOS. Sin publicar.
-- Pendiente de Nacho: foto definitiva de la escena (y medir el rectángulo de la pantalla), archivo
-  de la letra, nombres y precios de los tramos de cada evento, primer evento, dominio, dirección de
-  envío de Resend (EMAIL_FROM), titular legal, Worker de Cloudflare, si «Eusebio» es el abuelo.
+- Pendiente de Nacho: foto definitiva de la escena (si cambia la de prueba), nombres y precios de
+  los tramos de cada evento, primer evento, dominio, dirección de envío de Resend (EMAIL_FROM),
+  titular legal, Worker de Cloudflare.
 - Desde aquí no se pueden abrir veleta.lema.club ni instagram.com (red del entorno): el enlace
   de Lema está puesto tal cual lo dio Nacho, sin comprobar.
 
@@ -79,8 +82,8 @@ emite la tele es el evento. De ahí se pasa a la pantalla de venta.
   quitada del código el 26/11. Lo PENDIENTE va en rojo (no es diseño).
 
 ### Decisiones finales del hero (Nacho, 26/11; mandan sobre lo anterior)
-1. Solo blanco y negro. Logos negro/blanco (en la web: el blanco). Letra del sistema hasta que
-   llegue el archivo de la de Veleta; nada de fuentes externas.
+1. Solo blanco y negro. Logos negro/blanco (en la web: el blanco). Letra: RL Madena estirada en
+   titulares (27/11), servida desde la web; nada de fuentes externas.
 2. La escena es una foto B/N casi quieta (salón español de los 60-80): señor DE ESPALDAS en su
    sillón viendo una tele de tubo. Todo el movimiento lo pone la web, nunca la imagen. En la
    foto: nada de textos, logos, veleta ni objetos modernos.
@@ -327,8 +330,8 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   absolutas (canonical, og:url, og:image) ni `sitemap.xml`, y lo avisa.
 - Pesos: la build avisa si un vídeo pasa de 3 MB o una imagen de 500 KB. Vídeo mp4 con póster,
   que se pausa cuando no se ve.
-- Fuentes propias servidas desde la web, solo los pesos que se usan (hoy ninguna: letra del
-  sistema hasta tener la de Veleta).
+- Fuentes propias servidas desde la web, solo los pesos que se usan: RL Madena 400 (34 KB, con
+  preload y caché de un año).
 - Capas de ambiente baratas: grano (`publico/img/grano.svg`, 300 bytes), viñeteo y barrido con
   degradados CSS, luz de la tele con `opacity`.
 
@@ -345,9 +348,12 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   («amarillo premiere»), negro y blanco. **Para la web, solo negro y blanco (Nacho, 26/11).**
 - Logos: negro, blanco, blanco y negro, azul #8FCDC0, amarillo #C3C500, versiones «SIN
   VALENCIA», «azul hueco» y «grafiti negro». Originales en .ai.
-- Letra: no hay archivos de fuente en el Drive. Preguntar a Nacho cuál es (o sacarla del .ai).
-- En el plan de marketing del 6/11 sale «Eusebio» («Flyer principal: imagen Eusebio + info»):
-  preguntar si es el personaje del abuelo antes de suponerlo.
+- Letra (Nacho, 27/11): **RL Madena «un poco estirada»**. En `publico/fuentes/rl-madena.woff2`
+  (copiada de nach69/Private-; licencia del grupo para web confirmada por Nacho para esa web:
+  confirmar que cubre también esta). En CSS: `--titulos` y `--estirado: 1.15` (letra 1,15 veces
+  más alta y estrechada con `scaleX(1/1,15)`, con el ancho compensado, para que los titulares de
+  varias líneas ocupen su alto real). Para estirar más o menos, cambiar solo `--estirado`.
+- «Eusebio»: no hace falta (Nacho, 27/11).
 - Logos en la web (`publico/img/`, recortado el margen vacío): `logo-veleta-blanco.png` (segunda
   pantalla y pie; del Drive, «logo veleta blanco.png») y `logo-veleta-negro.png` (guardado, sin
   usar ahora). El menta se borró el 26/11. `og.jpg` = logo blanco sobre negro, 1200×630. La
