@@ -25,5 +25,7 @@
   // Intro: solo la primera vez en esta visita (sessionStorage, que puede fallar en modo privado).
   var visto = false;
   try { visto = sessionStorage.getItem('veleta_intro') === '1'; } catch (e) { /* sin almacenamiento: se enseña */ }
+  // «Volver» (?intro=1): otra vez la tele
+  if (/[?&]intro=1\b/.test(window.location.search)) visto = false;
   if (document.querySelector('meta[name="veleta-eventos"]')) html.setAttribute('data-fase', visto ? 'pantalla' : 'intro');
 })();

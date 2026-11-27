@@ -159,6 +159,7 @@ function pantallaEvento(ev) {
   const enlace = ev.enlaceCompra || ticketera.enlaceGeneral || null;
   const nombreTexto = ev.censurado ? 'Por desvelar' : (ev.nombre || 'Evento sin nombre');
   const tramos = Array.isArray(ev.tramos) ? ev.tramos : [];
+  // Cada tramo es una tarjeta (rectángulo con volumen, como en Bogart) que es un enlace normal
   const fila = (nombreHTML, precioHTML, etiqueta) => enlace
     ? `          <li><a class="tramo" href="${escapar(enlace)}" rel="noopener" data-comprar data-evento="${escapar(nombreTexto)}" aria-label="${escapar(etiqueta)}"><span class="tramo__nombre">${nombreHTML}</span><span class="tramo__precio">${precioHTML}</span></a></li>`
     : `          <li><span class="tramo tramo--apagado"><span class="tramo__nombre">${nombreHTML}</span><span class="tramo__precio">${precioHTML}</span></span></li>`;
@@ -178,8 +179,11 @@ function pantallaEvento(ev) {
     evLugar: ev.lugar ? escapar(ev.lugar) : (ev.censurado ? 'Por desvelar' : pendiente('lugar')),
     modoEmail: op.emailAntesDeComprar,
     etiquetaEmail: op.emailAntesDeComprar === 'obligatorio' ? 'Tu email (lo necesitamos para seguir)' : 'Tu email (si quieres)',
-    evTramos: `        <ul class="tramos" role="list">\n${filas.join('\n')}\n        </ul>`,
-    evNota: enlace ? 'La compra se hace en la web de la ticketera.' : '<strong>Entradas pronto.</strong>'
+    evTramos: `        <ul class="tramos" role="list" aria-label="Tramos de entradas">\n${filas.join('\n')}\n        </ul>`,
+    // «Continuar» lleva al mismo enlace que los tramos; sin enlace, «Entradas pronto» apagado
+    evContinuar: enlace
+      ? `          <a class="pastilla pastilla--clara" href="${escapar(enlace)}" rel="noopener" data-comprar data-continuar data-evento="${escapar(nombreTexto)}">Continuar</a>`
+      : '          <span class="pastilla pastilla--apagada" aria-disabled="true">Entradas pronto</span>'
   };
   b.evEmail = enlace && op.emailAntesDeComprar !== 'no' ? rellenar(leer('plantillas/parciales/email-compra.html'), b) : '';
   return rellenar(leer('plantillas/parciales/evento.html'), b);

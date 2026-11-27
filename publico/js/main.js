@@ -150,6 +150,11 @@
     else irAPantalla();
   }
 
+  // Al volver con «Volver» (?intro=1), se limpia la dirección para que una recarga no repita la intro
+  if (/[?&]intro=1\b/.test(window.location.search) && window.history && history.replaceState) {
+    try { history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) { /* nada */ }
+  }
+
   if (escena && html.getAttribute('data-fase') === 'intro') {
     var aviso = escena.querySelector('[data-saltar]');
     if (aviso) aviso.hidden = false;

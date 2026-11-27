@@ -1,10 +1,11 @@
       <article class="venta" id="{{{evId}}}-venta" data-bloque="{{{evId}}}" aria-labelledby="{{{evId}}}-titulo">
-        <p class="pantalla__marca"><img src="/img/logo-veleta-blanco.png" alt="{{nombre}}" width="900" height="275"></p>
-        <p class="pantalla__antetitulo">En antena</p>
-        <h1 class="pantalla__titulo" id="{{{evId}}}-titulo" tabindex="-1">{{{evNombre}}}</h1>
-        <p class="venta__datos"><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time><span aria-hidden="true"> · </span><span class="venta__lugar">{{{evLugar}}}</span></p>
-{{{evEmail}}}
-        <h2 class="tramos__titulo">Entradas</h2>
+        <p class="pantalla__aviso"><time datetime="{{{evFechaISO}}}">{{{evFecha}}}</time></p>
+        <h1 class="pantalla__titulo" id="{{{evId}}}-titulo" tabindex="-1">Entradas</h1>
+        <p class="pantalla__destacado"><span class="venta__nombre">{{{evNombre}}}</span><span aria-hidden="true"> · </span><span class="venta__lugar">{{{evLugar}}}</span></p>
 {{{evTramos}}}
-        <p class="venta__nota">{{{evNota}}}</p>
+{{{evEmail}}}
+        <nav class="botonera" aria-label="Navegación">
+          <a class="pastilla pastilla--oscura" href="?intro=1" data-volver>Volver</a>
+{{{evContinuar}}}
+        </nav>
       </article>

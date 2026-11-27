@@ -154,79 +154,113 @@ html.js .escena__grano { animation: grano .5s steps(1, end) infinite; }
 
 /* =====================================================================
    2. SEGUNDA PANTALLA (venta por tramos o lista de espera)
+   Formato de Bogart (Nacho, 27/11): línea pequeña arriba, título grande centrado, línea destacada
+   debajo, tramos como rectángulos con un poco de volumen y dos botones redondos abajo
+   (Volver / Continuar). En blanco y negro, con RL Madena. Sin líneas separadoras.
    ===================================================================== */
 .pantalla {
   position: relative; isolation: isolate;
-  padding: 3rem 1.25rem 3rem; background: var(--negro);
+  padding: 2.5rem 1.25rem 0; background: var(--negro); text-align: center;
 }
 .pantalla::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.10), transparent 55%);
+}
+.pantalla::after {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background: url('/img/grano.svg') repeat; background-size: 160px; opacity: .14; mix-blend-mode: overlay;
 }
-.venta, .espera { position: relative; width: 100%; max-width: 32rem; margin: 0 auto; min-width: 0; }
+.venta, .espera {
+  position: relative; width: 100%; max-width: 30rem; margin: 0 auto; min-width: 0;
+  display: flex; flex-direction: column; min-height: calc(100svh - 2.5rem);
+}
 /* Tema secundario por evento (opcional): textura de fondo muy suave */
 .venta::before {
-  content: ''; position: absolute; inset: -3rem -1.25rem; z-index: -1; pointer-events: none;
+  content: ''; position: absolute; inset: -2.5rem -1.25rem 0; z-index: -1; pointer-events: none;
   background: var(--textura, none) center / cover; opacity: .18; filter: grayscale(1);
 }
-.pantalla__marca { margin: 0 0 2rem; }
-.pantalla__marca img { width: 104px; height: auto; }
-.pantalla__antetitulo {
-  margin: 0 0 .75rem; font: 700 .75rem/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--texto-suave);
-}
-.pantalla__antetitulo::before {
-  content: ''; display: inline-block; width: .55em; height: .55em; margin-right: .6em; border-radius: 50%;
-  background: var(--acento); vertical-align: .05em;
+.pantalla__aviso {
+  margin: 0 0 .5rem; font: 700 .78rem/1.3 var(--textos); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--texto-suave);
 }
 .pantalla__titulo {
-  margin: 0 0 1rem; font: 400 calc(clamp(2.4rem, 11.5vw, 4.4rem) * var(--estirado))/.95 var(--titulos);
-  letter-spacing: -.02em; outline: none; overflow-wrap: anywhere;
+  margin: 0 0 .6rem; font: 400 calc(clamp(3.2rem, 17vw, 5.5rem) * var(--estirado))/.9 var(--titulos);
+  letter-spacing: -.01em; outline: none; overflow-wrap: anywhere;
+  text-shadow: 0 .06em .18em rgba(0, 0, 0, .55), 0 0 .5em rgba(255, 255, 255, .12);
 }
+.espera .pantalla__titulo { font-size: calc(clamp(2.4rem, 11.5vw, 4.4rem) * var(--estirado)); line-height: .95; }
 /* RL Madena «un poco estirada»: letra más alta y estrechada en horizontal en la misma proporción.
-   Así el titular ocupa su alto real (no se monta sobre lo de debajo) aunque tenga varias líneas. */
-.pantalla__titulo, .legal h1 {
+   Así el titular ocupa su alto real (no se monta sobre lo de debajo) aunque tenga varias líneas.
+   Centrado: se estrecha desde el centro. */
+.pantalla__titulo {
+  width: calc(100% * var(--estirado)); margin-left: calc(50% - 50% * var(--estirado));
+  transform: scaleX(calc(1 / var(--estirado))); transform-origin: center top;
+}
+.legal h1 {
   width: calc(100% * var(--estirado));
   transform: scaleX(calc(1 / var(--estirado))); transform-origin: left top;
 }
-.venta__datos {
-  margin: 0 0 2rem; font: 600 .85rem/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--texto-suave);
+.pantalla__destacado {
+  display: block; margin: 0 0 1.75rem; font: 800 .95rem/1.35 var(--textos); letter-spacing: .03em;
+  text-transform: uppercase; color: var(--blanco);
 }
-.tramos__titulo { margin: 0 0 .5rem; font: 700 .75rem/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--texto-suave); }
-.tramos { list-style: none; margin: 0 0 1rem; padding: 0; border-bottom: 1px solid var(--blanco); }
-.tramos li { border-top: 1px solid var(--blanco); }
+
+/* Tramos: rectángulos con un poco de volumen (degradado, borde de luz arriba y sombra) */
+.tramos { list-style: none; margin: 0 0 1.25rem; padding: 0; display: grid; gap: .8rem; }
 .tramo {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  min-height: 68px; padding: .9rem .25rem;
-  font: 800 1.2rem/1.15 var(--textos); text-transform: uppercase; text-decoration: none;
-  transition: background-color 120ms ease-out, color 120ms ease-out, padding 120ms ease-out;
+  min-height: 72px; padding: 1rem 1.15rem; border-radius: 14px;
+  background: linear-gradient(180deg, #2b2b2b 0%, #161616 100%);
+  border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 6px 0 #050505, 0 10px 24px rgba(0, 0, 0, .6);
+  font: 800 1.05rem/1.2 var(--textos); text-transform: uppercase; text-decoration: none; text-align: left;
+  transition: transform 120ms ease-out, box-shadow 120ms ease-out, background-color 120ms ease-out;
 }
-a.tramo::after { content: '→'; font-weight: 400; margin-left: .25rem; }
-.tramo__nombre { flex: 1 0 auto; max-width: 60%; }
-.tramo__precio { font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 0; }
-.tramo__precio:has(mark) { white-space: normal; text-align: right; }
-a.tramo:hover, a.tramo:focus-visible, a.tramo:active {
-  background: var(--acento); color: var(--negro); padding-left: .9rem; padding-right: .9rem; outline: none;
+.tramo__nombre { flex: 1 0 auto; max-width: 62%; }
+.tramo__precio { font: 400 calc(1.9rem * var(--estirado))/1 var(--titulos); font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 0; }
+.tramo__precio:has(mark) { white-space: normal; text-align: right; font: inherit; }
+a.tramo:hover, a.tramo:focus-visible {
+  background: linear-gradient(180deg, #3a3a3a 0%, #1e1e1e 100%); outline: 2px solid var(--acento); outline-offset: 2px;
 }
-.tramo--apagado { opacity: .55; }
-.venta__nota { margin: 0; font-size: .8rem; color: var(--texto-suave); }
-.venta__nota strong { color: var(--blanco); font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; }
+a.tramo:active { transform: translateY(4px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 2px 0 #050505, 0 4px 12px rgba(0, 0, 0, .6); }
+.tramo--apagado { opacity: .5; }
+
+/* Botones redondos abajo, siempre a mano */
+.botonera {
+  position: sticky; bottom: 0; margin-top: auto; z-index: 2;
+  display: flex; gap: .75rem; justify-content: center;
+  padding: 1.25rem 0 max(1.25rem, env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.85) 35%, #000 100%);
+  margin-left: -1.25rem; margin-right: -1.25rem; /* la franja ocupa todo el ancho */
+}
+.pastilla {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 8.5rem; min-height: 52px; padding: .8rem 1.6rem; border-radius: 999px; border: 0;
+  font: 800 .95rem/1 var(--textos); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, .55);
+}
+.pastilla--oscura { background: #262626; color: var(--blanco); }
+.pastilla--clara { background: var(--blanco); color: var(--negro); }
+.pastilla--apagada { background: #262626; color: var(--texto-suave); cursor: default; }
+.pastilla:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0, 0, 0, .55); }
 
 /* Email antes de ir a la ticketera (opcional u obligatorio, según config.json) */
-.comprar__email { display: grid; gap: .4rem; margin: 0 0 1.5rem; }
-.comprar__etiqueta, .lista__etiqueta { font: 700 .75rem/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--texto-suave); }
+.comprar__email { display: grid; gap: .4rem; margin: 0 0 1rem; text-align: left; }
+.comprar__etiqueta { font: 700 .8rem/1.3 var(--textos); color: var(--texto-suave); }
 input[type="email"] {
-  width: 100%; min-height: 50px; padding: .6rem .8rem;
-  border: 2px solid var(--blanco); border-radius: 0; background: var(--negro);
+  width: 100%; min-height: 52px; padding: .6rem 1rem;
+  border: 1px solid rgba(255, 255, 255, .35); border-radius: 12px; background: #111;
   font: 400 1rem var(--textos); color: var(--blanco);
 }
 input[type="email"]::placeholder { color: var(--gris-3); }
 input[aria-invalid="true"] { border-color: var(--error); }
 .campo__error { margin: 0; color: var(--error); font-size: .85rem; }
 .campo__error:empty { display: none; }
-.legal-corto { margin: 0; font-size: .72rem; color: var(--texto-suave); }
-.lista { display: grid; gap: .6rem; margin-top: 2rem; }
-.lista__fila { display: grid; grid-template-columns: 1fr auto; }
-.lista__fila .btn { border-left: 0; }
+.legal-corto { margin: 0; font-size: .72rem; color: var(--texto-suave); text-align: left; }
+.lista { display: grid; gap: .7rem; margin: .5rem 0 1rem; }
+.lista__etiqueta { margin-bottom: .25rem; }
+.lista__fila { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
+.lista__fila .pastilla { min-width: 0; }
 .form-estado { margin: 0; font-weight: 700; }
 .form-estado:empty { display: none; }
 .form-estado.es-error { color: var(--error); }
@@ -251,7 +285,7 @@ html.js[data-fase] .escena__lienzo {
 html.js[data-fase="intro"] .escena { cursor: pointer; }
 html.js[data-fase="intro"] .pantalla,
 html.js[data-fase="intro"] .pie { visibility: hidden; opacity: 0; }
-html.js[data-fase] .pantalla { z-index: 1; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+html.js[data-fase] .pantalla { z-index: 1; min-height: 100vh; min-height: 100svh; }
 html.js[data-fase="pantalla"] .escena { visibility: hidden; opacity: 0; transition: opacity 400ms ease-out, visibility 0s 400ms; }
 html.js[data-fase="pantalla"] .pantalla,
 html.js[data-fase="pantalla"] .pie { visibility: visible; opacity: 1; transition: opacity 400ms ease-out; }

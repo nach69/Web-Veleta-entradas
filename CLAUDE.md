@@ -35,6 +35,16 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   «Primer/Segundo/Tercer tramo + 2 cervezas» a 15, 18 y 20 € (nombres de tramo puestos por
   Claude a partir de lo que dijo Nacho), enlace veleta.lema.club, vídeo de Casino Veleta. Nombre
   y lugar sin dar (PENDIENTE). La fecha ahora se ve con la hora de fin («15:00–20:00»).
+- 27/11 (Nacho): **la pantalla de entradas sigue el formato de Bogart** (pasó captura): línea
+  pequeña arriba (fecha y hora), título grande centrado «Entradas» (RL Madena estirada), línea
+  destacada (nombre · lugar), tramos como **rectángulos con un poco de volumen** (degradado,
+  borde de luz, sombra; sin rayas separadoras ni rótulos de letras espaciadas, «las típicas rayas
+  de Claude» que Nacho no quiere) y **dos botones redondos abajo: «Volver» (vuelve a la tele,
+  `?intro=1`) y «Continuar» (mismo enlace que los tramos)**. Sin evento: «No hay ningún evento
+  ahora mismo» + título + email + «Volver». Cada tramo sigue siendo un enlace directo.
+- 27/11 (Nacho): probar SIN Cloudflare: `npm run modelo:archivo` crea
+  `dist-modelo/veleta-modelo.html`, UN archivo con todo dentro (≈ 580 KB) que se abre con doble
+  clic (`scripts/archivo-unico.mjs`). Ahí no funcionan el envío de emails ni las páginas legales.
 - 27/11: corregido que la segunda pantalla se salía por los lados en el móvil con textos largos
   (pruebas nuevas: «no se sale por los lados»). Nacho reenvió los logos blanco y negro (son los
   mismos que ya había). La letra de Veleta sigue SIN aparecer en el Drive ni en el chat.
@@ -99,8 +109,9 @@ emite la tele es el evento. De ahí se pasa a la pantalla de venta.
 5. Golpe de cámara: 2-3 oscilaciones laterales (±1,5 % translateX, giro ≤ 0,3°), frenando, con un
    destello en la pantalla. Al final el vídeo se pausa.
 6. Segunda pantalla a pantalla completa (NO texto dentro de la tele): nombre, fecha, lugar y la
-   lista de TRAMOS (filas grandes: nombre + precio). TODOS los tramos llevan al MISMO enlace (el
-   del evento o veleta.lema.club). Son `<a href>` normales: funciona sin JavaScript. Sin estado de
+   lista de TRAMOS (tarjetas grandes: nombre + precio) y botones «Volver»/«Continuar» (formato
+   Bogart, 27/11). TODOS los tramos y «Continuar» llevan al MISMO enlace (el del evento o
+   veleta.lema.club). Son `<a href>` normales: funciona sin JavaScript. Sin estado de
    agotado. **Sin animación al pulsar: se navega y ya** (se quitó la reacción del abuelo).
 7. Tema secundario por evento (`tema`: acento y/o textura). Por defecto null = B/N puro. No
    inventar temas.
@@ -379,7 +390,7 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   texto a la vista. Que lo confirme el asesor.
 
 ## Cómo trabajar
-- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (76 comprobaciones en
+- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (83 comprobaciones en
   Chromium: los dos estados, cambio por fecha moviendo el reloj, móvil y ordenador, con y sin
   JavaScript, fases de la intro, saltar, segunda visita, «reducir movimiento», tramos al mismo
   enlace, tema, solo B/N, nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y
