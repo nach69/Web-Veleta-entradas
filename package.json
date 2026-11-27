@@ -3,11 +3,14 @@
   "private": true,
   "type": "module",
   "description": "Landing de entradas de Veleta: estática, generada con Node sin dependencias y publicada como Worker de Cloudflare.",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node scripts/build.mjs && node --test tests/*.test.mjs",
     "test:navegador": "node scripts/build.mjs && DATOS=tests/fixtures/estados DIST=dist-pruebas node scripts/build.mjs && node tests/navegador.cjs",
-    "dev": "node scripts/build.mjs && cd dist && python3 -m http.server 8080"
+    "dev": "node scripts/build.mjs && cd dist && python3 -m http.server 8080",
+    "modelo": "DATOS=modelo DIST=dist-modelo node scripts/build.mjs"
   }
 }

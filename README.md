@@ -105,6 +105,7 @@ arriba del todo.
 
 ## Para quien programe
 
+- `npm run modelo` → `dist-modelo/`: versión para enseñar con un evento de muestra (no se publica).
 - `npm run build` → `dist/` · `npm test` · `npm run test:navegador` (Chromium) · `npx wrangler deploy --dry-run`.
 - Sin dependencias. Detalles y decisiones: `CLAUDE.md`.
 - Variables del Worker en Cloudflare: `RESEND_API_KEY` (secreto) y `EMAIL_FROM` (en el panel);

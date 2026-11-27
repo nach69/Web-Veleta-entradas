@@ -22,9 +22,18 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
   (≈ 4:3). La cabeza del señor tapa el borde de abajo de la pantalla: se recortó como capa
   `publico/img/escena-cabeza.webp` (2 KB, con transparencia) que va DELANTE del vídeo
   (`escena.primerPlano`). Si cambia la foto, hay que volver a medir y recortar.
-- Siguiente: «ir acabando cositas para sacar modelos» (versiones para enseñar). Faltan: letra de
-  Veleta, tramos y precios por evento, primer evento (y su vídeo 4:3), dominio de envío para
-  Resend, titular legal, Worker de Cloudflare, si «Eusebio» es el abuelo.
+- 27/11: **Modelo para enseñar** (`npm run modelo` → `dist-modelo/`, no se publica): datos en
+  `modelo/` con un evento de muestra (fecha inventada 31/12/2099 SOLO para que salga «con
+  evento»; lo demás PENDIENTE) y en la tele el vídeo de presentación de Casino Veleta × Alegal
+  (6/11) que pasó Nacho: recortado a 4:3, B/N, sin sonido, primeros 18 s (sin el cierre con los
+  logos de Sobremesa y Alegal), aclarado (gamma 1,45): `modelo/publico/video/casino-veleta-tele.mp4`
+  (290 KB) + póster. Ese vídeo es de un evento pasado: no está en `publico/` ni en la web real.
+- 27/11: corregido que la segunda pantalla se salía por los lados en el móvil con textos largos
+  (pruebas nuevas: «no se sale por los lados»). Nacho reenvió los logos blanco y negro (son los
+  mismos que ya había). La letra de Veleta sigue SIN aparecer en el Drive ni en el chat.
+- Siguiente: «ir acabando cositas para sacar modelos». Faltan: archivo de la letra, tramos y
+  precios, primer evento (y su vídeo 4:3), dominio de envío para Resend, titular legal, Worker de
+  Cloudflare, si «Eusebio» es el abuelo (¿el señor del vídeo de Casino Veleta?).
 
 ## Quién y cómo hablarle
 - Cliente: Nacho (socio de Grupo Sobremesa; Veleta es una de sus marcas). Español, sin jerga,
@@ -360,7 +369,7 @@ Duraciones de la intro: constantes `FASE_QUIETA_MS`, `FASE_ZOOM_MS`, `FASE_SACUD
   texto a la vista. Que lo confirme el asesor.
 
 ## Cómo trabajar
-- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (73 comprobaciones en
+- Probar antes de subir: `npm test` (35 pruebas), `npm run test:navegador` (76 comprobaciones en
   Chromium: los dos estados, cambio por fecha moviendo el reloj, móvil y ordenador, con y sin
   JavaScript, fases de la intro, saltar, segunda visita, «reducir movimiento», tramos al mismo
   enlace, tema, solo B/N, nada de terceros, sin errores JS ni de CSP, formularios, enlaces) y

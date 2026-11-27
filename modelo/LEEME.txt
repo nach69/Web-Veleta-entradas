@@ -1,0 +1,2 @@
+Modelo para enseñar (no se publica): npm run modelo → dist-modelo/
+Usa la foto y la configuración reales y un evento de muestra con el vídeo de Casino Veleta en la tele.

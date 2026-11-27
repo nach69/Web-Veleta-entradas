@@ -123,6 +123,7 @@ const madrid = (iso) => new Date(iso + '+01:00');
     ok(await p.$eval(A, (el) => getComputedStyle(el).getPropertyValue('--acento').trim()) === '#ff3b3b', 'tema del evento: color de acento');
     ok(await p.$eval(A, (el) => getComputedStyle(el, '::before').backgroundImage.includes('/img/texturas/prueba.png')), 'tema del evento: textura');
     ok(await p.$$eval('[data-sonido]', (b) => b.length) === 0, 'no hay botón de sonido');
+    ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'la venta no se sale por los lados en el móvil');
     ok(await p.isVisible(A + ' .comprar__email'), 'email (opcional) antes de los tramos');
     await p.reload();
     ok(await fase(p) === 'pantalla' && await p.isVisible(A), 'en la misma visita ya no se repite la intro');
@@ -204,10 +205,12 @@ const madrid = (iso) => new Date(iso + '+01:00');
       ok((await p.textContent(B)).includes('Entradas pronto') && await p.$$eval(B + ' a', (a) => a.filter((x) => x.classList.contains('tramo')).length) === 0, 'sin ningún enlace: «Entradas pronto» y tramos sin enlace');
       ok(await p.isVisible(B + ' .censura'), 'evento censurado: nombre tapado');
       ok((await p.textContent(B)).includes('PENDIENTE: precio'), 'precio que falta: PENDIENTE');
+      ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'con textos PENDIENTE largos tampoco se sale por los lados');
     }
     if (esperado === 'ninguno') {
       ok(await p.isVisible('#lista') && (await p.textContent('#lista h1')) === 'Estamos esperando al nuevo programa', 'segunda pantalla: «Estamos esperando al nuevo programa»');
       ok((await p.textContent('#lista')).includes('Avísame cuando empiece la emisión'), 'con «Avísame cuando empiece la emisión»');
+      ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'la lista de espera no se sale por los lados');
     }
     await ctx.close();
   }
