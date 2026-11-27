@@ -40,7 +40,7 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 - 27/11 (Nacho): el modelo usa un **evento de prueba**: 24/12/2026 de 15:00 a 20:00, tramos
   «Primer/Segundo/Tercer tramo + 2 cervezas» a 15, 18 y 20 € (nombres de tramo puestos por
   Claude a partir de lo que dijo Nacho), enlace veleta.lema.club, vídeo de Casino Veleta. Nombre
-  y lugar sin dar (PENDIENTE). La fecha ahora se ve con la hora de fin («15:00–20:00»).
+  «Veleta Navidad» y lugar «Valencia» (Nacho, 27/11). La fecha ahora se ve con la hora de fin («15:00–20:00»).
 - 27/11 (Nacho): **la pantalla de entradas sigue el formato de Bogart** (pasó captura): línea
   pequeña arriba (fecha y hora), título grande centrado «Entradas» (RL Madena estirada), línea
   destacada (nombre · lugar), tramos como **rectángulos con un poco de volumen** (degradado,

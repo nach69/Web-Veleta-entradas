@@ -1,19 +1,28 @@
 [
   {
-    "_nota": "EVENTO DE PRUEBA para enseñar (Nacho, 27/11): 24/12/2026 de 15:00 a 20:00, tres tramos con dos cervezas (15, 18 y 20 €), enlace general de Lema y el vídeo de Casino Veleta. Nombre y lugar sin dar: PENDIENTE. No se publica.",
-    "nombre": null,
+    "_nota": "EVENTO DE PRUEBA para enseñar (Nacho, 27/11): 24/12/2026 de 15:00 a 20:00, tres tramos con dos cervezas (15, 18 y 20 €), enlace general de Lema y el vídeo de Casino Veleta. Nombre «Veleta Navidad» y lugar «Valencia» (Nacho, 27/11). No se publica.",
+    "nombre": "Veleta Navidad",
     "fecha": "2026-12-24T15:00",
     "horaFin": "20:00",
-    "lugar": null,
+    "lugar": "Valencia",
     "enlaceCompra": null,
     "videoTele": "/video/casino-veleta-tele.mp4",
     "posterTele": "/video/casino-veleta-tele.jpg",
     "videoExclusivo": null,
     "tema": null,
     "tramos": [
-      { "nombre": "Primer tramo + 2 cervezas", "precio": 15 },
-      { "nombre": "Segundo tramo + 2 cervezas", "precio": 18 },
-      { "nombre": "Tercer tramo + 2 cervezas", "precio": 20 }
+      {
+        "nombre": "Primer tramo + 2 cervezas",
+        "precio": 15
+      },
+      {
+        "nombre": "Segundo tramo + 2 cervezas",
+        "precio": 18
+      },
+      {
+        "nombre": "Tercer tramo + 2 cervezas",
+        "precio": 20
+      }
     ]
   }
 ]
