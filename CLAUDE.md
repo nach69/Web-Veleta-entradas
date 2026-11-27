@@ -45,6 +45,13 @@ Léelo antes de trabajar. Lo mantiene Claude; actualízalo cuando cambie algo.
 - 27/11 (Nacho): probar SIN Cloudflare: `npm run modelo:archivo` crea
   `dist-modelo/veleta-modelo.html`, UN archivo con todo dentro (≈ 580 KB) que se abre con doble
   clic (`scripts/archivo-unico.mjs`). Ahí no funcionan el envío de emails ni las páginas legales.
+- 27/11 (Nacho): **crear el Worker de Cloudflare para ir viéndolo.** Se publica el MODELO:
+  build command `npm run build:prueba` (= `DATOS=modelo node scripts/build.mjs`, sale en `dist/`),
+  deploy `npx wrangler deploy`, rama de producción `claude/confident-dijkstra-7goz2c` (no hay
+  `main` aún). Nombre del Worker: `veleta-entradas` (como `wrangler.jsonc`). `_headers` lleva
+  `X-Robots-Tag: noindex, nofollow` para TODA la web mientras sea de prueba: QUITARLO al lanzar.
+  Para lanzar de verdad: build command → `npm run build`, quitar el noindex, y pasar a `main`.
+  Ojo: el evento de prueba (24/12) deja de verse el 25/12 y sale «sin evento».
 - 27/11: corregido que la segunda pantalla se salía por los lados en el móvil con textos largos
   (pruebas nuevas: «no se sale por los lados»). Nacho reenvió los logos blanco y negro (son los
   mismos que ya había). La letra de Veleta sigue SIN aparecer en el Drive ni en el chat.

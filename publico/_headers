@@ -5,6 +5,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   X-Frame-Options: DENY
+  # FASE DE PRUEBA (27/11): que ningún buscador la indexe. QUITAR esta línea al lanzar la web de verdad.
+  X-Robots-Tag: noindex, nofollow
 
 # La dirección de prueba (workers.dev) no debe salir en Google.
 # [RELLENAR] cuando exista el Worker: https://veleta-entradas.<cuenta>.workers.dev/*
